@@ -1,0 +1,115 @@
+model GeneralInspection {
+  id Int @id @default(autoincrement())
+
+  animalId Int    @map("animal_id")
+  animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  // Gabitus
+
+  bodyType      BodyType      @map("body_type") // jussasi
+  bodyStructure BodyStructure @map("body_structure") // tana tuzilishi
+  bodyPosition  BodyPosition  @map("body_position")
+  obesity       ObesityType // semizligi
+  character     CharacterType // hayvon mijozi gabitus         Gabitus?
+
+  leatherCoverId Int          @map("leather_cover_id")
+  leatherCover   LeatherCover @relation(fields: [leatherCoverId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  inspection Inspection?
+}
+
+model Inspection {
+  id Int @id @default(autoincrement())
+
+  animalId Int?    @map("animal_id")
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  diseaseId Int?     @map("disease_id")
+  disease   Disease? @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+
+  generalInspectionId Int?               @unique @map("general_inspection_id")
+  generalInspection   GeneralInspection? @relation(fields: [generalInspectionId], references: [id], onDelete: Cascade)
+
+  temperature     Float? // temperatura
+  pulse           Int? // puls
+  respiratoryRate Float? @map("respiratory_rate") // nafas soni
+  rumination      Int? // ruminatsiya
+
+  type       InspectionType
+  conclusion String?        @db.Text()
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+
+// Qonning morfologik tekshirishlari / Морфологическое исследование крови / Blood Morphological Analysis
+model BloodMorphologicAnalysis {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String? @map("animal_id")
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  coe              Float? // СОЭ / COE / скорость оседания эритроцитов
+  erythrocyteCount Float? @map("erythrocyte_count") // эритроциты / eritrositlar soni
+  leukocyteCount   Float? @map("leukocyte_count") // лейкоциты / leykotsitlar soni
+  thrombocyteCount Float? @map("thrombocyte_count") // тромбоциты / trombotsitlar soni
+  hemoglobin       Float? // гемоглобин / gemoglobin
+  glutathione      Float? // глутатион / glutation
+  waterPercentage  Float? @map("water_percentage") // вода % / suv foizi
+  dryResidue       Float? @map("dry_residue") // сухой остаток % / quruq qoldiq foizi
+
+
+  conclusion String? @db.Text() // заключение / xulosa / conclusion
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("blood_morphologic_analyses")
+}
+
+// Qon Serum tekshiruvi / Исследование сыворотки крови / Blood Serum Analysis
+model BloodSerumAnalysis {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String? @map("animal_id")
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  totalProtein      Float? @map("total_protein") // zardobdagi umumiy oqsil — g/l / общий белок в сыворотке
+  totalCalcium      Float? @map("total_calcium") // umumiy kalsiy — mmol/l / общий кальций
+  organicPhosphorus Float? @map("organic_phosphorus") // organik fosfor — mmol/l / органический фосфор
+  albumin           Float? // albuminlar — % / альбумины
+  alphaGlobulin     Float? @map("alpha_globulin") // alfa-globulinlar — % / альфа-глобулины
+  betaGlobulin      Float? @map("beta_globulin") // beta-globulinlar — % / бета-глобулины
+  gammaGlobulin     Float? @map("gamma_globulin") // gamma-globulinlar — % / гамма-глобулины
+  residualNitrogen  Float? @map("residual_nitrogen") // qoldiq azot — mmol/l / остаточный азот
+  urea              Float? // mochevina (karbamid) — mmol/l / мочевина (карбамид)
+  uricAcid          Float? @map("uric_acid") // moche kislotasi — mmol/l / мочевая кислота
+  creatine          Float? // kreatin — mmol/l / креатин
+  creatinine        Float? // kreatinin — mkmol/l / креатинин
+  alkalineReserve   Float? @map("alkaline_reserve") // ishqoriy zaxira — % СО₂ / щелочной резерв
+  glucose           Float? // glyukoza — mmol/l / глюкоза
+  ketoneBodies      Float? @map("ketone_bodies") // keton tanachalari — g/l / кетоновые тела
+  totalBilirubin    Float? @map("total_bilirubin") // umumiy bilirubin — mkmol/l / общий билирубин
+  directBilirubin   Float? @map("direct_bilirubin") // to'g'ri bilirubin — mkmol/l / прямой билирубин
+  totalCholesterol  Float? @map("total_cholesterol") // umumiy xolesterin — mmol/l / общий холестерин
+  totalLipids       Float? @map("total_lipids") // umumiy lipidlar — g/l / общие липиды
+  phospholipids     Float? // fosfolipidlar — g/l / фосфолипиды
+  lacticAcid        Float? @map("lactic_acid") // sutch (laktat) kislotasi — mmol/l / молочная кислота
+  pyruvicAcid       Float? @map("pyruvic_acid") // piruvinuz (piruvat) kislotasi — mmol/l / пировиноградная кислота
+  citricAcid        Float? @map("citric_acid") // limon kislotasi — mmol/l / лимонная кислота
+  carotene          Float? // karotin — mkmol/l / каротин
+  vitaminA          Float? @map("vitamin_a") // A vitamini — mkmol/l / витамин A
+  vitaminB          Float? @map("vitamin_b") // B vitamini — mkmol/l / витамин B
+  vitaminC          Float? @map("vitamin_c") // C vitamini — mkmol/l / витамин C
+
+  conclusion String? @db.Text() // заключение / xulosa / conclusion
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("blood_serum_analyses")
+}

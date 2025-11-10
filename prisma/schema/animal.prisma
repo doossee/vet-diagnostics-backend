@@ -1,0 +1,105 @@
+model Animal {
+  id String @id @default(uuid()) @db.Uuid
+
+  arrivalDate DateTime @map("arrival_date")
+
+  age Int       @db.SmallInt
+  sex AnimalSex @default(UNKNOWN)
+
+  // nameOrCode String    @unique @map("name_or_code") @db.VarChar(50)
+  // weight Float
+
+  farmerId String @map("farmer_id") @db.Uuid
+  farmer   Farmer @relation(fields: [farmerId], references: [id], onDelete: Restrict)
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  animalBreedId String      @map("animal_breed_id") @db.Uuid
+  animalBreed   AnimalBreed @relation(fields: [animalBreedId], references: [id], onDelete: Restrict)
+
+  animalColorId String      @map("color_id") @db.Uuid
+  animalColor   AnimalColor @relation(fields: [animalColorId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  vaccines Vaccine[]
+  diseases Disease[]
+  urineAnalyses UrineAnalysis[]
+  fecesAnalyses FecesAnalysis[]
+  mucosaAnalyses MucosaAnalysis[]
+
+  // UrineTest UrineTest[]
+
+  // generalInspection GeneralInspection[]
+  // generalBloodTests GeneralBloodTest[]
+  // bloodSerumTests   BloodSerumTest[]
+
+  // inspection Inspection[]
+  // urineTests UrineTest[]
+  // dungTests  DungTest[]
+
+  @@index([farmerId])
+  @@index([animalTypeId])
+  @@index([animalBreedId])
+  @@index([sex])
+  @@map("animals")
+}
+
+model AnimalType {
+  id String @id @default(uuid()) @db.Uuid
+
+  name_ru String @unique @db.VarChar(255)
+  name_uz String @unique @db.VarChar(255)
+
+  parentId String?     @map("parent_id") @db.Uuid
+  parent   AnimalType? @relation("AnimalTypeHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+
+  // Hierarchy
+  children AnimalType[] @relation("AnimalTypeHierarchy")
+
+  // Animals
+  animals Animal[]
+
+  // Urine Analysis Types
+  urineColors        UrineColor[]
+  urineSmells        UrineSmell[]
+  urineClarities     UrineClarity[]
+  urineConsistencies UrineConsistency[]
+
+  // Feces Analysis Types
+  fecesColors        FecesColor[]
+  fecesSmells        FecesSmell[]
+  fecesConsistencies FecesConsistency[]
+  fecesForms         FecesForm[]
+
+  // Mucosa Analysis Types
+  mucosaAppearances MucosaAppearance[]
+
+  @@index([parentId])
+  @@map("animal_types")
+}
+
+model AnimalBreed {
+  id String @id @default(uuid()) @db.Uuid
+
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
+
+  animals Animal[]
+
+  @@map("animal_breeds")
+}
+
+model AnimalColor {
+  id String @id @default(uuid()) @db.Uuid
+
+  name_ru String @db.VarChar(50)
+  name_uz String @db.VarChar(50)
+
+  animals Animal[]
+  // generalInspections GeneralInspection[]
+
+  @@map("animal_colors")
+}

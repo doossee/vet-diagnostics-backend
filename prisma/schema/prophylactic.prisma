@@ -1,0 +1,64 @@
+model ProphylacticRecord {
+    id String @id @default(uuid()) @db.Uuid
+
+    type ProphylacticType
+
+    animalId String @map("animal_id") @db.Uuid
+    animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+    itemId String           @map("item_id") @db.Uuid
+    item   ProphylacticItem @relation(fields: [itemId], references: [id], onDelete: Restrict)
+
+    // Optional detail (strain for vaccine, preparation for deworming)
+    detailId String?             @map("detail_id") @db.Uuid
+    detail   ProphylacticDetail? @relation(fields: [detailId], references: [id], onDelete: Restrict)
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@index([animalId])
+    @@index([type])
+    @@map("prophylactic_records")
+}
+
+model ProphylacticItem {
+    id String @id @default(uuid()) @db.Uuid
+
+    name_ru String @db.VarChar(255)
+    name_uz String @db.VarChar(255)
+
+    type ProphylacticType
+
+    records ProphylacticRecord[]
+    details ProphylacticDetail[]
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@index([type])
+    @@map("prophylactic_items")
+}
+
+model ProphylacticDetail {
+    id String @id @default(uuid()) @db.Uuid
+
+    name_ru String @db.VarChar(255)
+    name_uz String @db.VarChar(255)
+
+    itemId String           @map("item_id") @db.Uuid
+    item   ProphylacticItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+    records ProphylacticRecord[]
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@index([itemId])
+    @@map("prophylactic_details")
+}
+
+enum ProphylacticType {
+    VACCINE
+    IMMUNIZATION
+    DEWORMING
+}

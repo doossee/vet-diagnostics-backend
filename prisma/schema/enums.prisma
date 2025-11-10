@@ -1,0 +1,50 @@
+
+enum AnimalSex {
+  MALE // erkak
+  FEMALE // ayol
+  NEUTERED // kastratsiya qilingan erkak
+  SPAYED // sterilizatsiya qilingan ayol
+  UNKNOWN // noma'lum
+}
+
+enum BodyType {
+  WEAK // kuchsiz
+  MEDIUM // o'rtacha
+  STRONG // kuchli
+}
+
+enum ObesityType {
+  HIGH // yuqori
+  MEDIUM // o'rtacha
+  LOW // past
+  LEAN // ozg'inlik
+  CACHEXIA //kaxeksiya
+}
+
+enum BodyStructure {
+  COARSE // qupol
+  SLIM // nozik
+  DENSE // zich
+  WEAK // bo'sh
+}
+
+enum BodyPosition {
+  NATURAL // tabiy
+  FORCED // majbiriy 
+  FORCED_STANDING // majbiriy tik turgan
+  FORCED_LYING // majbiriy yotgan
+  FORCED_SITTING // majbiriy o’tirgan
+  NON_THERAPEUTIC // tabiy bo’lmagan
+}
+
+enum CharacterType {
+  MOBILE // harakatchan
+  CALM // tinch
+}
+
+enum InspectionType {
+  MORNING // ertalabki
+  EVENING // kechki
+  DISEASE // kasallik
+  GENERAL // umumiy
+}
