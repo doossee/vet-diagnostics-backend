@@ -1,4 +1,4 @@
-model GeneralInspection {
+model GeneralAnalysis {
   id Int @id @default(autoincrement())
 
   animalId Int    @map("animal_id")
@@ -10,10 +10,9 @@ model GeneralInspection {
   bodyStructure BodyStructure @map("body_structure") // tana tuzilishi
   bodyPosition  BodyPosition  @map("body_position")
   obesity       ObesityType // semizligi
-  character     CharacterType // hayvon mijozi gabitus         Gabitus?
+  character     CharacterType // hayvon mijozi gabitus
 
-  leatherCoverId Int          @map("leather_cover_id")
-  leatherCover   LeatherCover @relation(fields: [leatherCoverId], references: [id])
+
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -21,17 +20,11 @@ model GeneralInspection {
   inspection Inspection?
 }
 
-model Inspection {
+model DailyAnalysis {
   id Int @id @default(autoincrement())
 
   animalId Int?    @map("animal_id")
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
-
-  diseaseId Int?     @map("disease_id")
-  disease   Disease? @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-
-  generalInspectionId Int?               @unique @map("general_inspection_id")
-  generalInspection   GeneralInspection? @relation(fields: [generalInspectionId], references: [id], onDelete: Cascade)
 
   temperature     Float? // temperatura
   pulse           Int? // puls
