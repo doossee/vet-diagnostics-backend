@@ -27,17 +27,3 @@ export function IsAdminUser() {
     }),
   );
 }
-
-export function IsDeviceUser() {
-  return applyDecorators(
-    UseGuards(JwtAuthGuard, new RolesGuard([UserRole.DEVICE])),
-    ApiUnauthorizedResponse({
-      description:
-        'Access denied: User is not authenticated. Please log in to access this resource.',
-    }),
-    ApiForbiddenResponse({
-      description:
-        'Access denied: Insufficient permissions. Device privileges are required to perform this action.',
-    }),
-  );
-}

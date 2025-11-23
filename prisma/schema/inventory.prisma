@@ -1,3 +1,12 @@
+
+enum AnimalSex {
+  MALE // erkak
+  FEMALE // ayol
+  NEUTERED // kastratsiya qilingan erkak
+  SPAYED // sterilizatsiya qilingan ayol
+  UNKNOWN // noma'lum
+}
+
 model Animal {
   id String @id @default(uuid()) @db.Uuid
 
@@ -10,37 +19,27 @@ model Animal {
   // weight Float
 
   farmerId String @map("farmer_id") @db.Uuid
-  farmer   Farmer @relation(fields: [farmerId], references: [id], onDelete: Restrict)
+  farmer   FarmerProfile @relation(fields: [farmerId], references: [id], onDelete: Restrict)
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
   animalBreedId String      @map("animal_breed_id") @db.Uuid
-  animalBreed   AnimalBreed @relation(fields: [animalBreedId], references: [id], onDelete: Restrict)
+  animalBreed   Breed @relation(fields: [animalBreedId], references: [id], onDelete: Restrict)
 
   animalColorId String      @map("color_id") @db.Uuid
-  animalColor   AnimalColor @relation(fields: [animalColorId], references: [id], onDelete: Restrict)
+  animalColor   Color @relation(fields: [animalColorId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  vaccines Vaccine[]
+  vaccines Prophylaxis[]
   diseases Disease[]
-  urineAnalyses UrineAnalysis[]
-  fecesAnalyses FecesAnalysis[]
-  mucosaAnalyses MucosaAnalysis[]
-  bloodMorphologicAnalyses BloodMorphologicAnalysis[]
-  bloodSerumAnalyses BloodSerumAnalysis[]
-
-  // UrineTest UrineTest[]
-
-  // generalInspection GeneralInspection[]
-  // generalBloodTests GeneralBloodTest[]
-  // bloodSerumTests   BloodSerumTest[]
-
-  // inspection Inspection[]
-  // urineTests UrineTest[]
-  // dungTests  DungTest[]
+  urineAnalyses UrineExam[]
+  fecesAnalyses FecesExam[]
+  mucosaAnalyses MucosaExam[]
+  bloodAnalyses BloodExam[]
+  clinicalAnalyses ClinicalExam[]
 
   @@index([farmerId])
   @@index([animalTypeId])
@@ -83,7 +82,7 @@ model AnimalType {
   @@map("animal_types")
 }
 
-model AnimalBreed {
+model Breed {
   id String @id @default(uuid()) @db.Uuid
 
   name_ru String @db.VarChar(255)
@@ -94,14 +93,13 @@ model AnimalBreed {
   @@map("animal_breeds")
 }
 
-model AnimalColor {
+model Color {
   id String @id @default(uuid()) @db.Uuid
 
   name_ru String @db.VarChar(50)
   name_uz String @db.VarChar(50)
 
   animals Animal[]
-  // generalInspections GeneralInspection[]
 
   @@map("animal_colors")
 }

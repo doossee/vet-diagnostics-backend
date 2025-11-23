@@ -1,3 +1,4 @@
+
 model User {
   id String @id @default(uuid()) @db.Uuid
 
@@ -33,51 +34,13 @@ model User {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  veterinarianProfile Veterinarian?
-  farmerProfile       Farmer?
+  veterinarianProfile VetProfile?
+  farmerProfile       FarmerProfile?
 
   @@index([username])
   @@index([role])
   @@index([districtId])
   @@map("users")
-}
-
-model Veterinarian {
-  id String @id @map("user_id") @db.Uuid
-
-  user User @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  licenseNumber  String? @unique @map("license_number") @db.VarChar(50)
-  specialization String? @map("specialization") @db.VarChar(100)
-  experience     Int?    @default(0)
-
-  farmers Farmer[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@index([licenseNumber])
-  @@map("veterinarians")
-}
-
-model Farmer {
-  id String @id @map("user_id") @db.Uuid
-
-  user User @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  veterinarianId String       @map("veterinarian_id") @db.Uuid
-  veterinarian   Veterinarian @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
-
-  farmName String? @map("farm_name") @db.VarChar(100)
-  farmSize Float?  @map("farm_size")
-
-  animals Animal[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@index([veterinarianId])
-  @@map("farmers")
 }
 
 enum UserRole {
@@ -90,4 +53,42 @@ enum UserRole {
 enum UserGender {
   MALE // erkak
   FEMALE // ayol
+}
+
+model VetProfile {
+  id String @id @map("user_id") @db.Uuid
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  licenseNumber  String? @unique @map("license_number") @db.VarChar(50)
+  specialization String? @map("specialization") @db.VarChar(100)
+  experience     Int?    @default(0)
+
+  farmers FarmerProfile[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([licenseNumber])
+  @@map("veterinarians")
+}
+
+model FarmerProfile {
+  id String @id @map("user_id") @db.Uuid
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  veterinarianId String       @map("veterinarian_id") @db.Uuid
+  veterinarian   VetProfile @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
+
+  farmName String? @map("farm_name") @db.VarChar(100)
+  farmSize Float?  @map("farm_size")
+
+  animals Animal[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([veterinarianId])
+  @@map("farmers")
 }

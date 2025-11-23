@@ -1,3 +1,4 @@
+
 model Region {
   id Int @id @default(autoincrement())
 
@@ -41,3 +42,7 @@ model VetStation {
   @@index([districtId])
   @@map("vet_stations")
 }
+
+
+
+

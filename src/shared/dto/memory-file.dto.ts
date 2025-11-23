@@ -15,9 +15,9 @@ export class MoveFileDto {
 }
 
 export class DeleteFilesDto {
-  @ApiPropertyOptional({ 
+  @ApiPropertyOptional({
     description: 'Array of file IDs to delete',
-    type: [String]
+    type: [String],
   })
   @IsArray()
   @IsString({ each: true })
@@ -30,7 +30,9 @@ export class FileSearchDto {
   @IsString()
   directory?: string;
 
-  @ApiPropertyOptional({ description: 'File extension to filter by (e.g., .jpg)' })
+  @ApiPropertyOptional({
+    description: 'File extension to filter by (e.g., .jpg)',
+  })
   @IsOptional()
   @IsString()
   extension?: string;
