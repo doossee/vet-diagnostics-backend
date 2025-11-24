@@ -6,75 +6,100 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
 import { ClinicalExamService } from './clinical-exam.service';
-import { CreateClinicalExamDto } from './dto/create-clinical-exam.dto';
-import { UpdateClinicalExamDto } from './dto/update-clinical-exam.dto';
-import { ClinicalExamEntity } from './entities/clinical-exam.entity';
+import {
+  CreateClinicalExamDto,
+  UpdateClinicalExamDto,
+  ClinicalExamQueryParamsDto,
+} from './dto';
+import { ClinicalExamEntity, PaginatedClinicalExamEntity } from './entities';
 
-@ApiTags('Clinical Exams')
+@ApiTags('clinical-exams')
 @Controller('clinical-exams')
 export class ClinicalExamController {
   constructor(private readonly clinicalExamService: ClinicalExamService) {}
 
+  @ApiOperation({
+    summary: 'Create clinical exam',
+    description: 'Creates a new clinical exam.',
+  })
+  @ApiCreatedResponse({
+    type: ClinicalExamEntity,
+    description: 'Clinical exam created successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
   @Post()
-  @ApiOperation({ summary: 'Create a new clinical exam' })
-  @ApiResponse({
-    status: 201,
-    description: 'The clinical exam has been successfully created.',
-    type: ClinicalExamEntity,
-  })
-  create(@Body() createClinicalExamDto: CreateClinicalExamDto) {
-    return this.clinicalExamService.create(createClinicalExamDto);
+  async create(@Body() data: CreateClinicalExamDto) {
+    return await this.clinicalExamService.create(data);
   }
 
+  @ApiOperation({
+    summary: 'List clinical exams',
+    description: 'Retrieve paginated list of clinical exams.',
+  })
+  @ApiOkResponse({
+    type: PaginatedClinicalExamEntity,
+    description: 'Clinical exams retrieved successfully',
+  })
   @Get()
-  @ApiOperation({ summary: 'Get all clinical exams' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return all clinical exams.',
-    type: [ClinicalExamEntity],
-  })
-  findAll() {
-    return this.clinicalExamService.findAll();
+  async findAll(@Query() query: ClinicalExamQueryParamsDto) {
+    return await this.clinicalExamService.findAll(query);
   }
 
+  @ApiOperation({
+    summary: 'Get clinical exam by ID',
+    description: 'Retrieve clinical exam details.',
+  })
+  @ApiOkResponse({
+    type: ClinicalExamEntity,
+    description: 'Clinical exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Clinical exam not found' })
   @Get(':id')
-  @ApiOperation({ summary: 'Get a clinical exam by id' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return the clinical exam.',
-    type: ClinicalExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Clinical exam not found.' })
-  findOne(@Param('id') id: string) {
-    return this.clinicalExamService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.clinicalExamService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Update clinical exam',
+    description: 'Update clinical exam information by ID.',
+  })
+  @ApiOkResponse({
+    type: ClinicalExamEntity,
+    description: 'Clinical exam updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Clinical exam not found' })
+  @ApiBadRequestResponse({ description: 'Invalid update data' })
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a clinical exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The clinical exam has been successfully updated.',
-    type: ClinicalExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Clinical exam not found.' })
-  update(
-    @Param('id') id: string,
-    @Body() updateClinicalExamDto: UpdateClinicalExamDto,
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateClinicalExamDto,
   ) {
-    return this.clinicalExamService.update(id, updateClinicalExamDto);
+    return await this.clinicalExamService.update(id, data);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a clinical exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The clinical exam has been successfully deleted.',
+  @ApiOperation({
+    summary: 'Delete clinical exam',
+    description: 'Delete clinical exam by ID.',
   })
-  @ApiResponse({ status: 404, description: 'Clinical exam not found.' })
-  remove(@Param('id') id: string) {
-    return this.clinicalExamService.remove(id);
+  @ApiOkResponse({
+    type: ClinicalExamEntity,
+    description: 'Clinical exam deleted successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Clinical exam not found' })
+  @Delete(':id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.clinicalExamService.delete(id);
   }
 }

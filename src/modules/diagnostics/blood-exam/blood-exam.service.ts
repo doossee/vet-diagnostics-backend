@@ -1,52 +1,99 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import { CreateBloodExamDto } from './dto/create-blood-exam.dto';
-import { UpdateBloodExamDto } from './dto/update-blood-exam.dto';
+import { PaginationService } from 'src/shared/services';
+import {
+  CreateBloodExamDto,
+  UpdateBloodExamDto,
+  BloodExamQueryParamsDto,
+} from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class BloodExamService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly paginationService: PaginationService,
+  ) {}
 
-  async create(createBloodExamDto: CreateBloodExamDto) {
-    return this.prisma.bloodExam.create({
-      data: createBloodExamDto,
+  /**
+   * Create a new blood exam
+   * @param data - Blood exam creation data
+   * @returns Created blood exam
+   */
+  async create(data: CreateBloodExamDto) {
+    return await this.prisma.bloodExam.create({
+      data,
+      include: { animal: true },
     });
   }
 
-  async findAll() {
-    return this.prisma.bloodExam.findMany({
-      include: {
-        animal: true,
-      },
-    });
+  /**
+   * Get paginated list of blood exams
+   * @param query - Query parameters including filters and pagination
+   * @returns Paginated blood exams
+   */
+  async findAll(query: BloodExamQueryParamsDto) {
+    const { page, perPage, search, byId } = query;
+
+    const where: Prisma.BloodExamWhereInput = {
+      ...(search &&
+        {
+          // Add search logic if needed, e.g., by animal name
+        }),
+    };
+
+    const orderBy: Prisma.BloodExamOrderByWithRelationInput = {
+      ...(byId && { id: byId }),
+      ...(!byId && { createdAt: 'desc' }),
+    };
+
+    const include: Prisma.BloodExamInclude = {
+      animal: true,
+    };
+
+    return await this.paginationService.paginate(
+      this.prisma.bloodExam,
+      { where, orderBy, include },
+      { page, perPage },
+    );
   }
 
+  /**
+   * Get a single blood exam by ID
+   * @param id - Blood exam UUID
+   * @returns Blood exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async findOne(id: string) {
-    const bloodExam = await this.prisma.bloodExam.findUnique({
+    return await this.prisma.bloodExam.findUniqueOrThrow({
       where: { id },
-      include: {
-        animal: true,
-      },
-    });
-
-    if (!bloodExam) {
-      throw new NotFoundException(`BloodExam with ID ${id} not found`);
-    }
-
-    return bloodExam;
-  }
-
-  async update(id: string, updateBloodExamDto: UpdateBloodExamDto) {
-    await this.findOne(id);
-    return this.prisma.bloodExam.update({
-      where: { id },
-      data: updateBloodExamDto,
+      include: { animal: true },
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
-    return this.prisma.bloodExam.delete({
+  /**
+   * Update blood exam
+   * @param id - Blood exam UUID
+   * @param data - Updated blood exam data
+   * @returns Updated blood exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async update(id: string, data: UpdateBloodExamDto) {
+    return await this.prisma.bloodExam.update({
+      where: { id },
+      data,
+      include: { animal: true },
+    });
+  }
+
+  /**
+   * Delete blood exam
+   * @param id - Blood exam UUID
+   * @returns Deleted blood exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async delete(id: string) {
+    return await this.prisma.bloodExam.delete({
       where: { id },
     });
   }

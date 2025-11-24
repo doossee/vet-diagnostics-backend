@@ -6,75 +6,100 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
 import { FecesExamService } from './feces-exam.service';
-import { CreateFecesExamDto } from './dto/create-feces-exam.dto';
-import { UpdateFecesExamDto } from './dto/update-feces-exam.dto';
-import { FecesExamEntity } from './entities/feces-exam.entity';
+import {
+  CreateFecesExamDto,
+  UpdateFecesExamDto,
+  FecesExamQueryParamsDto,
+} from './dto';
+import { FecesExamEntity, PaginatedFecesExamEntity } from './entities';
 
-@ApiTags('Feces Exams')
+@ApiTags('feces-exams')
 @Controller('feces-exams')
 export class FecesExamController {
   constructor(private readonly fecesExamService: FecesExamService) {}
 
+  @ApiOperation({
+    summary: 'Create feces exam',
+    description: 'Creates a new feces exam.',
+  })
+  @ApiCreatedResponse({
+    type: FecesExamEntity,
+    description: 'Feces exam created successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
   @Post()
-  @ApiOperation({ summary: 'Create a new feces exam' })
-  @ApiResponse({
-    status: 201,
-    description: 'The feces exam has been successfully created.',
-    type: FecesExamEntity,
-  })
-  create(@Body() createFecesExamDto: CreateFecesExamDto) {
-    return this.fecesExamService.create(createFecesExamDto);
+  async create(@Body() data: CreateFecesExamDto) {
+    return await this.fecesExamService.create(data);
   }
 
+  @ApiOperation({
+    summary: 'List feces exams',
+    description: 'Retrieve paginated list of feces exams.',
+  })
+  @ApiOkResponse({
+    type: PaginatedFecesExamEntity,
+    description: 'Feces exams retrieved successfully',
+  })
   @Get()
-  @ApiOperation({ summary: 'Get all feces exams' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return all feces exams.',
-    type: [FecesExamEntity],
-  })
-  findAll() {
-    return this.fecesExamService.findAll();
+  async findAll(@Query() query: FecesExamQueryParamsDto) {
+    return await this.fecesExamService.findAll(query);
   }
 
+  @ApiOperation({
+    summary: 'Get feces exam by ID',
+    description: 'Retrieve feces exam details.',
+  })
+  @ApiOkResponse({
+    type: FecesExamEntity,
+    description: 'Feces exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces exam not found' })
   @Get(':id')
-  @ApiOperation({ summary: 'Get a feces exam by id' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return the feces exam.',
-    type: FecesExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Feces exam not found.' })
-  findOne(@Param('id') id: string) {
-    return this.fecesExamService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.fecesExamService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Update feces exam',
+    description: 'Update feces exam information by ID.',
+  })
+  @ApiOkResponse({
+    type: FecesExamEntity,
+    description: 'Feces exam updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces exam not found' })
+  @ApiBadRequestResponse({ description: 'Invalid update data' })
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a feces exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The feces exam has been successfully updated.',
-    type: FecesExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Feces exam not found.' })
-  update(
-    @Param('id') id: string,
-    @Body() updateFecesExamDto: UpdateFecesExamDto,
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateFecesExamDto,
   ) {
-    return this.fecesExamService.update(id, updateFecesExamDto);
+    return await this.fecesExamService.update(id, data);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a feces exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The feces exam has been successfully deleted.',
+  @ApiOperation({
+    summary: 'Delete feces exam',
+    description: 'Delete feces exam by ID.',
   })
-  @ApiResponse({ status: 404, description: 'Feces exam not found.' })
-  remove(@Param('id') id: string) {
-    return this.fecesExamService.remove(id);
+  @ApiOkResponse({
+    type: FecesExamEntity,
+    description: 'Feces exam deleted successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces exam not found' })
+  @Delete(':id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.fecesExamService.delete(id);
   }
 }

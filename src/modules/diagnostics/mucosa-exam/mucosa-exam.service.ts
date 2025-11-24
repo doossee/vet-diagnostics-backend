@@ -1,20 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import { CreateMucosaExamDto } from './dto/create-mucosa-exam.dto';
-import { UpdateMucosaExamDto } from './dto/update-mucosa-exam.dto';
+import { PaginationService } from 'src/shared/services';
+import {
+  CreateMucosaExamDto,
+  UpdateMucosaExamDto,
+  MucosaExamQueryParamsDto,
+} from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MucosaExamService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly paginationService: PaginationService,
+  ) {}
 
-  async create(createMucosaExamDto: CreateMucosaExamDto) {
-    return this.prisma.mucosaExam.create({
-      data: createMucosaExamDto,
-    });
-  }
-
-  async findAll() {
-    return this.prisma.mucosaExam.findMany({
+  /**
+   * Create a new mucosa exam
+   * @param data - Mucosa exam creation data
+   * @returns Created mucosa exam
+   */
+  async create(data: CreateMucosaExamDto) {
+    return await this.prisma.mucosaExam.create({
+      data,
       include: {
         animal: true,
         mucosaAppearance: true,
@@ -22,33 +30,80 @@ export class MucosaExamService {
     });
   }
 
+  /**
+   * Get paginated list of mucosa exams
+   * @param query - Query parameters including filters and pagination
+   * @returns Paginated mucosa exams
+   */
+  async findAll(query: MucosaExamQueryParamsDto) {
+    const { page, perPage, search, byId } = query;
+
+    const where: Prisma.MucosaExamWhereInput = {
+      ...(search &&
+        {
+          // Add search logic if needed
+        }),
+    };
+
+    const orderBy: Prisma.MucosaExamOrderByWithRelationInput = {
+      ...(byId && { id: byId }),
+      ...(!byId && { createdAt: 'desc' }),
+    };
+
+    const include: Prisma.MucosaExamInclude = {
+      animal: true,
+      mucosaAppearance: true,
+    };
+
+    return await this.paginationService.paginate(
+      this.prisma.mucosaExam,
+      { where, orderBy, include },
+      { page, perPage },
+    );
+  }
+
+  /**
+   * Get a single mucosa exam by ID
+   * @param id - Mucosa exam UUID
+   * @returns Mucosa exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async findOne(id: string) {
-    const mucosaExam = await this.prisma.mucosaExam.findUnique({
+    return await this.prisma.mucosaExam.findUniqueOrThrow({
       where: { id },
       include: {
         animal: true,
         mucosaAppearance: true,
       },
     });
-
-    if (!mucosaExam) {
-      throw new NotFoundException(`MucosaExam with ID ${id} not found`);
-    }
-
-    return mucosaExam;
   }
 
-  async update(id: string, updateMucosaExamDto: UpdateMucosaExamDto) {
-    await this.findOne(id);
-    return this.prisma.mucosaExam.update({
+  /**
+   * Update mucosa exam
+   * @param id - Mucosa exam UUID
+   * @param data - Updated mucosa exam data
+   * @returns Updated mucosa exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async update(id: string, data: UpdateMucosaExamDto) {
+    return await this.prisma.mucosaExam.update({
       where: { id },
-      data: updateMucosaExamDto,
+      data,
+      include: {
+        animal: true,
+        mucosaAppearance: true,
+      },
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
-    return this.prisma.mucosaExam.delete({
+  /**
+   * Delete mucosa exam
+   * @param id - Mucosa exam UUID
+   * @returns Deleted mucosa exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async delete(id: string) {
+    return await this.prisma.mucosaExam.delete({
       where: { id },
     });
   }

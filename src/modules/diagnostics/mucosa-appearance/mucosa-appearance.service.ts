@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
+import { PaginationService } from 'src/shared/services';
 import {
   CreateMucosaAppearanceDto,
   UpdateMucosaAppearanceDto,
   MucosaAppearanceQueryParamsDto,
 } from './dto';
-import { PaginationService } from 'src/shared/services';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -15,12 +15,26 @@ export class MucosaAppearanceService {
     private readonly paginationService: PaginationService,
   ) {}
 
+  /**
+   * Create a new mucosa appearance
+   * @param data - Mucosa appearance creation data
+   * @returns Created mucosa appearance
+   */
   async create(data: CreateMucosaAppearanceDto) {
-    return await this.prisma.mucosaAppearance.create({ data });
+    return await this.prisma.mucosaAppearance.create({
+      data,
+      include: { animalType: true },
+    });
   }
 
+  /**
+   * Get paginated list of mucosa appearances
+   * @param query - Query parameters including filters and pagination
+   * @returns Paginated mucosa appearances
+   */
   async findAll(query: MucosaAppearanceQueryParamsDto) {
-    const { page, perPage, search, animalTypeId, mucosaType, byId } = query;
+    const { page, perPage, search, byId } = query;
+
     const where: Prisma.MucosaAppearanceWhereInput = {
       ...(search && {
         OR: [
@@ -28,31 +42,61 @@ export class MucosaAppearanceService {
           { name_uz: { contains: search, mode: 'insensitive' } },
         ],
       }),
-      ...(animalTypeId && { animalTypeId }),
-      ...(mucosaType && { mucosaType }),
     };
+
     const orderBy: Prisma.MucosaAppearanceOrderByWithRelationInput = {
       ...(byId && { id: byId }),
       ...(!byId && { name_ru: 'asc' }),
     };
+
+    const include: Prisma.MucosaAppearanceInclude = {
+      animalType: true,
+    };
+
     return await this.paginationService.paginate(
       this.prisma.mucosaAppearance,
-      { where, orderBy },
+      { where, orderBy, include },
       { page, perPage },
     );
   }
 
+  /**
+   * Get a single mucosa appearance by ID
+   * @param id - Mucosa appearance UUID
+   * @returns Mucosa appearance
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async findOne(id: string) {
     return await this.prisma.mucosaAppearance.findUniqueOrThrow({
       where: { id },
+      include: { animalType: true },
     });
   }
 
+  /**
+   * Update mucosa appearance
+   * @param id - Mucosa appearance UUID
+   * @param data - Updated mucosa appearance data
+   * @returns Updated mucosa appearance
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async update(id: string, data: UpdateMucosaAppearanceDto) {
-    return await this.prisma.mucosaAppearance.update({ where: { id }, data });
+    return await this.prisma.mucosaAppearance.update({
+      where: { id },
+      data,
+      include: { animalType: true },
+    });
   }
 
+  /**
+   * Delete mucosa appearance
+   * @param id - Mucosa appearance UUID
+   * @returns Deleted mucosa appearance
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async delete(id: string) {
-    return await this.prisma.mucosaAppearance.delete({ where: { id } });
+    return await this.prisma.mucosaAppearance.delete({
+      where: { id },
+    });
   }
 }

@@ -3,163 +3,211 @@ import { BloodExam } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
 export class BloodExamEntity implements BloodExam {
-  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   id: string;
 
-  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Animal ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   animalId: string | null;
 
-  @ApiProperty({ example: 5.5, required: false })
+  @ApiProperty({ description: 'COE', example: 5.5, required: false })
   @Expose()
   coe: number | null;
 
-  @ApiProperty({ example: 4.5, required: false })
+  @ApiProperty({
+    description: 'Erythrocyte Count',
+    example: 5.5,
+    required: false,
+  })
   @Expose()
   erythrocyteCount: number | null;
 
-  @ApiProperty({ example: 7.5, required: false })
+  @ApiProperty({
+    description: 'Leukocyte Count',
+    example: 8.5,
+    required: false,
+  })
   @Expose()
   leukocyteCount: number | null;
 
-  @ApiProperty({ example: 250, required: false })
+  @ApiProperty({
+    description: 'Thrombocyte Count',
+    example: 250,
+    required: false,
+  })
   @Expose()
   thrombocyteCount: number | null;
 
-  @ApiProperty({ example: 120, required: false })
+  @ApiProperty({ description: 'Hemoglobin', example: 120, required: false })
   @Expose()
   hemoglobin: number | null;
 
-  @ApiProperty({ example: 2.5, required: false })
+  @ApiProperty({ description: 'Glutathione', example: 30, required: false })
   @Expose()
   glutathione: number | null;
 
-  @ApiProperty({ example: 80, required: false })
+  @ApiProperty({
+    description: 'Water Percentage',
+    example: 80,
+    required: false,
+  })
   @Expose()
   waterPercentage: number | null;
 
-  @ApiProperty({ example: 20, required: false })
+  @ApiProperty({ description: 'Dry Residue', example: 20, required: false })
   @Expose()
   dryResidue: number | null;
 
-  @ApiProperty({ example: 70, required: false })
+  @ApiProperty({ description: 'Total Protein', example: 70, required: false })
   @Expose()
   totalProtein: number | null;
 
-  @ApiProperty({ example: 2.5, required: false })
+  @ApiProperty({ description: 'Total Calcium', example: 2.5, required: false })
   @Expose()
   totalCalcium: number | null;
 
-  @ApiProperty({ example: 1.5, required: false })
+  @ApiProperty({
+    description: 'Organic Phosphorus',
+    example: 1.5,
+    required: false,
+  })
   @Expose()
   organicPhosphorus: number | null;
 
-  @ApiProperty({ example: 40, required: false })
+  @ApiProperty({ description: 'Albumin', example: 40, required: false })
   @Expose()
   albumin: number | null;
 
-  @ApiProperty({ example: 10, required: false })
+  @ApiProperty({ description: 'Alpha Globulin', example: 10, required: false })
   @Expose()
   alphaGlobulin: number | null;
 
-  @ApiProperty({ example: 10, required: false })
+  @ApiProperty({ description: 'Beta Globulin', example: 10, required: false })
   @Expose()
   betaGlobulin: number | null;
 
-  @ApiProperty({ example: 10, required: false })
+  @ApiProperty({ description: 'Gamma Globulin', example: 10, required: false })
   @Expose()
   gammaGlobulin: number | null;
 
-  @ApiProperty({ example: 15, required: false })
+  @ApiProperty({
+    description: 'Residual Nitrogen',
+    example: 20,
+    required: false,
+  })
   @Expose()
   residualNitrogen: number | null;
 
-  @ApiProperty({ example: 5, required: false })
+  @ApiProperty({ description: 'Urea', example: 5, required: false })
   @Expose()
   urea: number | null;
 
-  @ApiProperty({ example: 0.3, required: false })
+  @ApiProperty({ description: 'Uric Acid', example: 0.3, required: false })
   @Expose()
   uricAcid: number | null;
 
-  @ApiProperty({ example: 0.1, required: false })
+  @ApiProperty({ description: 'Creatine', example: 0.1, required: false })
   @Expose()
   creatine: number | null;
 
-  @ApiProperty({ example: 80, required: false })
+  @ApiProperty({ description: 'Creatinine', example: 80, required: false })
   @Expose()
   creatinine: number | null;
 
-  @ApiProperty({ example: 50, required: false })
+  @ApiProperty({
+    description: 'Alkaline Reserve',
+    example: 50,
+    required: false,
+  })
   @Expose()
   alkalineReserve: number | null;
 
-  @ApiProperty({ example: 5.5, required: false })
+  @ApiProperty({ description: 'Glucose', example: 5.5, required: false })
   @Expose()
   glucose: number | null;
 
-  @ApiProperty({ example: 0.5, required: false })
+  @ApiProperty({ description: 'Ketone Bodies', example: 0, required: false })
   @Expose()
   ketoneBodies: number | null;
 
-  @ApiProperty({ example: 10, required: false })
+  @ApiProperty({ description: 'Total Bilirubin', example: 10, required: false })
   @Expose()
   totalBilirubin: number | null;
 
-  @ApiProperty({ example: 2, required: false })
+  @ApiProperty({ description: 'Direct Bilirubin', example: 2, required: false })
   @Expose()
   directBilirubin: number | null;
 
-  @ApiProperty({ example: 4.5, required: false })
+  @ApiProperty({
+    description: 'Total Cholesterol',
+    example: 4,
+    required: false,
+  })
   @Expose()
   totalCholesterol: number | null;
 
-  @ApiProperty({ example: 3.5, required: false })
+  @ApiProperty({ description: 'Total Lipids', example: 5, required: false })
   @Expose()
   totalLipids: number | null;
 
-  @ApiProperty({ example: 2.5, required: false })
+  @ApiProperty({ description: 'Phospholipids', example: 2, required: false })
   @Expose()
   phospholipids: number | null;
 
-  @ApiProperty({ example: 1.5, required: false })
+  @ApiProperty({ description: 'Lactic Acid', example: 1, required: false })
   @Expose()
   lacticAcid: number | null;
 
-  @ApiProperty({ example: 0.5, required: false })
+  @ApiProperty({ description: 'Pyruvic Acid', example: 0.1, required: false })
   @Expose()
   pyruvicAcid: number | null;
 
-  @ApiProperty({ example: 0.2, required: false })
+  @ApiProperty({ description: 'Citric Acid', example: 0.1, required: false })
   @Expose()
   citricAcid: number | null;
 
-  @ApiProperty({ example: 0.1, required: false })
+  @ApiProperty({ description: 'Carotene', example: 0.5, required: false })
   @Expose()
   carotene: number | null;
 
-  @ApiProperty({ example: 0.5, required: false })
+  @ApiProperty({ description: 'Vitamin A', example: 1, required: false })
   @Expose()
   vitaminA: number | null;
 
-  @ApiProperty({ example: 0.5, required: false })
+  @ApiProperty({ description: 'Vitamin B', example: 1, required: false })
   @Expose()
   vitaminB: number | null;
 
-  @ApiProperty({ example: 0.5, required: false })
+  @ApiProperty({ description: 'Vitamin C', example: 1, required: false })
   @Expose()
   vitaminC: number | null;
 
-  @ApiProperty({ example: 'Healthy', required: false })
+  @ApiProperty({
+    description: 'Conclusion',
+    example: 'Normal',
+    required: false,
+  })
   @Expose()
   conclusion: string | null;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Creation date',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   @Expose()
   createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Last update date',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   @Expose()
   updatedAt: Date;
 }

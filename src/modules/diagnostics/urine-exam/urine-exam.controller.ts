@@ -6,75 +6,100 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
 import { UrineExamService } from './urine-exam.service';
-import { CreateUrineExamDto } from './dto/create-urine-exam.dto';
-import { UpdateUrineExamDto } from './dto/update-urine-exam.dto';
-import { UrineExamEntity } from './entities/urine-exam.entity';
+import {
+  CreateUrineExamDto,
+  UpdateUrineExamDto,
+  UrineExamQueryParamsDto,
+} from './dto';
+import { UrineExamEntity, PaginatedUrineExamEntity } from './entities';
 
-@ApiTags('Urine Exams')
+@ApiTags('urine-exams')
 @Controller('urine-exams')
 export class UrineExamController {
   constructor(private readonly urineExamService: UrineExamService) {}
 
+  @ApiOperation({
+    summary: 'Create urine exam',
+    description: 'Creates a new urine exam.',
+  })
+  @ApiCreatedResponse({
+    type: UrineExamEntity,
+    description: 'Urine exam created successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
   @Post()
-  @ApiOperation({ summary: 'Create a new urine exam' })
-  @ApiResponse({
-    status: 201,
-    description: 'The urine exam has been successfully created.',
-    type: UrineExamEntity,
-  })
-  create(@Body() createUrineExamDto: CreateUrineExamDto) {
-    return this.urineExamService.create(createUrineExamDto);
+  async create(@Body() data: CreateUrineExamDto) {
+    return await this.urineExamService.create(data);
   }
 
+  @ApiOperation({
+    summary: 'List urine exams',
+    description: 'Retrieve paginated list of urine exams.',
+  })
+  @ApiOkResponse({
+    type: PaginatedUrineExamEntity,
+    description: 'Urine exams retrieved successfully',
+  })
   @Get()
-  @ApiOperation({ summary: 'Get all urine exams' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return all urine exams.',
-    type: [UrineExamEntity],
-  })
-  findAll() {
-    return this.urineExamService.findAll();
+  async findAll(@Query() query: UrineExamQueryParamsDto) {
+    return await this.urineExamService.findAll(query);
   }
 
+  @ApiOperation({
+    summary: 'Get urine exam by ID',
+    description: 'Retrieve urine exam details.',
+  })
+  @ApiOkResponse({
+    type: UrineExamEntity,
+    description: 'Urine exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Urine exam not found' })
   @Get(':id')
-  @ApiOperation({ summary: 'Get a urine exam by id' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return the urine exam.',
-    type: UrineExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Urine exam not found.' })
-  findOne(@Param('id') id: string) {
-    return this.urineExamService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.urineExamService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Update urine exam',
+    description: 'Update urine exam information by ID.',
+  })
+  @ApiOkResponse({
+    type: UrineExamEntity,
+    description: 'Urine exam updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Urine exam not found' })
+  @ApiBadRequestResponse({ description: 'Invalid update data' })
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a urine exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The urine exam has been successfully updated.',
-    type: UrineExamEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Urine exam not found.' })
-  update(
-    @Param('id') id: string,
-    @Body() updateUrineExamDto: UpdateUrineExamDto,
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateUrineExamDto,
   ) {
-    return this.urineExamService.update(id, updateUrineExamDto);
+    return await this.urineExamService.update(id, data);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a urine exam' })
-  @ApiResponse({
-    status: 200,
-    description: 'The urine exam has been successfully deleted.',
+  @ApiOperation({
+    summary: 'Delete urine exam',
+    description: 'Delete urine exam by ID.',
   })
-  @ApiResponse({ status: 404, description: 'Urine exam not found.' })
-  remove(@Param('id') id: string) {
-    return this.urineExamService.remove(id);
+  @ApiOkResponse({
+    type: UrineExamEntity,
+    description: 'Urine exam deleted successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Urine exam not found' })
+  @Delete(':id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.urineExamService.delete(id);
   }
 }

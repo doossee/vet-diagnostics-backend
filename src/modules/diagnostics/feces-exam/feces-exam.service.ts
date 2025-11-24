@@ -1,20 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import { CreateFecesExamDto } from './dto/create-feces-exam.dto';
-import { UpdateFecesExamDto } from './dto/update-feces-exam.dto';
+import { PaginationService } from 'src/shared/services';
+import {
+  CreateFecesExamDto,
+  UpdateFecesExamDto,
+  FecesExamQueryParamsDto,
+} from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class FecesExamService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly paginationService: PaginationService,
+  ) {}
 
-  async create(createFecesExamDto: CreateFecesExamDto) {
-    return this.prisma.fecesExam.create({
-      data: createFecesExamDto,
-    });
-  }
-
-  async findAll() {
-    return this.prisma.fecesExam.findMany({
+  /**
+   * Create a new feces exam
+   * @param data - Feces exam creation data
+   * @returns Created feces exam
+   */
+  async create(data: CreateFecesExamDto) {
+    return await this.prisma.fecesExam.create({
+      data,
       include: {
         animal: true,
         fecesColor: true,
@@ -25,8 +33,49 @@ export class FecesExamService {
     });
   }
 
+  /**
+   * Get paginated list of feces exams
+   * @param query - Query parameters including filters and pagination
+   * @returns Paginated feces exams
+   */
+  async findAll(query: FecesExamQueryParamsDto) {
+    const { page, perPage, search, byId } = query;
+
+    const where: Prisma.FecesExamWhereInput = {
+      ...(search &&
+        {
+          // Add search logic if needed
+        }),
+    };
+
+    const orderBy: Prisma.FecesExamOrderByWithRelationInput = {
+      ...(byId && { id: byId }),
+      ...(!byId && { createdAt: 'desc' }),
+    };
+
+    const include: Prisma.FecesExamInclude = {
+      animal: true,
+      fecesColor: true,
+      fecesSmell: true,
+      fecesConsistency: true,
+      fecesForm: true,
+    };
+
+    return await this.paginationService.paginate(
+      this.prisma.fecesExam,
+      { where, orderBy, include },
+      { page, perPage },
+    );
+  }
+
+  /**
+   * Get a single feces exam by ID
+   * @param id - Feces exam UUID
+   * @returns Feces exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
   async findOne(id: string) {
-    const fecesExam = await this.prisma.fecesExam.findUnique({
+    return await this.prisma.fecesExam.findUniqueOrThrow({
       where: { id },
       include: {
         animal: true,
@@ -36,25 +85,37 @@ export class FecesExamService {
         fecesForm: true,
       },
     });
-
-    if (!fecesExam) {
-      throw new NotFoundException(`FecesExam with ID ${id} not found`);
-    }
-
-    return fecesExam;
   }
 
-  async update(id: string, updateFecesExamDto: UpdateFecesExamDto) {
-    await this.findOne(id);
-    return this.prisma.fecesExam.update({
+  /**
+   * Update feces exam
+   * @param id - Feces exam UUID
+   * @param data - Updated feces exam data
+   * @returns Updated feces exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async update(id: string, data: UpdateFecesExamDto) {
+    return await this.prisma.fecesExam.update({
       where: { id },
-      data: updateFecesExamDto,
+      data,
+      include: {
+        animal: true,
+        fecesColor: true,
+        fecesSmell: true,
+        fecesConsistency: true,
+        fecesForm: true,
+      },
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
-    return this.prisma.fecesExam.delete({
+  /**
+   * Delete feces exam
+   * @param id - Feces exam UUID
+   * @returns Deleted feces exam
+   * @throws PrismaClientKnownRequestError if not found
+   */
+  async delete(id: string) {
+    return await this.prisma.fecesExam.delete({
       where: { id },
     });
   }

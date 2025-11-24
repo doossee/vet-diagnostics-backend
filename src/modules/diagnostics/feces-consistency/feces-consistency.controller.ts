@@ -6,77 +6,105 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiBadRequestResponse,
+} from '@nestjs/swagger';
 import { FecesConsistencyService } from './feces-consistency.service';
-import { CreateFecesConsistencyDto } from './dto/create-feces-consistency.dto';
-import { UpdateFecesConsistencyDto } from './dto/update-feces-consistency.dto';
-import { FecesConsistencyEntity } from './entities/feces-consistency.entity';
+import {
+  CreateFecesConsistencyDto,
+  UpdateFecesConsistencyDto,
+  FecesConsistencyQueryParamsDto,
+} from './dto';
+import {
+  FecesConsistencyEntity,
+  PaginatedFecesConsistencyEntity,
+} from './entities';
 
-@ApiTags('Feces Consistencies')
+@ApiTags('feces-consistencies')
 @Controller('feces-consistencies')
 export class FecesConsistencyController {
   constructor(
     private readonly fecesConsistencyService: FecesConsistencyService,
   ) {}
 
+  @ApiOperation({
+    summary: 'Create feces consistency',
+    description: 'Creates a new feces consistency.',
+  })
+  @ApiCreatedResponse({
+    type: FecesConsistencyEntity,
+    description: 'Feces consistency created successfully',
+  })
+  @ApiBadRequestResponse({ description: 'Invalid data' })
   @Post()
-  @ApiOperation({ summary: 'Create a new feces consistency' })
-  @ApiResponse({
-    status: 201,
-    description: 'The feces consistency has been successfully created.',
-    type: FecesConsistencyEntity,
-  })
-  create(@Body() createFecesConsistencyDto: CreateFecesConsistencyDto) {
-    return this.fecesConsistencyService.create(createFecesConsistencyDto);
+  async create(@Body() data: CreateFecesConsistencyDto) {
+    return await this.fecesConsistencyService.create(data);
   }
 
+  @ApiOperation({
+    summary: 'List feces consistencies',
+    description: 'Retrieve paginated list of feces consistencies.',
+  })
+  @ApiOkResponse({
+    type: PaginatedFecesConsistencyEntity,
+    description: 'Feces consistencies retrieved successfully',
+  })
   @Get()
-  @ApiOperation({ summary: 'Get all feces consistencies' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return all feces consistencies.',
-    type: [FecesConsistencyEntity],
-  })
-  findAll() {
-    return this.fecesConsistencyService.findAll();
+  async findAll(@Query() query: FecesConsistencyQueryParamsDto) {
+    return await this.fecesConsistencyService.findAll(query);
   }
 
+  @ApiOperation({
+    summary: 'Get feces consistency by ID',
+    description: 'Retrieve feces consistency details.',
+  })
+  @ApiOkResponse({
+    type: FecesConsistencyEntity,
+    description: 'Feces consistency retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces consistency not found' })
   @Get(':id')
-  @ApiOperation({ summary: 'Get a feces consistency by id' })
-  @ApiResponse({
-    status: 200,
-    description: 'Return the feces consistency.',
-    type: FecesConsistencyEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Feces consistency not found.' })
-  findOne(@Param('id') id: string) {
-    return this.fecesConsistencyService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.fecesConsistencyService.findOne(id);
   }
 
+  @ApiOperation({
+    summary: 'Update feces consistency',
+    description: 'Update feces consistency information by ID.',
+  })
+  @ApiOkResponse({
+    type: FecesConsistencyEntity,
+    description: 'Feces consistency updated successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces consistency not found' })
+  @ApiBadRequestResponse({ description: 'Invalid update data' })
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a feces consistency' })
-  @ApiResponse({
-    status: 200,
-    description: 'The feces consistency has been successfully updated.',
-    type: FecesConsistencyEntity,
-  })
-  @ApiResponse({ status: 404, description: 'Feces consistency not found.' })
-  update(
-    @Param('id') id: string,
-    @Body() updateFecesConsistencyDto: UpdateFecesConsistencyDto,
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateFecesConsistencyDto,
   ) {
-    return this.fecesConsistencyService.update(id, updateFecesConsistencyDto);
+    return await this.fecesConsistencyService.update(id, data);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a feces consistency' })
-  @ApiResponse({
-    status: 200,
-    description: 'The feces consistency has been successfully deleted.',
+  @ApiOperation({
+    summary: 'Delete feces consistency',
+    description: 'Delete feces consistency by ID.',
   })
-  @ApiResponse({ status: 404, description: 'Feces consistency not found.' })
-  remove(@Param('id') id: string) {
-    return this.fecesConsistencyService.remove(id);
+  @ApiOkResponse({
+    type: FecesConsistencyEntity,
+    description: 'Feces consistency deleted successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces consistency not found' })
+  @Delete(':id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.fecesConsistencyService.delete(id);
   }
 }

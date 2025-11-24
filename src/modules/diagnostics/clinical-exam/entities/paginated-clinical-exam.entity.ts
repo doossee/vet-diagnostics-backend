@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MucosaAppearanceEntity } from './mucosa-appearance.entity';
+import { ClinicalExamEntity } from './clinical-exam.entity';
 import { MetaDataEntity } from 'src/shared/entities';
 
-export class PaginatedMucosaAppearanceEntity {
+export class PaginatedClinicalExamEntity {
   @ApiProperty({
-    description: 'Array of mucosa appearances',
-    type: [MucosaAppearanceEntity],
+    description: 'Array of clinical exams',
+    type: [ClinicalExamEntity],
   })
-  data: MucosaAppearanceEntity[];
+  data: ClinicalExamEntity[];
 
   @ApiProperty({
     description: 'Pagination metadata',

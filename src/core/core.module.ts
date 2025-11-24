@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseTransformInterceptor } from 'src/shared/interceptors';
+import { DiagnosticsModule } from 'src/modules/diagnostics/diagnostics.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ResponseTransformInterceptor } from 'src/shared/interceptors';
     }),
     PrismaModule,
     AuthModule,
+    DiagnosticsModule,
   ],
   controllers: [],
   providers: [
