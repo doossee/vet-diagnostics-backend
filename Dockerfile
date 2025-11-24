@@ -17,7 +17,7 @@ COPY . .
 ENV DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy?schema=public"
 
 # Generate Prisma Client
-RUN npx prisma generate --schema prisma/schema_merged.prisma
+RUN npx prisma generate
 
 # Expose port
 EXPOSE 3000

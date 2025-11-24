@@ -1,11 +1,10 @@
-
 model Disease {
     id String @id @default(uuid()) @db.Uuid
 
     name_ru String @db.VarChar(100)
     name_uz String @db.VarChar(100)
 
-    diseaseCategoryId String      @map("type_id") @db.Uuid
+    diseaseCategoryId String          @map("type_id") @db.Uuid
     diseaseCategory   DiseaseCategory @relation(fields: [diseaseCategoryId], references: [id], onDelete: Restrict)
 
     createdAt DateTime @default(now()) @map("created_at")
@@ -23,7 +22,7 @@ model DiseaseCategory {
     name_ru String @db.VarChar(100)
     name_uz String @db.VarChar(100)
 
-    parentId String?      @map("parent_id") @db.Uuid
+    parentId String?          @map("parent_id") @db.Uuid
     parent   DiseaseCategory? @relation("DiseaseCategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
 
     diseases Disease[]
@@ -40,18 +39,21 @@ model Prophylaxis {
     animalId String @map("animal_id") @db.Uuid
     animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
-    itemId String           @map("item_id") @db.Uuid
+    itemId String          @map("item_id") @db.Uuid
     item   ProphylaxisItem @relation(fields: [itemId], references: [id], onDelete: Restrict)
 
     // Optional detail (strain for vaccine, preparation for deworming)
-    detailId String?             @map("detail_id") @db.Uuid
+    detailId String?            @map("detail_id") @db.Uuid
     detail   ProphylaxisDetail? @relation(fields: [detailId], references: [id], onDelete: Restrict)
+
+    date DateTime @map("date")
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
 
     @@index([animalId])
     @@index([type])
+    @@index([date])
     @@map("prophylactic_records")
 }
 
@@ -79,7 +81,7 @@ model ProphylaxisDetail {
     name_ru String @db.VarChar(255)
     name_uz String @db.VarChar(255)
 
-    itemId String           @map("item_id") @db.Uuid
+    itemId String          @map("item_id") @db.Uuid
     item   ProphylaxisItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
     records Prophylaxis[]

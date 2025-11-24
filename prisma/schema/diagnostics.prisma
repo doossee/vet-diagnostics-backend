@@ -1,10 +1,9 @@
-
 // Clinical / General Inspection
 // Clinical / General Inspection
 model ClinicalExam {
   id String @id @default(uuid()) @db.Uuid
 
-  animalId String    @map("animal_id")
+  animalId String @map("animal_id") @db.Uuid
   animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
   // --- General ---
@@ -14,11 +13,11 @@ model ClinicalExam {
   respiratoryRate Float? @map("respiratory_rate") // nafas soni
 
   // --- Habitus ---
-  bodyType      BodyType?      @map("body_type") // jussasi
-  obesity       ObesityType? // semizligi
-  bodyPosition  BodyPosition?  @map("body_position") // holati
-  constitution  Constitution?  @map("constitution") // tana tuzilishi (konstitutsiyasi)
-  temperament   Temperament?   @map("temperament") // mijozi
+  bodyType     BodyType?     @map("body_type") // jussasi
+  obesity      ObesityType? // semizligi
+  bodyPosition BodyPosition? @map("body_position") // holati
+  constitution Constitution? @map("constitution") // tana tuzilishi (konstitutsiyasi)
+  temperament  Temperament?  @map("temperament") // mijozi
 
   // --- Skin Cover (Teri qoplamasi) ---
   wool     WoolType?    @map("wool") // jun
@@ -56,77 +55,77 @@ model ClinicalExam {
 enum BodyType {
   STRONG // Kuchli jussali
   MEDIUM // O'rtacha jussali
-  WEAK   // Kuchsiz jussali
+  WEAK // Kuchsiz jussali
 }
 
 enum ObesityType {
-  HIGH     // Yaxshi, yuqori semiz
-  MEDIUM   // O'rtacha semiz
-  LOW      // O'rtadan past semiz
+  HIGH // Yaxshi, yuqori semiz
+  MEDIUM // O'rtacha semiz
+  LOW // O'rtadan past semiz
   CACHEXIA // Kaxeksiya
 }
 
 enum BodyPosition {
-  NATURAL         // Tabiiy
+  NATURAL // Tabiiy
   FORCED_STANDING // Majburiy tik turgan
-  FORCED_LYING    // Majburiy yotgan
-  FORCED_SITTING  // Majburiy o’tirgan
+  FORCED_LYING // Majburiy yotgan
+  FORCED_SITTING // Majburiy o’tirgan
   NON_THERAPEUTIC // Tabiiy bo’lmagan holat
-  INVOLUNTARY     // Ixtiyorsiz harakatlar
-  MANEGE          // Monejli harakat
-  CIRCULAR        // Aylanma harakat
-  FORWARD         // Oldinga qarab harakat
-  BACKWARD        // Orqaga qarab harakat
-  ROLLING         // Ag’anab yotgan joyidagi harakat
+  INVOLUNTARY // Ixtiyorsiz harakatlar
+  MANEGE // Monejli harakat
+  CIRCULAR // Aylanma harakat
+  FORWARD // Oldinga qarab harakat
+  BACKWARD // Orqaga qarab harakat
+  ROLLING // Ag’anab yotgan joyidagi harakat
 }
 
 enum Constitution {
-  LOOSE  // YShX (Yumshoq?)
-  DENSE  // MShH (Mustahkam?)
+  LOOSE // YShX (Yumshoq?)
+  DENSE // MShH (Mustahkam?)
   HORSES // Otlar (Specific type?)
-  BIRDS  // Parrandalarda
+  BIRDS // Parrandalarda
 }
 
 enum Temperament {
   MELANCHOLIC // Melanxolik
-  PHLEGMATIC  // Flegmatik
+  PHLEGMATIC // Flegmatik
   // Document only listed these two, but usually there are 4. Keeping strictly to doc.
 }
 
 enum WoolType {
-  EVEN           // Bir tekis
-  UNEVEN         // Bir tekis emas
-  LYING_FLAT     // Teriga yotib turibdi
-  SHINY          // Yaltiroq
-  MATTE          // Yaltiroq emas (Xira?)
-  NOT_FALLING    // Tushmaydi
-  DISHEVELED     // Hurpaygan
-  MATTED         // Bir biriga yopishgan
-  BALD_PATCHES   // Terining ayrim joylarida junlar tushgan
-  THICK          // Qalin
-  SPARSE         // Siyrak
+  EVEN // Bir tekis
+  UNEVEN // Bir tekis emas
+  LYING_FLAT // Teriga yotib turibdi
+  SHINY // Yaltiroq
+  MATTE // Yaltiroq emas (Xira?)
+  NOT_FALLING // Tushmaydi
+  DISHEVELED // Hurpaygan
+  MATTED // Bir biriga yopishgan
+  BALD_PATCHES // Terining ayrim joylarida junlar tushgan
+  THICK // Qalin
+  SPARSE // Siyrak
   PHYSIOLOGICAL_MOLT // Fiziologik tullash
-  PATHOLOGICAL_MOLT  // Patologik tullash
-  FALLING        // Jun tushayapti
+  PATHOLOGICAL_MOLT // Patologik tullash
+  FALLING // Jun tushayapti
   NOT_FALLING_OUT // Jun tushmayapti
 }
 
 enum DownType {
-  DENSE      // Zich
-  SPARSE     // Siyrak
-  NONE       // Yo’q
-  SOFT       // Yumshoq
-  SMOOTH     // Silliq
-  MATTE      // Xira
-  SHINY      // Yaltiroq
-  DRY        // Quruq
-  DUSTY      // Chang bosgan
-  EVEN       // Bir tekis
-  WHITE      // Oq rangli
-  GRAY       // Kulrang
-  YELLOWISH  // Sarg’aygan
-  DARK       // Qoramtir
-  MOIST      // Nam
+  DENSE // Zich
+  SPARSE // Siyrak
+  NONE // Yo’q
+  SOFT // Yumshoq
+  SMOOTH // Silliq
+  MATTE // Xira
+  SHINY // Yaltiroq
+  DRY // Quruq
+  DUSTY // Chang bosgan
+  EVEN // Bir tekis
+  WHITE // Oq rangli
+  GRAY // Kulrang
+  YELLOWISH // Sarg’aygan
+  DARK // Qoramtir
+  MOIST // Nam
 }
 
 enum HairType {
@@ -135,77 +134,77 @@ enum HairType {
 }
 
 enum FeatherType {
-  SHINY   // Yaltiroq
-  MATTE   // Xira
-  FULL    // To’liq
-  FALLEN  // To’kilgan
-  BROKEN  // Siniq
+  SHINY // Yaltiroq
+  MATTE // Xira
+  FULL // To’liq
+  FALLEN // To’kilgan
+  BROKEN // Siniq
 }
 
 enum SkinColor {
   PALE_VIOLET // Och binafsha
-  PALE        // Oqargan
-  RED         // Qizargan
-  BLUE        // Ko’kargan
-  YELLOW      // Sarg’aygan
+  PALE // Oqargan
+  RED // Qizargan
+  BLUE // Ko’kargan
+  YELLOW // Sarg’aygan
 }
 
 enum SkinHumidity {
-  MODERATE      // O’rtacha nam
+  MODERATE // O’rtacha nam
   HYPERHIDROSIS // Gipergidroz
-  LOCAL_SWEAT   // Mahalliy terlagan
-  DRY           // Quruq – angidoz
+  LOCAL_SWEAT // Mahalliy terlagan
+  DRY // Quruq – angidoz
 }
 
 enum SkinTemp {
   GENERAL_HIGH // Teri harorati umumiy ko’tarilgan
-  LOCAL_HIGH   // Teri harorati mahalliy ko’tarilgan
-  GENERAL_LOW  // Teri harorati umumiy pasaygan
-  LOCAL_LOW    // Teri harorati mahalliy pasaygan
-  UNEVEN       // Teri harorati har xil
+  LOCAL_HIGH // Teri harorati mahalliy ko’tarilgan
+  GENERAL_LOW // Teri harorati umumiy pasaygan
+  LOCAL_LOW // Teri harorati mahalliy pasaygan
+  UNEVEN // Teri harorati har xil
 }
 
 enum SkinElasticity {
-  ELASTIC      // elastik
-  REDUCED      // teri elastikgi kamaygan
-  NONE         // teri elastikligi umuman yo’q
+  ELASTIC // elastik
+  REDUCED // teri elastikgi kamaygan
+  NONE // teri elastikligi umuman yo’q
 }
 
 enum LymphSize {
-  NORMAL    // Kattarmagan
-  ENLARGED  // Kattargan
+  NORMAL // Kattarmagan
+  ENLARGED // Kattargan
 }
 
 enum LymphShape {
-  FLAT      // Yassi
-  ROUND     // Dumaloq
-  ENLARGED  // Kattargan (Duplicate concept but in shape list?)
-  SWOLLEN   // Shishgan
+  FLAT // Yassi
+  ROUND // Dumaloq
+  ENLARGED // Kattargan (Duplicate concept but in shape list?)
+  SWOLLEN // Shishgan
 }
 
 enum LymphSurface {
   SMOOTH // Silliq
-  ROUGH  // G’adir-budir
+  ROUGH // G’adir-budir
 }
 
 enum LymphConsistency {
-  DENSE    // Zich
-  SOFT     // Bilqillagan
+  DENSE // Zich
+  SOFT // Bilqillagan
   SPECIFIC // O’ziga xos
 }
 
 enum LymphTemp {
-  NORMAL   // O’rtacha
+  NORMAL // O’rtacha
   ELEVATED // Oshgan
 }
 
 enum LymphPain {
   PAINLESS // Og’riqsiz
-  PAINFUL  // Og’riqli
+  PAINFUL // Og’riqli
 }
 
 enum LymphMobility {
-  MOBILE   // Harakatchan
+  MOBILE // Harakatchan
   LOW_MOBILITY // Kam harakatchan
 }
 
@@ -213,7 +212,7 @@ enum LymphMobility {
 model BloodExam {
   id String @id @default(uuid()) @db.Uuid
 
-  animalId String? @map("animal_id")
+  animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
   // Qonning morfologik tekshirishlari / Морфологическое исследование крови / Blood Morphological Analysis
@@ -271,103 +270,103 @@ enum UrineAnalysisType {
 }
 
 model UrineExam {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    analysisType UrineAnalysisType @map("analysis_type")
+  analysisType UrineAnalysisType @map("analysis_type")
 
-    animalId String? @map("animal_id")
-    animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  animalId String? @map("animal_id") @db.Uuid
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
-    urineColorId String?     @map("urine_color_id") @db.Uuid
-    urineColor   UrineColor? @relation(fields: [urineColorId], references: [id], onDelete: Restrict)
+  urineColorId String?     @map("urine_color_id") @db.Uuid
+  urineColor   UrineColor? @relation(fields: [urineColorId], references: [id], onDelete: Restrict)
 
-    // Макроскопическое исследование / Makroskopik tekshiruv
-    amount      Float? // количество / miqdor
-    
-    urineClarityId String?        @map("urine_clarity_id") @db.Uuid
-    urineClarity   UrineClarity?  @relation(fields: [urineClarityId], references: [id], onDelete: Restrict)
-    
-    urineConsistencyId String?            @map("urine_consistency_id") @db.Uuid
-    urineConsistency   UrineConsistency?  @relation(fields: [urineConsistencyId], references: [id], onDelete: Restrict)
-    
-    urineSmellId String?      @map("urine_smell_id") @db.Uuid
-    urineSmell   UrineSmell?  @relation(fields: [urineSmellId], references: [id], onDelete: Restrict)
+  // Макроскопическое исследование / Makroskopik tekshiruv
+  amount Float? // количество / miqdor
 
-    // Лабораторное исследование / Laborator tekshiruv
-    ph           Float? // среда (pH)
-    acetone      Float? // кетоновые тела (ацетон)
-    protein      Float? // белок
-    bilirubin    Float? // билирубин
-    urobilinogen Float? // уробилиноген
-    sugar        Float? // сахар
+  urineClarityId String?       @map("urine_clarity_id") @db.Uuid
+  urineClarity   UrineClarity? @relation(fields: [urineClarityId], references: [id], onDelete: Restrict)
 
-    // Микроскопическое исследование / Mikroskopik tekshiruv
-    leukocytes      Float? // лейкоциты / leykosit
-    epithelium      Float? // эпителий / epiteliy
-    microbialBodies Float? @map("microbial_bodies") // микробные тела / mikrob tanachalar
-    erythrocytes    Float? // эритроциты / eritrosit
-    saltCrystals    Float? @map("salt_crystals") // кристаллы солей / tuz kristallari
+  urineConsistencyId String?           @map("urine_consistency_id") @db.Uuid
+  urineConsistency   UrineConsistency? @relation(fields: [urineConsistencyId], references: [id], onDelete: Restrict)
 
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
+  urineSmellId String?     @map("urine_smell_id") @db.Uuid
+  urineSmell   UrineSmell? @relation(fields: [urineSmellId], references: [id], onDelete: Restrict)
 
-    @@map("urine_analyses")
+  // Лабораторное исследование / Laborator tekshiruv
+  ph           Float? // среда (pH)
+  acetone      Float? // кетоновые тела (ацетон)
+  protein      Float? // белок
+  bilirubin    Float? // билирубин
+  urobilinogen Float? // уробилиноген
+  sugar        Float? // сахар
+
+  // Микроскопическое исследование / Mikroskopik tekshiruv
+  leukocytes      Float? // лейкоциты / leykosit
+  epithelium      Float? // эпителий / epiteliy
+  microbialBodies Float? @map("microbial_bodies") // микробные тела / mikrob tanachalar
+  erythrocytes    Float? // эритроциты / eritrosit
+  saltCrystals    Float? @map("salt_crystals") // кристаллы солей / tuz kristallari
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("urine_analyses")
 }
 
 model UrineColor {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    urineTests UrineExam[]
+  urineTests UrineExam[]
 
-    @@map("urine_colors")
+  @@map("urine_colors")
 }
 
 model UrineSmell {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    urineAnalyses UrineExam[]
+  urineAnalyses UrineExam[]
 
-    @@map("urine_smells")
+  @@map("urine_smells")
 }
 
 model UrineClarity {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    urineAnalyses UrineExam[]
+  urineAnalyses UrineExam[]
 
-    @@map("urine_clarities")
+  @@map("urine_clarities")
 }
 
 model UrineConsistency {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    urineAnalyses UrineExam[]
+  urineAnalyses UrineExam[]
 
-    @@map("urine_consistencies")
+  @@map("urine_consistencies")
 }
 
 // Feces Analysis
@@ -377,87 +376,87 @@ enum FecesAnalysisType {
 }
 
 model FecesExam {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    animalId String? @map("animal_id")
-    animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  animalId String? @map("animal_id") @db.Uuid
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
-    fecesColorId String?     @map("feces_color_id") @db.Uuid
-    fecesColor   FecesColor? @relation(fields: [fecesColorId], references: [id], onDelete: Restrict)
+  fecesColorId String?     @map("feces_color_id") @db.Uuid
+  fecesColor   FecesColor? @relation(fields: [fecesColorId], references: [id], onDelete: Restrict)
 
-    // Макроскопические исследования / Makroskopik tekshiruv
-    fecesSmellId String?      @map("feces_smell_id") @db.Uuid
-    fecesSmell   FecesSmell?  @relation(fields: [fecesSmellId], references: [id], onDelete: Restrict)
-    
-    fecesConsistencyId String?            @map("feces_consistency_id") @db.Uuid
-    fecesConsistency   FecesConsistency?  @relation(fields: [fecesConsistencyId], references: [id], onDelete: Restrict)
-    
-    fecesFormId String?     @map("feces_form_id") @db.Uuid
-    fecesForm   FecesForm?  @relation(fields: [fecesFormId], references: [id], onDelete: Restrict)
-    
-    amount             Float? // количество / miqdor
-    undigestedFood     Float? @map("undigested_food") // количество непереваренной пищи / hazm bo'lmagan ovqat miqdori
+  // Макроскопические исследования / Makroskopik tekshiruv
+  fecesSmellId String?     @map("feces_smell_id") @db.Uuid
+  fecesSmell   FecesSmell? @relation(fields: [fecesSmellId], references: [id], onDelete: Restrict)
 
-    createdAt DateTime @default(now()) @map("created_at")
-    updatedAt DateTime @updatedAt @map("updated_at")
+  fecesConsistencyId String?           @map("feces_consistency_id") @db.Uuid
+  fecesConsistency   FecesConsistency? @relation(fields: [fecesConsistencyId], references: [id], onDelete: Restrict)
 
-    @@map("feces_analyses")
+  fecesFormId String?    @map("feces_form_id") @db.Uuid
+  fecesForm   FecesForm? @relation(fields: [fecesFormId], references: [id], onDelete: Restrict)
+
+  amount         Float? // количество / miqdor
+  undigestedFood Float? @map("undigested_food") // количество непереваренной пищи / hazm bo'lmagan ovqat miqdori
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("feces_analyses")
 }
 
 model FecesColor {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    fecesAnalyses FecesExam[]
-    
-    @@map("feces_colors")
+  fecesAnalyses FecesExam[]
+
+  @@map("feces_colors")
 }
 
 model FecesSmell {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    fecesAnalyses FecesExam[]
-    
-    @@map("feces_smells")
+  fecesAnalyses FecesExam[]
+
+  @@map("feces_smells")
 }
 
 model FecesConsistency {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    fecesAnalyses FecesExam[]
-    
-    @@map("feces_consistencies")
+  fecesAnalyses FecesExam[]
+
+  @@map("feces_consistencies")
 }
 
 model FecesForm {
-    id String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    name_ru String @db.VarChar(255)
-    name_uz String @db.VarChar(255)
+  name_ru String @db.VarChar(255)
+  name_uz String @db.VarChar(255)
 
-    animalTypeId String     @map("animal_type_id") @db.Uuid
-    animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-    fecesAnalyses FecesExam[]
-    
-    @@map("feces_forms")
+  fecesAnalyses FecesExam[]
+
+  @@map("feces_forms")
 }
 
 // Mucosa Analysis
@@ -466,7 +465,7 @@ model MucosaExam {
 
   mucosaType MucosaType @map("mucosa_type")
 
-  animalId String? @map("animal_id")
+  animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
   mucosaAppearanceId String?           @map("mucosa_appearance_id") @db.Uuid
