@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { VetStation } from '@prisma/client';
 import { Expose } from 'class-transformer';
 import { DistrictEntity } from '../../district/entities';
@@ -54,10 +54,9 @@ export class VetStationEntity implements VetStation {
   @Expose()
   updatedAt: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'District details',
     type: () => DistrictEntity,
-    required: false,
   })
   @Expose()
   district?: DistrictEntity;

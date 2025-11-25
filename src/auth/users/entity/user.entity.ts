@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { $Enums, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
@@ -28,54 +28,47 @@ export class UserEntity implements User {
   })
   firstName: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Last name of the user',
     example: 'Smith',
-    required: false,
   })
   lastName: string | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Email address of the user',
     example: 'john.smith@example.com',
-    required: false,
   })
   email: string | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "User's phone number",
     example: '+998901234567',
-    required: false,
   })
   phone: string | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "User's avatar URL",
     example: 'https://example.com/avatar.jpg',
-    required: false,
   })
   avatar: string | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "User's gender",
     enum: $Enums.UserGender,
     example: $Enums.UserGender.MALE,
-    required: false,
   })
   gender: $Enums.UserGender | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "User's birth date",
     type: String,
     example: '1990-01-01',
-    required: false,
   })
   birthDate: Date | null;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "User's address",
     example: 'Tashkent, Yunusabad district',
-    required: false,
   })
   address: string | null;
 
@@ -118,11 +111,10 @@ export class UserEntity implements User {
   })
   updatedAt: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Soft delete timestamp',
     type: String,
     example: '2024-01-10T00:00:00.000Z',
-    required: false,
   })
   deletedAt: Date | null;
 }

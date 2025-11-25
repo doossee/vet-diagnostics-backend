@@ -1,29 +1,48 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AnimalType } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
 export class AnimalTypeEntity implements AnimalType {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({
+    description: 'Unique identifier for the animal type',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+    format: 'uuid',
+  })
   @Expose()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Name of the animal type in Russian',
+    example: 'Крупный рогатый скот',
+  })
   @Expose()
   name_ru: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Name of the animal type in Uzbek',
+    example: 'Qoramol',
+  })
   @Expose()
   name_uz: string;
 
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional({
+    description: 'Parent animal type ID (for hierarchical types)',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
   @Expose()
   parentId: string | null;
 
-  @ApiProperty({ type: () => AnimalTypeEntity, required: false })
+  @ApiPropertyOptional({
+    description: 'Parent animal type details',
+    type: () => AnimalTypeEntity,
+  })
   @Expose()
   parent?: AnimalTypeEntity;
 
-  @ApiProperty({ type: () => [AnimalTypeEntity], required: false })
+  @ApiPropertyOptional({
+    description: 'Child animal types',
+    type: () => [AnimalTypeEntity],
+  })
   @Expose()
   children?: AnimalTypeEntity[];
 }

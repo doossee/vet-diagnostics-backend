@@ -17,38 +17,35 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { AnimalAnimalBreedService } from './animal-breed.service';
+import { AnimalBreedService } from './animal-breed.service';
 import {
-  CreateAnimalAnimalBreedDto,
-  UpdateAnimalAnimalBreedDto,
-  AnimalAnimalBreedQueryParamsDto,
+  CreateAnimalBreedDto,
+  UpdateAnimalBreedDto,
+  AnimalBreedQueryParamsDto,
 } from './dto';
-import {
-  AnimalAnimalBreedEntity,
-  PaginatedAnimalAnimalBreedEntity,
-} from './entities';
+import { AnimalBreedEntity, PaginatedAnimalBreedEntity } from './entities';
 
 @ApiTags('breeds')
 @Controller('breeds')
-export class AnimalAnimalBreedController {
-  constructor(private readonly breedService: AnimalAnimalBreedService) {}
+export class AnimalBreedController {
+  constructor(private readonly breedService: AnimalBreedService) {}
 
   @ApiOperation({ summary: 'Create breed' })
-  @ApiCreatedResponse({ type: AnimalAnimalBreedEntity })
+  @ApiCreatedResponse({ type: AnimalBreedEntity })
   @Post()
-  async create(@Body() data: CreateAnimalAnimalBreedDto) {
+  async create(@Body() data: CreateAnimalBreedDto) {
     return await this.breedService.create(data);
   }
 
   @ApiOperation({ summary: 'List breeds' })
-  @ApiOkResponse({ type: PaginatedAnimalAnimalBreedEntity })
+  @ApiOkResponse({ type: PaginatedAnimalBreedEntity })
   @Get()
-  async findAll(@Query() query: AnimalAnimalBreedQueryParamsDto) {
+  async findAll(@Query() query: AnimalBreedQueryParamsDto) {
     return await this.breedService.findAll(query);
   }
 
   @ApiOperation({ summary: 'Get breed by ID' })
-  @ApiOkResponse({ type: AnimalAnimalBreedEntity })
+  @ApiOkResponse({ type: AnimalBreedEntity })
   @ApiNotFoundResponse()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -56,17 +53,17 @@ export class AnimalAnimalBreedController {
   }
 
   @ApiOperation({ summary: 'Update breed' })
-  @ApiOkResponse({ type: AnimalAnimalBreedEntity })
+  @ApiOkResponse({ type: AnimalBreedEntity })
   @Patch(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: UpdateAnimalAnimalBreedDto,
+    @Body() data: UpdateAnimalBreedDto,
   ) {
     return await this.breedService.update(id, data);
   }
 
   @ApiOperation({ summary: 'Delete breed' })
-  @ApiOkResponse({ type: AnimalAnimalBreedEntity })
+  @ApiOkResponse({ type: AnimalBreedEntity })
   @Delete(':id')
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.breedService.delete(id);

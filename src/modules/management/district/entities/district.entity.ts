@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { District } from '@prisma/client';
 import { Expose } from 'class-transformer';
 import { RegionEntity } from '../../region/entities';
@@ -33,10 +33,9 @@ export class DistrictEntity implements District {
   @Expose()
   regionId: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Parent region details',
     type: () => RegionEntity,
-    required: false,
   })
   @Expose()
   region?: RegionEntity;

@@ -3,43 +3,75 @@ import { Animal, AnimalSex } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
 export class AnimalEntity implements Animal {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({
+    description: 'Unique identifier for the animal',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+    format: 'uuid',
+  })
   @Expose()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Date of arrival',
+    example: '2024-01-15T00:00:00.000Z',
+  })
   @Expose()
   arrivalDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Age of the animal (in months)',
+    example: 12,
+  })
   @Expose()
   age: number;
 
-  @ApiProperty({ enum: AnimalSex })
+  @ApiProperty({
+    description: 'Sex of the animal',
+    enum: AnimalSex,
+    example: AnimalSex.FEMALE,
+  })
   @Expose()
   sex: AnimalSex;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'ID of the farmer',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
   @Expose()
   farmerId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'ID of the animal type',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
   @Expose()
   animalTypeId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'ID of the animal breed',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
   @Expose()
   animalBreedId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'ID of the animal color',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
   @Expose()
   animalColorId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Record creation timestamp',
+    example: '2024-01-15T10:00:00.000Z',
+  })
   @Expose()
   createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Record last update timestamp',
+    example: '2024-01-15T10:00:00.000Z',
+  })
   @Expose()
   updatedAt: Date;
 }

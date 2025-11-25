@@ -17,33 +17,33 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { AnimalAnimalColorService } from './animal-color.service';
+import { AnimalColorService } from './animal-color.service';
 import {
-  CreateAnimalAnimalColorDto,
-  UpdateAnimalAnimalColorDto,
-  AnimalAnimalColorQueryParamsDto,
+  CreateAnimalColorDto,
+  UpdateAnimalColorDto,
+  AnimalColorQueryParamsDto,
 } from './dto';
 import {
-  AnimalAnimalColorEntity,
-  PaginatedAnimalAnimalColorEntity,
+  AnimalColorEntity,
+  PaginatedAnimalColorEntity,
 } from './entities';
 
 @ApiTags('colors')
 @Controller('colors')
-export class AnimalAnimalColorController {
-  constructor(private readonly colorService: AnimalAnimalColorService) {}
+export class AnimalColorController {
+  constructor(private readonly colorService: AnimalColorService) {}
 
   @ApiOperation({
     summary: 'Create color',
     description: 'Creates a new color.',
   })
   @ApiCreatedResponse({
-    type: AnimalAnimalColorEntity,
+    type: AnimalColorEntity,
     description: 'AnimalColor created successfully',
   })
   @ApiBadRequestResponse({ description: 'Invalid color data' })
   @Post()
-  async create(@Body() data: CreateAnimalAnimalColorDto) {
+  async create(@Body() data: CreateAnimalColorDto) {
     return await this.colorService.create(data);
   }
 
@@ -52,11 +52,11 @@ export class AnimalAnimalColorController {
     description: 'Retrieve paginated list of colors.',
   })
   @ApiOkResponse({
-    type: PaginatedAnimalAnimalColorEntity,
+    type: PaginatedAnimalColorEntity,
     description: 'AnimalColors retrieved successfully',
   })
   @Get()
-  async findAll(@Query() query: AnimalAnimalColorQueryParamsDto) {
+  async findAll(@Query() query: AnimalColorQueryParamsDto) {
     return await this.colorService.findAll(query);
   }
 
@@ -65,7 +65,7 @@ export class AnimalAnimalColorController {
     description: 'Retrieve color details.',
   })
   @ApiOkResponse({
-    type: AnimalAnimalColorEntity,
+    type: AnimalColorEntity,
     description: 'AnimalColor retrieved successfully',
   })
   @ApiNotFoundResponse({ description: 'AnimalColor not found' })
@@ -79,7 +79,7 @@ export class AnimalAnimalColorController {
     description: 'Update color information by ID.',
   })
   @ApiOkResponse({
-    type: AnimalAnimalColorEntity,
+    type: AnimalColorEntity,
     description: 'AnimalColor updated successfully',
   })
   @ApiNotFoundResponse({ description: 'AnimalColor not found' })
@@ -87,7 +87,7 @@ export class AnimalAnimalColorController {
   @Patch(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: UpdateAnimalAnimalColorDto,
+    @Body() data: UpdateAnimalColorDto,
   ) {
     return await this.colorService.update(id, data);
   }
@@ -97,7 +97,7 @@ export class AnimalAnimalColorController {
     description: 'Delete color by ID.',
   })
   @ApiOkResponse({
-    type: AnimalAnimalColorEntity,
+    type: AnimalColorEntity,
     description: 'AnimalColor deleted successfully',
   })
   @ApiNotFoundResponse({ description: 'AnimalColor not found' })

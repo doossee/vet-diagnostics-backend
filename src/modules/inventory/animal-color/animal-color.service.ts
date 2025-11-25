@@ -1,27 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import {
-  CreateAnimalAnimalColorDto,
-  UpdateAnimalAnimalColorDto,
-  AnimalAnimalColorQueryParamsDto,
+  CreateAnimalColorDto,
+  UpdateAnimalColorDto,
+  AnimalColorQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class AnimalAnimalColorService {
+export class AnimalColorService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly paginationService: PaginationService,
   ) {}
 
-  async create(data: CreateAnimalAnimalColorDto) {
+  async create(data: CreateAnimalColorDto) {
     return await this.prisma.color.create({
       data,
     });
   }
 
-  async findAll(query: AnimalAnimalColorQueryParamsDto) {
+  async findAll(query: AnimalColorQueryParamsDto) {
     const { page, perPage, search, byId } = query;
 
     const where: Prisma.ColorWhereInput = {
@@ -51,7 +51,7 @@ export class AnimalAnimalColorService {
     });
   }
 
-  async update(id: string, data: UpdateAnimalAnimalColorDto) {
+  async update(id: string, data: UpdateAnimalColorDto) {
     return await this.prisma.color.update({
       where: { id },
       data,

@@ -8,6 +8,9 @@ import { join } from 'path';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseTransformInterceptor } from 'src/shared/interceptors';
 import { DiagnosticsModule } from 'src/modules/diagnostics/diagnostics.module';
+import { MedicalModule } from 'src/modules/medical/medical.module';
+import { InventoryModule } from 'src/modules/inventory/inventory.module';
+import { ManagementModule } from 'src/modules/management/management.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { DiagnosticsModule } from 'src/modules/diagnostics/diagnostics.module';
     PrismaModule,
     AuthModule,
     DiagnosticsModule,
+    MedicalModule,
+    InventoryModule,
+    ManagementModule,
   ],
   controllers: [],
   providers: [

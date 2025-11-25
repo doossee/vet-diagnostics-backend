@@ -1,6 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { CreateAnimalAnimalColorDto } from './create-animal-color.dto';
+import { CreateAnimalColorDto } from './create-animal-color.dto';
 
-export class UpdateAnimalAnimalColorDto extends PartialType(
-  CreateAnimalAnimalColorDto,
-) {}
+export class UpdateAnimalColorDto extends PartialType(CreateAnimalColorDto) {}

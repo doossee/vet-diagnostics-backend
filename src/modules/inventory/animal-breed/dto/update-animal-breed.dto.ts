@@ -1,6 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { CreateAnimalAnimalBreedDto } from './create-animal-breed.dto';
+import { CreateAnimalBreedDto } from './create-animal-breed.dto';
 
-export class UpdateAnimalAnimalBreedDto extends PartialType(
-  CreateAnimalAnimalBreedDto,
-) {}
+export class UpdateAnimalBreedDto extends PartialType(CreateAnimalBreedDto) {}

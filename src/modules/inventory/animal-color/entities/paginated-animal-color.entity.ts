@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AnimalAnimalColorEntity } from './animal-color.entity';
+import { AnimalColorEntity } from './animal-color.entity';
 import { MetaDataEntity } from 'src/shared/entities';
 
-export class PaginatedAnimalAnimalColorEntity {
+export class PaginatedAnimalColorEntity {
   @ApiProperty({
     description: 'Array of colors',
-    type: [AnimalAnimalColorEntity],
+    type: [AnimalColorEntity],
   })
-  data: AnimalAnimalColorEntity[];
+  data: AnimalColorEntity[];
 
   @ApiProperty({
     description: 'Pagination metadata',

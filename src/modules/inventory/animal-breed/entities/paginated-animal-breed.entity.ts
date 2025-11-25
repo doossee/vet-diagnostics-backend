@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AnimalAnimalBreedEntity } from './animal-breed.entity';
+import { AnimalBreedEntity } from './animal-breed.entity';
 import { MetaDataEntity } from 'src/shared/entities';
 
-export class PaginatedAnimalAnimalBreedEntity {
+export class PaginatedAnimalBreedEntity {
   @ApiProperty({
     description: 'Array of breeds',
-    type: [AnimalAnimalBreedEntity],
+    type: [AnimalBreedEntity],
   })
-  data: AnimalAnimalBreedEntity[];
+  data: AnimalBreedEntity[];
 
   @ApiProperty({
     description: 'Pagination metadata',

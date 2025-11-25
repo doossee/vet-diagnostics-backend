@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AnimalAnimalColorService } from './animal-color.service';
-import { AnimalAnimalColorController } from './animal-color.controller';
+import { AnimalColorService } from './animal-color.service';
+import { AnimalColorController } from './animal-color.controller';
 
 @Module({
-  controllers: [AnimalAnimalColorController],
-  providers: [AnimalAnimalColorService],
-  exports: [AnimalAnimalColorService],
+  controllers: [AnimalColorController],
+  providers: [AnimalColorService],
+  exports: [AnimalColorService],
 })
-export class AnimalAnimalColorModule {}
+export class AnimalColorModule {}

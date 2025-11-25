@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsEnum,
@@ -50,11 +50,9 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   @MinLength(1, { message: 'Last name must be at least 1 character long' })
   @MaxLength(255, { message: 'Last name must not exceed 255 characters' })
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "The user's last name",
     example: 'Smith',
-    required: false,
-    nullable: true,
     minLength: 1,
     maxLength: 255,
   })
@@ -63,21 +61,17 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   @IsString()
   @IsEmail({}, { message: 'Email must be a valid email address' })
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "The user's email address",
     example: 'john.smith@example.com',
-    required: false,
-    nullable: true,
   })
   email?: string | null | undefined;
 
   @IsString()
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "The user's phone number",
     example: '+998901234567',
-    required: false,
-    nullable: true,
   })
   phone?: string | null | undefined;
 
@@ -93,11 +87,10 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
     message: 'Role must be one of the predefined enum values',
   })
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "The user's role in the system",
     enum: UserRole,
     example: UserRole.VETERINARIAN,
-    required: false,
   })
   role?: UserRole | undefined;
 }

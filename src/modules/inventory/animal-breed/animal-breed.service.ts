@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import {
-  CreateAnimalAnimalBreedDto,
-  UpdateAnimalAnimalBreedDto,
-  AnimalAnimalBreedQueryParamsDto,
+  CreateAnimalBreedDto,
+  UpdateAnimalBreedDto,
+  AnimalBreedQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class AnimalAnimalBreedService {
+export class AnimalBreedService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly paginationService: PaginationService,
   ) {}
 
-  async create(data: CreateAnimalAnimalBreedDto) {
+  async create(data: CreateAnimalBreedDto) {
     return await this.prisma.breed.create({ data });
   }
 
-  async findAll(query: AnimalAnimalBreedQueryParamsDto) {
+  async findAll(query: AnimalBreedQueryParamsDto) {
     const { page, perPage, search, byId } = query;
     const where: Prisma.BreedWhereInput = {
       ...(search && {
@@ -44,7 +44,7 @@ export class AnimalAnimalBreedService {
     return await this.prisma.breed.findUniqueOrThrow({ where: { id } });
   }
 
-  async update(id: string, data: UpdateAnimalAnimalBreedDto) {
+  async update(id: string, data: UpdateAnimalBreedDto) {
     return await this.prisma.breed.update({ where: { id }, data });
   }
 

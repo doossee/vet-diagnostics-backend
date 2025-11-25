@@ -1,3 +1,3 @@
 import { BaseQueryParamsDto } from 'src/shared/dto';
 
-export class AnimalAnimalBreedQueryParamsDto extends BaseQueryParamsDto {}
+export class AnimalBreedQueryParamsDto extends BaseQueryParamsDto {}
