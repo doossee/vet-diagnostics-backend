@@ -1,0 +1,20 @@
+# Code Owners
+# These users will be automatically requested for review when someone opens a pull request
+
+# Global owners (all files)
+* @tabletap2
+
+# Auth module
+/src/auth/ @tabletap2
+
+# Core infrastructure
+/src/core/ @tabletap2
+/prisma/ @tabletap2
+
+# CI/CD and deployment
+/.github/ @tabletap2
+/docker-compose*.yml @tabletap2
+/Dockerfile* @tabletap2
+
+# Documentation
+/*.md @tabletap2

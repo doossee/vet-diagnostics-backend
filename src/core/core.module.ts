@@ -11,6 +11,7 @@ import { DiagnosticsModule } from 'src/modules/diagnostics/diagnostics.module';
 import { MedicalModule } from 'src/modules/medical/medical.module';
 import { InventoryModule } from 'src/modules/inventory/inventory.module';
 import { ManagementModule } from 'src/modules/management/management.module';
+import { HealthModule } from 'src/health/health.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ManagementModule } from 'src/modules/management/management.module';
     }),
     PrismaModule,
     AuthModule,
+    HealthModule,
     DiagnosticsModule,
     MedicalModule,
     InventoryModule,

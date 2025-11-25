@@ -1,0 +1,107 @@
+name: Release Preparation
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: vet_diagnostics_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema prisma/schema/schema.prisma
+
+      - name: Lint code
+        run: yarn lint
+
+      - name: Run all tests
+        run: yarn test
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vet_diagnostics_test?schema=public
+          JWT_ACCESS_SECRET: test-access-secret
+          JWT_REFRESH_SECRET: test-refresh-secret
+
+      - name: Build application
+        run: yarn build
+
+      - name: Verify version
+        run: |
+          VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo "Release version: $VERSION"
+
+          # Verify CHANGELOG.md updated
+          if ! grep -q "$VERSION" CHANGELOG.md; then
+            echo "❌ CHANGELOG.md not updated for version $VERSION"
+            exit 1
+          fi
+          echo "✅ CHANGELOG.md updated"
+
+  build-release-candidate:
+    name: Build Release Candidate
+    runs-on: ubuntu-latest
+    needs: validate
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push RC image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:rc-${{ steps.version.outputs.version }}
+            ghcr.io/${{ github.repository }}:rc-latest
+
+      - name: Summary
+        run: |
+          echo "✅ Release candidate built successfully"
+          echo "Version: ${{ steps.version.outputs.version }}"
+          echo "Image: ghcr.io/${{ github.repository }}:rc-${{ steps.version.outputs.version }}"

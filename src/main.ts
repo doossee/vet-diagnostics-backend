@@ -18,9 +18,15 @@ async function bootstrap() {
     prefix: '/uploads',
   });
 
+  // CORS Configuration
+  const corsOrigin = config.get<string>('CORS_ORIGIN');
   app.enableCors({
-    origin: true,
+    origin: corsOrigin ? corsOrigin.split(',').map((o) => o.trim()) : false,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    maxAge: 3600,
   });
 
   app.useGlobalPipes(
