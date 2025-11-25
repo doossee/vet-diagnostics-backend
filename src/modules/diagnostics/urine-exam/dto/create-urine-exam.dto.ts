@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { UrineAnalysisType } from '@prisma/client';
+import { UrineAnalysisType } from 'src/shared/enums';
 import { IsEnum, IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateUrineExamDto {

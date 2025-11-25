@@ -1,5 +1,5 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
-import { UserRole } from '@prisma/client'; // Путь к роли UserRole из Prisma (или вашей роли)
+import { UserRole } from 'src/shared/enums'; // Путь к роли UserRole из Prisma (или вашей роли)
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { ApiForbiddenResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';

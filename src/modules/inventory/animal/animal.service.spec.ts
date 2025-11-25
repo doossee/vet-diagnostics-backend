@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AnimalService } from './animal.service';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { PaginationService } from 'src/shared/services';
-import { AnimalSex } from '@prisma/client';
+import { AnimalSex } from 'src/shared/enums';
 
 describe('AnimalService', () => {
   let service: AnimalService;

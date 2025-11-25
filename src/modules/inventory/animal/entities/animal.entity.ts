@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Animal, AnimalSex } from '@prisma/client';
+import { Animal } from '@prisma/client';
+import { AnimalSex } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class AnimalEntity implements Animal {

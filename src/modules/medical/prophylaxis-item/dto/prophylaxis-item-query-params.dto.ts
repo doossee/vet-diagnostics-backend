@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsEnum } from 'class-validator';
 import { BaseQueryParamsDto } from 'src/shared/dto';
-import { ProphylaxisType } from '@prisma/client';
+import { ProphylaxisType } from 'src/shared/enums';
 
 export class ProphylaxisItemQueryParamsDto extends BaseQueryParamsDto {
   @IsOptional()

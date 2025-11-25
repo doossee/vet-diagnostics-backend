@@ -7,7 +7,7 @@ import {
   IsString,
   IsEnum,
 } from 'class-validator';
-import { ProphylaxisType } from '@prisma/client';
+import { ProphylaxisType } from 'src/shared/enums';
 
 export class CreateProphylaxisDto {
   @IsEnum(ProphylaxisType)

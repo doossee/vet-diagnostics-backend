@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MucosaExam, MucosaType } from '@prisma/client';
+import { MucosaExam } from '@prisma/client';
+import { MucosaType } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class MucosaExamEntity implements MucosaExam {

@@ -2,7 +2,7 @@ import { IsOptional, IsString, IsUUID, IsEnum } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { SortOrder } from 'src/shared/dto';
-import { MucosaType } from '@prisma/client';
+import { MucosaType } from 'src/shared/enums';
 
 export class MucosaAppearanceQueryParamsDto {
   @IsOptional()

@@ -20,7 +20,7 @@ import {
   LymphTemp,
   LymphPain,
   LymphMobility,
-} from '@prisma/client';
+} from 'src/shared/enums';
 import {
   IsEnum,
   IsNumber,

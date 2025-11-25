@@ -6,7 +6,7 @@ import {
   IsEnum,
   IsDateString,
 } from 'class-validator';
-import { AnimalSex } from '@prisma/client';
+import { AnimalSex } from 'src/shared/enums';
 
 export class CreateAnimalDto {
   @IsDateString()

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { MucosaType } from '@prisma/client';
+import { MucosaType } from 'src/shared/enums';
 import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateMucosaExamDto {
