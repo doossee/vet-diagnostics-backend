@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from 'src/shared/enums';
+import { UserRole } from '@prisma/client';
 
 export class AuthEntity {
   constructor({ ...data }) {

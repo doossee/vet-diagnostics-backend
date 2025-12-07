@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProphylaxisItem } from '@prisma/client';
-import { ProphylaxisType } from 'src/shared/enums';
+import { ProphylaxisItem, ProphylaxisType } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
 export class ProphylaxisItemEntity implements ProphylaxisItem {

@@ -23,7 +23,8 @@ export enum UserGender {
 
 export enum ProphylaxisType {
   VACCINE = 'VACCINE',
-  TREATMENT = 'TREATMENT',
+  IMMUNIZATION = 'IMMUNIZATION',
+  DEWORMING = 'DEWORMING',
 }
 
 export enum BodyType {

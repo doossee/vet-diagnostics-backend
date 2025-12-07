@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { compare } from 'bcryptjs';
 import { createHash } from 'crypto';
-import { UserRole } from 'src/shared/enums';
+import { UserRole } from '@prisma/client';
 
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { UsersService } from './users/users.service';

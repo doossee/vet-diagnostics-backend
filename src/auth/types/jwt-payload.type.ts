@@ -1,4 +1,4 @@
-import { UserRole } from 'src/shared/enums';
+import { UserRole } from '@prisma/client';
 
 /**
  * JWT Payload Structure
