@@ -39,9 +39,10 @@ export class FecesExamService {
    * @returns Paginated feces exams
    */
   async findAll(query: FecesExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.FecesExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed

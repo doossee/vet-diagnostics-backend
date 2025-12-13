@@ -33,9 +33,10 @@ export class BloodExamService {
    * @returns Paginated blood exams
    */
   async findAll(query: BloodExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.BloodExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed, e.g., by animal name

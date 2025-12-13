@@ -39,9 +39,10 @@ export class UrineExamService {
    * @returns Paginated urine exams
    */
   async findAll(query: UrineExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.UrineExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed

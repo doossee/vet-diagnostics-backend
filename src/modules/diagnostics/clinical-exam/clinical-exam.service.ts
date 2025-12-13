@@ -33,9 +33,10 @@ export class ClinicalExamService {
    * @returns Paginated clinical exams
    */
   async findAll(query: ClinicalExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.ClinicalExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed
