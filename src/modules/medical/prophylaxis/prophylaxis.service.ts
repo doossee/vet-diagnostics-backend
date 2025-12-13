@@ -26,10 +26,11 @@ export class ProphylaxisService {
   }
 
   async findAll(query: ProphylaxisQueryParamsDto) {
-    const { page, perPage, animalId, itemId, byId } = query;
+    const { page, perPage, animalId, itemId, byId, type } = query;
     const where: Prisma.ProphylaxisWhereInput = {
       ...(animalId && { animalId }),
       ...(itemId && { itemId }),
+      ...(type && { type }),
     };
     const orderBy: Prisma.ProphylaxisOrderByWithRelationInput = {
       ...(byId && { id: byId }),

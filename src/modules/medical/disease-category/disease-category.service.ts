@@ -40,6 +40,11 @@ export class DiseaseCategoryService {
     const include: Prisma.DiseaseCategoryInclude = {
       parent: true,
       children: true,
+      _count: {
+        select: {
+          children: true,
+        },
+      },
     };
     return await this.paginationService.paginate(
       this.prisma.diseaseCategory,

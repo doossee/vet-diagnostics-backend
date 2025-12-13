@@ -262,17 +262,8 @@ model BloodExam {
   @@map("blood_analyses")
 }
 
-// Urine Analysis
-enum UrineAnalysisType {
-  LABORATORY // лабораторный / laboratoriya
-  MACROSCOPIC // макроскопический / makroskopik
-  MICROSCOPIC // микроскопический / mikroskopik
-}
-
 model UrineExam {
   id String @id @default(uuid()) @db.Uuid
-
-  analysisType UrineAnalysisType @map("analysis_type")
 
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
@@ -367,12 +358,6 @@ model UrineConsistency {
   urineAnalyses UrineExam[]
 
   @@map("urine_consistencies")
-}
-
-// Feces Analysis
-enum FecesAnalysisType {
-  MACROSCOPIC // макроскопический / makroskopik
-  MICROSCOPIC // микроскопический / mikroskopik
 }
 
 model FecesExam {

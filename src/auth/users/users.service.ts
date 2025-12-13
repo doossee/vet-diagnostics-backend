@@ -102,9 +102,20 @@ export class UsersService {
       ...(byCreatedDate && { createdAt: byCreatedDate }),
     };
 
+    const include: Prisma.UserInclude = {
+      district: {
+        select: {
+          id: true,
+          name_ru: true,
+          name_uz: true,
+          regionId: true,
+        },
+      },
+    };
+
     const result = await this.paginationService.paginate(
       this.prisma.user,
-      { where, orderBy },
+      { where, orderBy, include },
       { page, perPage },
     );
 

@@ -13,6 +13,13 @@ export class AnimalEntity implements Animal {
   id: string;
 
   @ApiProperty({
+    description: 'Name of the animal (in months)',
+    example: 'Example',
+  })
+  @Expose()
+  animalNameCode: string;
+
+  @ApiProperty({
     description: 'Date of arrival',
     example: '2024-01-15T00:00:00.000Z',
   })

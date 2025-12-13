@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { BaseQueryParamsDto } from 'src/shared/dto';
+import { ProphylaxisType } from 'src/shared/enums';
 
 export class ProphylaxisQueryParamsDto extends BaseQueryParamsDto {
   @IsOptional()
@@ -12,4 +13,9 @@ export class ProphylaxisQueryParamsDto extends BaseQueryParamsDto {
   @IsUUID()
   @ApiPropertyOptional()
   readonly itemId?: string;
+
+  @IsEnum(ProphylaxisType)
+  @IsOptional()
+  @ApiPropertyOptional()
+  readonly type?: ProphylaxisType;
 }
