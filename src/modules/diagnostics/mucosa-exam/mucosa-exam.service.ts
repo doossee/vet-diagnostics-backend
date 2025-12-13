@@ -97,6 +97,22 @@ export class MucosaExamService {
   }
 
   /**
+   * Get the last mucosa exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last mucosa exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.mucosaExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        animal: true,
+        mucosaAppearance: true,
+      },
+    });
+  }
+
+  /**
    * Delete mucosa exam
    * @param id - Mucosa exam UUID
    * @returns Deleted mucosa exam

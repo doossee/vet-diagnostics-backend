@@ -66,6 +66,19 @@ export class ProphylaxisService {
     });
   }
 
+  /**
+   * Get the last prophylaxis record for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last prophylaxis record for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.prophylaxis.findFirst({
+      where: { animalId },
+      orderBy: { date: 'desc' },
+      include: { animal: true, item: true, detail: true },
+    });
+  }
+
   async delete(id: string) {
     return await this.prisma.prophylaxis.delete({ where: { id } });
   }

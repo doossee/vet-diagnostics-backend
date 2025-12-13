@@ -58,6 +58,20 @@ export class BloodExamController {
   }
 
   @ApiOperation({
+    summary: 'Get last blood exam by animal ID',
+    description: 'Retrieve the last blood exam for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: BloodExamEntity,
+    description: 'Last blood exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Blood exam not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.bloodExamService.findLastByAnimalId(animalId);
+  }
+
+  @ApiOperation({
     summary: 'Get blood exam by ID',
     description: 'Retrieve blood exam details.',
   })

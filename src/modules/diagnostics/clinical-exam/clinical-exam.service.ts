@@ -87,6 +87,19 @@ export class ClinicalExamService {
   }
 
   /**
+   * Get the last clinical exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last clinical exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.clinicalExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
+      include: { animal: true },
+    });
+  }
+
+  /**
    * Delete clinical exam
    * @param id - Clinical exam UUID
    * @returns Deleted clinical exam

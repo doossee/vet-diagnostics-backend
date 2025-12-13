@@ -58,6 +58,20 @@ export class UrineExamController {
   }
 
   @ApiOperation({
+    summary: 'Get last urine exam by animal ID',
+    description: 'Retrieve the last urine exam for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: UrineExamEntity,
+    description: 'Last urine exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Urine exam not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.urineExamService.findLastByAnimalId(animalId);
+  }
+
+  @ApiOperation({
     summary: 'Get urine exam by ID',
     description: 'Retrieve urine exam details.',
   })

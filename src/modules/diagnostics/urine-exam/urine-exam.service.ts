@@ -109,6 +109,25 @@ export class UrineExamService {
   }
 
   /**
+   * Get the last urine exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last urine exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.urineExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        animal: true,
+        urineColor: true,
+        urineSmell: true,
+        urineClarity: true,
+        urineConsistency: true,
+      },
+    });
+  }
+
+  /**
    * Delete urine exam
    * @param id - Urine exam UUID
    * @returns Deleted urine exam

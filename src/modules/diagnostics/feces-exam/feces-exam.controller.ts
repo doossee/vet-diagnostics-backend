@@ -58,6 +58,20 @@ export class FecesExamController {
   }
 
   @ApiOperation({
+    summary: 'Get last feces exam by animal ID',
+    description: 'Retrieve the last feces exam for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: FecesExamEntity,
+    description: 'Last feces exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Feces exam not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.fecesExamService.findLastByAnimalId(animalId);
+  }
+
+  @ApiOperation({
     summary: 'Get feces exam by ID',
     description: 'Retrieve feces exam details.',
   })

@@ -87,6 +87,19 @@ export class BloodExamService {
   }
 
   /**
+   * Get the last blood exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last blood exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.bloodExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
+      include: { animal: true },
+    });
+  }
+
+  /**
    * Delete blood exam
    * @param id - Blood exam UUID
    * @returns Deleted blood exam
