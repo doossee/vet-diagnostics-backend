@@ -47,6 +47,14 @@ export class AnimalController {
     return await this.animalService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Get animal by ID' })
+  @ApiOkResponse({ type: AnimalEntity })
+  @ApiNotFoundResponse()
+  @Get('/predict/:id')
+  async findPredict(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.animalService.findPredict(id);
+  }
+
   @ApiOperation({ summary: 'Update animal' })
   @ApiOkResponse({ type: AnimalEntity })
   @Patch(':id')

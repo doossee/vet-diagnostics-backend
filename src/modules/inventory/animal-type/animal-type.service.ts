@@ -31,7 +31,8 @@ export class AnimalTypeService {
           { name_uz: { contains: search, mode: 'insensitive' } },
         ],
       }),
-      ...(parentId !== undefined ? { parentId } : { parentId: null }),
+      ...(parentId === null && { parentId: null }),
+      ...(typeof parentId === 'string' && { parentId }),
     };
     const orderBy: Prisma.AnimalTypeOrderByWithRelationInput = {
       ...(byId && { id: byId }),

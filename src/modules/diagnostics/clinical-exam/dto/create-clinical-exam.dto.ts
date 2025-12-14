@@ -173,4 +173,12 @@ export class CreateClinicalExamDto {
   @IsEnum(LymphMobility)
   @IsOptional()
   lymphMobility?: LymphMobility;
+
+  @IsNumber()
+  @IsOptional()
+  rumenInfusoriaCount?: number;
+
+  @IsString()
+  @IsOptional()
+  rumenFluidState?: string;
 }

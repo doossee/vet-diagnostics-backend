@@ -182,6 +182,26 @@ export class CreateBloodExamDto {
   @IsOptional()
   vitaminC?: number;
 
+  @ApiPropertyOptional({ example: 0.5 })
+  @IsNumber()
+  @IsOptional()
+  copper?: number;
+
+  @ApiPropertyOptional({ example: 0.5 })
+  @IsNumber()
+  @IsOptional()
+  cobalt?: number;
+
+  @ApiPropertyOptional({ example: 0.5 })
+  @IsNumber()
+  @IsOptional()
+  manganese?: number;
+
+  @ApiPropertyOptional({ example: 0.5 })
+  @IsNumber()
+  @IsOptional()
+  zinc?: number;
+
   @ApiPropertyOptional({ example: 'Healthy' })
   @IsString()
   @IsOptional()

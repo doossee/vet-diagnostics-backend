@@ -52,6 +52,9 @@ export class UsersService {
           role: data.role || 'FARMER', // Default to FARMER if not specified
           districtId: data.districtId,
         },
+        include: {
+          district: true,
+        },
       });
 
       return new UserEntity(user);
@@ -155,6 +158,9 @@ export class UsersService {
       where: { id },
       data: {
         ...data,
+      },
+      include: {
+        district: true,
       },
     });
 

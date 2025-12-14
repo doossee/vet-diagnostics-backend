@@ -44,6 +44,11 @@ model ClinicalExam {
   lymphPain        LymphPain?        @map("lymph_pain") // og'riq sezishi
   lymphMobility    LymphMobility?    @map("lymph_mobility") // harakatchanligi
 
+  // --- Rumen Fluid (Рубцовая жидкость / Shirdon suyuqligi) ---
+  // Специфично для жвачных животных (КРС, овцы, козы)
+  rumenInfusoriaCount Float?  @map("rumen_infusoria_count") // количество инфузорий в рубце — 1000/мл / shirdon infuzoriyalari soni
+  rumenFluidState     String? @map("rumen_fluid_state") // состояние рубцовой жидкости (Раметром) / shirdon suyuqligi holati
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -253,6 +258,12 @@ model BloodExam {
   vitaminA          Float? @map("vitamin_a") // A vitamini — mkmol/l / витамин A
   vitaminB          Float? @map("vitamin_b") // B vitamini — mkmol/l / витамин B
   vitaminC          Float? @map("vitamin_c") // C vitamini — mkmol/l / витамин C
+
+  // Mikroelementlar / Микроэлементы / Trace Elements
+  copper    Float? // медь / mis — ммоль/л / mmol/l
+  cobalt    Float? // кобальт / kobalt — ммоль/л / mmol/l
+  manganese Float? // марганец / marganets — ммоль/л / mmol/l
+  zinc      Float? // цинк / rux — ммоль/л / mmol/l
 
   conclusion String? @db.Text() // заключение / xulosa / conclusion
 
