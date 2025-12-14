@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineExam, UrineAnalysisType } from '@prisma/client';
+import { UrineExam } from '@prisma/client';
+import { UrineAnalysisType } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class UrineExamEntity implements UrineExam {

@@ -58,6 +58,20 @@ export class ClinicalExamController {
   }
 
   @ApiOperation({
+    summary: 'Get last clinical exam by animal ID',
+    description: 'Retrieve the last clinical exam for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: ClinicalExamEntity,
+    description: 'Last clinical exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Clinical exam not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.clinicalExamService.findLastByAnimalId(animalId);
+  }
+
+  @ApiOperation({
     summary: 'Get clinical exam by ID',
     description: 'Retrieve clinical exam details.',
   })

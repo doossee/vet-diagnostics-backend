@@ -58,6 +58,20 @@ export class MucosaExamController {
   }
 
   @ApiOperation({
+    summary: 'Get last mucosa exam by animal ID',
+    description: 'Retrieve the last mucosa exam for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: MucosaExamEntity,
+    description: 'Last mucosa exam retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Mucosa exam not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.mucosaExamService.findLastByAnimalId(animalId);
+  }
+
+  @ApiOperation({
     summary: 'Get mucosa exam by ID',
     description: 'Retrieve mucosa exam details.',
   })

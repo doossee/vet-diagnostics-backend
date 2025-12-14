@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/shared/enums';
 
 @Injectable()
 export class RolesGuard extends JwtAuthGuard implements CanActivate {

@@ -189,6 +189,22 @@ export class BloodExamEntity implements BloodExam {
   @Expose()
   vitaminC: number | null;
 
+  @ApiProperty({ description: 'Vitamin C', example: 1, required: false })
+  @Expose()
+  cobalt: number | null;
+
+  @ApiProperty({ description: 'Vitamin C', example: 1, required: false })
+  @Expose()
+  copper: number | null;
+
+  @ApiProperty({ description: 'Vitamin C', example: 1, required: false })
+  @Expose()
+  manganese: number | null;
+
+  @ApiProperty({ description: 'Vitamin C', example: 1, required: false })
+  @Expose()
+  zinc: number | null;
+
   @ApiProperty({
     description: 'Conclusion',
     example: 'Normal',

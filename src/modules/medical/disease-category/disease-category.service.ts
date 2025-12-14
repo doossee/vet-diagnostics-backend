@@ -31,7 +31,8 @@ export class DiseaseCategoryService {
           { name_uz: { contains: search, mode: 'insensitive' } },
         ],
       }),
-      ...(parentId !== undefined && { parentId }),
+      ...(parentId === null && { parentId: null }),
+      ...(typeof parentId === 'string' && { parentId }),
     };
     const orderBy: Prisma.DiseaseCategoryOrderByWithRelationInput = {
       ...(byId && { id: byId }),
@@ -40,6 +41,11 @@ export class DiseaseCategoryService {
     const include: Prisma.DiseaseCategoryInclude = {
       parent: true,
       children: true,
+      _count: {
+        select: {
+          children: true,
+        },
+      },
     };
     return await this.paginationService.paginate(
       this.prisma.diseaseCategory,

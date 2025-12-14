@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { PaginationService } from 'src/shared/services';
-import { UserRole, UserGender } from '@prisma/client';
+import { UserRole, UserGender } from 'src/shared/enums';
 import { BadRequestException } from '@nestjs/common';
 
 describe('UsersService', () => {

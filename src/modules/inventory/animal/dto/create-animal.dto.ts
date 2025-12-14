@@ -5,8 +5,10 @@ import {
   IsInt,
   IsEnum,
   IsDateString,
+  IsOptional,
+  IsString,
 } from 'class-validator';
-import { AnimalSex } from '@prisma/client';
+import { AnimalSex } from 'src/shared/enums';
 
 export class CreateAnimalDto {
   @IsDateString()
@@ -16,6 +18,14 @@ export class CreateAnimalDto {
     example: '2024-01-15T00:00:00Z',
   })
   readonly arrivalDate: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Name or Code of the animal',
+    example: 'Example',
+  })
+  readonly animalNameCode: string;
 
   @IsInt()
   @IsNotEmpty()
@@ -34,7 +44,7 @@ export class CreateAnimalDto {
   readonly sex: AnimalSex;
 
   @IsUUID()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'UUID of the farmer who owns the animal',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',

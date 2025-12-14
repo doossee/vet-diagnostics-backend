@@ -15,11 +15,11 @@ model Animal {
   age Int       @db.SmallInt
   sex AnimalSex @default(UNKNOWN)
 
-  // nameOrCode String    @unique @map("name_or_code") @db.VarChar(50)
+  animalNameCode String @unique @map("animal_name_code") @db.VarChar(50)
   // weight Float
 
-  farmerId String @map("farmer_id") @db.Uuid
-  farmer   FarmerProfile @relation(fields: [farmerId], references: [id], onDelete: Restrict)
+  farmerId String? @map("farmer_id") @db.Uuid
+  farmer   FarmerProfile? @relation(fields: [farmerId], references: [id], onDelete: Restrict)
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)

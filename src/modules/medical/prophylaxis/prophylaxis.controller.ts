@@ -43,6 +43,20 @@ export class ProphylaxisController {
     return await this.prophylaxisService.findAll(query);
   }
 
+  @ApiOperation({
+    summary: 'Get last prophylaxis by animal ID',
+    description: 'Retrieve the last prophylaxis record for a specific animal.',
+  })
+  @ApiOkResponse({
+    type: ProphylaxisEntity,
+    description: 'Last prophylaxis record retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Prophylaxis record not found' })
+  @Get('animal/:animalId/last')
+  async findLastByAnimalId(@Param('animalId', ParseUUIDPipe) animalId: string) {
+    return await this.prophylaxisService.findLastByAnimalId(animalId);
+  }
+
   @ApiOperation({ summary: 'Get prophylaxis by ID' })
   @ApiOkResponse({ type: ProphylaxisEntity })
   @ApiNotFoundResponse()

@@ -228,4 +228,8 @@ export class ClinicalExamEntity implements ClinicalExam {
   })
   @Expose()
   updatedAt: Date;
+
+  rumenFluidState: string | null;
+
+  rumenInfusoriaCount: number | null;
 }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsUUID, IsEnum } from 'class-validator';
-import { MucosaType } from '@prisma/client';
+import { MucosaType } from 'src/shared/enums';
 
 export class CreateMucosaAppearanceDto {
   @IsString()

@@ -20,7 +20,7 @@ import {
   LymphTemp,
   LymphPain,
   LymphMobility,
-} from '@prisma/client';
+} from 'src/shared/enums';
 import {
   IsEnum,
   IsNumber,
@@ -173,4 +173,12 @@ export class CreateClinicalExamDto {
   @IsEnum(LymphMobility)
   @IsOptional()
   lymphMobility?: LymphMobility;
+
+  @IsNumber()
+  @IsOptional()
+  rumenInfusoriaCount?: number;
+
+  @IsString()
+  @IsOptional()
+  rumenFluidState?: string;
 }

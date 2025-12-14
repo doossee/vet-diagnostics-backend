@@ -44,6 +44,11 @@ model ClinicalExam {
   lymphPain        LymphPain?        @map("lymph_pain") // og'riq sezishi
   lymphMobility    LymphMobility?    @map("lymph_mobility") // harakatchanligi
 
+  // --- Rumen Fluid (Рубцовая жидкость / Shirdon suyuqligi) ---
+  // Специфично для жвачных животных (КРС, овцы, козы)
+  rumenInfusoriaCount Float?  @map("rumen_infusoria_count") // количество инфузорий в рубце — 1000/мл / shirdon infuzoriyalari soni
+  rumenFluidState     String? @map("rumen_fluid_state") // состояние рубцовой жидкости (Раметром) / shirdon suyuqligi holati
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -254,6 +259,12 @@ model BloodExam {
   vitaminB          Float? @map("vitamin_b") // B vitamini — mkmol/l / витамин B
   vitaminC          Float? @map("vitamin_c") // C vitamini — mkmol/l / витамин C
 
+  // Mikroelementlar / Микроэлементы / Trace Elements
+  copper    Float? // медь / mis — ммоль/л / mmol/l
+  cobalt    Float? // кобальт / kobalt — ммоль/л / mmol/l
+  manganese Float? // марганец / marganets — ммоль/л / mmol/l
+  zinc      Float? // цинк / rux — ммоль/л / mmol/l
+
   conclusion String? @db.Text() // заключение / xulosa / conclusion
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -262,17 +273,8 @@ model BloodExam {
   @@map("blood_analyses")
 }
 
-// Urine Analysis
-enum UrineAnalysisType {
-  LABORATORY // лабораторный / laboratoriya
-  MACROSCOPIC // макроскопический / makroskopik
-  MICROSCOPIC // микроскопический / mikroskopik
-}
-
 model UrineExam {
   id String @id @default(uuid()) @db.Uuid
-
-  analysisType UrineAnalysisType @map("analysis_type")
 
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
@@ -367,12 +369,6 @@ model UrineConsistency {
   urineAnalyses UrineExam[]
 
   @@map("urine_consistencies")
-}
-
-// Feces Analysis
-enum FecesAnalysisType {
-  MACROSCOPIC // макроскопический / makroskopik
-  MICROSCOPIC // микроскопический / mikroskopik
 }
 
 model FecesExam {

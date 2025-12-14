@@ -26,10 +26,11 @@ export class ProphylaxisService {
   }
 
   async findAll(query: ProphylaxisQueryParamsDto) {
-    const { page, perPage, animalId, itemId, byId } = query;
+    const { page, perPage, animalId, itemId, byId, type } = query;
     const where: Prisma.ProphylaxisWhereInput = {
       ...(animalId && { animalId }),
       ...(itemId && { itemId }),
+      ...(type && { type }),
     };
     const orderBy: Prisma.ProphylaxisOrderByWithRelationInput = {
       ...(byId && { id: byId }),
@@ -61,6 +62,19 @@ export class ProphylaxisService {
         ...data,
         ...(data.date && { date: new Date(data.date) }),
       },
+      include: { animal: true, item: true, detail: true },
+    });
+  }
+
+  /**
+   * Get the last prophylaxis record for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last prophylaxis record for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.prophylaxis.findFirst({
+      where: { animalId },
+      orderBy: { date: 'desc' },
       include: { animal: true, item: true, detail: true },
     });
   }

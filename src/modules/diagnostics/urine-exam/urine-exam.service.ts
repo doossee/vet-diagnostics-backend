@@ -39,9 +39,10 @@ export class UrineExamService {
    * @returns Paginated urine exams
    */
   async findAll(query: UrineExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.UrineExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed
@@ -98,6 +99,25 @@ export class UrineExamService {
     return await this.prisma.urineExam.update({
       where: { id },
       data,
+      include: {
+        animal: true,
+        urineColor: true,
+        urineSmell: true,
+        urineClarity: true,
+        urineConsistency: true,
+      },
+    });
+  }
+
+  /**
+   * Get the last urine exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last urine exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.urineExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
       include: {
         animal: true,
         urineColor: true,

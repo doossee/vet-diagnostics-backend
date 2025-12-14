@@ -36,9 +36,10 @@ export class MucosaExamService {
    * @returns Paginated mucosa exams
    */
   async findAll(query: MucosaExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.MucosaExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed
@@ -89,6 +90,22 @@ export class MucosaExamService {
     return await this.prisma.mucosaExam.update({
       where: { id },
       data,
+      include: {
+        animal: true,
+        mucosaAppearance: true,
+      },
+    });
+  }
+
+  /**
+   * Get the last mucosa exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last mucosa exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.mucosaExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
       include: {
         animal: true,
         mucosaAppearance: true,

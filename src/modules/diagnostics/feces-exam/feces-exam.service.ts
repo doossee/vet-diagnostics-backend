@@ -39,9 +39,10 @@ export class FecesExamService {
    * @returns Paginated feces exams
    */
   async findAll(query: FecesExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.FecesExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed
@@ -98,6 +99,25 @@ export class FecesExamService {
     return await this.prisma.fecesExam.update({
       where: { id },
       data,
+      include: {
+        animal: true,
+        fecesColor: true,
+        fecesSmell: true,
+        fecesConsistency: true,
+        fecesForm: true,
+      },
+    });
+  }
+
+  /**
+   * Get the last feces exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last feces exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.fecesExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
       include: {
         animal: true,
         fecesColor: true,

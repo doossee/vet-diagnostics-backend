@@ -52,6 +52,9 @@ export class UsersService {
           role: data.role || 'FARMER', // Default to FARMER if not specified
           districtId: data.districtId,
         },
+        include: {
+          district: true,
+        },
       });
 
       return new UserEntity(user);
@@ -102,9 +105,20 @@ export class UsersService {
       ...(byCreatedDate && { createdAt: byCreatedDate }),
     };
 
+    const include: Prisma.UserInclude = {
+      district: {
+        select: {
+          id: true,
+          name_ru: true,
+          name_uz: true,
+          regionId: true,
+        },
+      },
+    };
+
     const result = await this.paginationService.paginate(
       this.prisma.user,
-      { where, orderBy },
+      { where, orderBy, include },
       { page, perPage },
     );
 
@@ -144,6 +158,9 @@ export class UsersService {
       where: { id },
       data: {
         ...data,
+      },
+      include: {
+        district: true,
       },
     });
 

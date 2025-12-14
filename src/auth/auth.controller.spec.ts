@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/shared/enums';
 
 describe('AuthController', () => {
   let controller: AuthController;

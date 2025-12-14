@@ -33,9 +33,10 @@ export class BloodExamService {
    * @returns Paginated blood exams
    */
   async findAll(query: BloodExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.BloodExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed, e.g., by animal name
@@ -82,6 +83,19 @@ export class BloodExamService {
     return await this.prisma.bloodExam.update({
       where: { id },
       data,
+      include: { animal: true },
+    });
+  }
+
+  /**
+   * Get the last blood exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last blood exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.bloodExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
       include: { animal: true },
     });
   }

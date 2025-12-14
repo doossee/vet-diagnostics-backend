@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { $Enums, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import { UserGender, UserRole } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class UserEntity implements User {
@@ -54,10 +55,10 @@ export class UserEntity implements User {
 
   @ApiPropertyOptional({
     description: "User's gender",
-    enum: $Enums.UserGender,
-    example: $Enums.UserGender.MALE,
+    enum: UserGender,
+    example: UserGender.MALE,
   })
-  gender: $Enums.UserGender | null;
+  gender: UserGender | null;
 
   @ApiPropertyOptional({
     description: "User's birth date",
@@ -74,10 +75,10 @@ export class UserEntity implements User {
 
   @ApiProperty({
     description: "User's role in the system",
-    enum: $Enums.UserRole,
-    example: $Enums.UserRole.VETERINARIAN,
+    enum: UserRole,
+    example: UserRole.VETERINARIAN,
   })
-  role: $Enums.UserRole;
+  role: UserRole;
 
   @ApiProperty({
     description: 'District ID where the user is located',

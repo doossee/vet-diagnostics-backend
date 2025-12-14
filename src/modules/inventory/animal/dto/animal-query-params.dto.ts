@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsUUID, IsEnum } from 'class-validator';
 import { BaseQueryParamsDto } from 'src/shared/dto';
-import { AnimalSex } from '@prisma/client';
+import { AnimalSex } from 'src/shared/enums';
 
 export class AnimalQueryParamsDto extends BaseQueryParamsDto {
   @IsOptional()

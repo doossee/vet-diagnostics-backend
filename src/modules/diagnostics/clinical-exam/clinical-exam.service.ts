@@ -33,9 +33,10 @@ export class ClinicalExamService {
    * @returns Paginated clinical exams
    */
   async findAll(query: ClinicalExamQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.ClinicalExamWhereInput = {
+      ...(animalId && { animalId }),
       ...(search &&
         {
           // Add search logic if needed
@@ -82,6 +83,19 @@ export class ClinicalExamService {
     return await this.prisma.clinicalExam.update({
       where: { id },
       data,
+      include: { animal: true },
+    });
+  }
+
+  /**
+   * Get the last clinical exam for a specific animal
+   * @param animalId - Animal UUID
+   * @returns Last clinical exam for the animal or null if not found
+   */
+  async findLastByAnimalId(animalId: string) {
+    return await this.prisma.clinicalExam.findFirst({
+      where: { animalId },
+      orderBy: { createdAt: 'desc' },
       include: { animal: true },
     });
   }
