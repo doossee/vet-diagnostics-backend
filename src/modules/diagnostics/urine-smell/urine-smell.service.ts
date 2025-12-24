@@ -33,9 +33,10 @@ export class UrineSmellService {
    * @returns Paginated urine smells
    */
   async findAll(query: UrineSmellQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.UrineSmellWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

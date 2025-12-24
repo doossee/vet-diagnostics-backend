@@ -33,9 +33,10 @@ export class UrineClarityService {
    * @returns Paginated urine clarities
    */
   async findAll(query: UrineClarityQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.UrineClarityWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

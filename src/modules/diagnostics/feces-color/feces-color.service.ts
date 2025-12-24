@@ -33,9 +33,10 @@ export class FecesColorService {
    * @returns Paginated feces colors
    */
   async findAll(query: FecesColorQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.FecesColorWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

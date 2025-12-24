@@ -33,9 +33,10 @@ export class FecesSmellService {
    * @returns Paginated feces smells
    */
   async findAll(query: FecesSmellQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.FecesSmellWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },
