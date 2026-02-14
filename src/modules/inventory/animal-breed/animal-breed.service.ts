@@ -20,8 +20,9 @@ export class AnimalBreedService {
   }
 
   async findAll(query: AnimalBreedQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
     const where: Prisma.BreedWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

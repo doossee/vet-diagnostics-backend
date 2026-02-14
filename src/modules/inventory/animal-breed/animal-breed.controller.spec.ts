@@ -35,7 +35,7 @@ describe('AnimalBreedController', () => {
 
   describe('create', () => {
     it('should create a record', async () => {
-      const dto = { name: 'Test' };
+      const dto = { name_ru: 'Test', name_uz: 'Test', animalTypeId: 'uuid' };
       const result = { id: 'uuid', ...dto };
       
       mockService.create.mockResolvedValue(result);

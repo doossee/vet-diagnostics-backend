@@ -63,6 +63,9 @@ model AnimalType {
   // Animals
   animals Animal[]
 
+  // Breeds
+  breeds Breed[]
+
   // Urine Analysis Types
   urineColors        UrineColor[]
   urineSmells        UrineSmell[]
@@ -88,8 +91,12 @@ model Breed {
   name_ru String @db.VarChar(255)
   name_uz String @db.VarChar(255)
 
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
   animals Animal[]
 
+  @@index([animalTypeId])
   @@map("animal_breeds")
 }
 

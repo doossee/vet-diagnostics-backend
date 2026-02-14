@@ -37,7 +37,7 @@ describe('AnimalBreedService', () => {
 
   describe('create', () => {
     it('should create a breed', async () => {
-      const dto = { name_ru: 'Голштинская', name_uz: 'Holstein' };
+      const dto = { name_ru: 'Голштинская', name_uz: 'Holstein', animalTypeId: 'uuid-type' };
       const mockBreed = { id: 'uuid', ...dto };
 
       mockPrismaService.breed.create.mockResolvedValue(mockBreed);
@@ -51,7 +51,7 @@ describe('AnimalBreedService', () => {
   describe('findAll', () => {
     it('should return paginated breeds', async () => {
       const mockResult = {
-        data: [{ id: 'uuid', name_ru: 'Порода', name_uz: 'Breed' }],
+        data: [{ id: 'uuid', name_ru: 'Порода', name_uz: 'Breed', animalTypeId: 'uuid-type' }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
 

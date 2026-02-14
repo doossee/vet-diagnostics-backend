@@ -24,4 +24,12 @@ export class AnimalBreedEntity implements Breed {
   })
   @Expose()
   name_uz: string;
+
+  @ApiProperty({
+    description: 'Animal Type ID',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+    format: 'uuid',
+  })
+  @Expose()
+  animalTypeId: string;
 }
