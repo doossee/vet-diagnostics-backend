@@ -6,80 +6,80 @@ model ClinicalExam {
   animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
   // --- General ---
-  pulse           Int?   // puls
-  rumination      Int?   // ruminatsiya
+  pulse           Int? // puls
+  rumination      Int? // ruminatsiya
   temperature     Float? // temperatura
   respiratoryRate Float? @map("respiratory_rate") // nafas soni
 
   // --- Habitus ---
-  bodyTypeId     String?      @map("body_type_id") @db.Uuid
-  bodyType       BodyType?    @relation(fields: [bodyTypeId], references: [id], onDelete: Restrict)
+  bodyTypeId String?   @map("body_type_id") @db.Uuid
+  bodyType   BodyType? @relation(fields: [bodyTypeId], references: [id], onDelete: Restrict)
 
-  obesityId      String?      @map("obesity_id") @db.Uuid
-  obesity        ObesityType? @relation(fields: [obesityId], references: [id], onDelete: Restrict)
+  obesityId String?      @map("obesity_id") @db.Uuid
+  obesity   ObesityType? @relation(fields: [obesityId], references: [id], onDelete: Restrict)
 
-  bodyPositionId String?      @map("body_position_id") @db.Uuid
+  bodyPositionId String?       @map("body_position_id") @db.Uuid
   bodyPosition   BodyPosition? @relation(fields: [bodyPositionId], references: [id], onDelete: Restrict)
 
-  constitutionId String?      @map("constitution_id") @db.Uuid
+  constitutionId String?       @map("constitution_id") @db.Uuid
   constitution   Constitution? @relation(fields: [constitutionId], references: [id], onDelete: Restrict)
 
-  temperamentId  String?      @map("temperament_id") @db.Uuid
-  temperament    Temperament? @relation(fields: [temperamentId], references: [id], onDelete: Restrict)
+  temperamentId String?      @map("temperament_id") @db.Uuid
+  temperament   Temperament? @relation(fields: [temperamentId], references: [id], onDelete: Restrict)
 
   // --- Skin Cover (Teri qoplamasi) ---
-  woolId     String?    @map("wool_id") @db.Uuid
-  wool       WoolType?  @relation(fields: [woolId], references: [id], onDelete: Restrict)
+  woolId String?   @map("wool_id") @db.Uuid
+  wool   WoolType? @relation(fields: [woolId], references: [id], onDelete: Restrict)
 
-  downId     String?    @map("down_id") @db.Uuid
-  down       DownType?  @relation(fields: [downId], references: [id], onDelete: Restrict)
+  downId String?   @map("down_id") @db.Uuid
+  down   DownType? @relation(fields: [downId], references: [id], onDelete: Restrict)
 
-  hairId     String?    @map("hair_id") @db.Uuid
-  hair       HairType?  @relation(fields: [hairId], references: [id], onDelete: Restrict)
+  hairId String?   @map("hair_id") @db.Uuid
+  hair   HairType? @relation(fields: [hairId], references: [id], onDelete: Restrict)
 
-  feathersId String?       @map("feathers_id") @db.Uuid
-  feathers   FeatherType?  @relation(fields: [feathersId], references: [id], onDelete: Restrict)
+  feathersId String?      @map("feathers_id") @db.Uuid
+  feathers   FeatherType? @relation(fields: [feathersId], references: [id], onDelete: Restrict)
 
   // --- Skin (Teri) ---
-  skinColorId       String?         @map("skin_color_id") @db.Uuid
-  skinColor         SkinColor?      @relation(fields: [skinColorId], references: [id], onDelete: Restrict)
+  skinColorId String?    @map("skin_color_id") @db.Uuid
+  skinColor   SkinColor? @relation(fields: [skinColorId], references: [id], onDelete: Restrict)
 
-  skinHumidityId    String?         @map("skin_humidity_id") @db.Uuid
-  skinHumidity      SkinHumidity?   @relation(fields: [skinHumidityId], references: [id], onDelete: Restrict)
+  skinHumidityId String?       @map("skin_humidity_id") @db.Uuid
+  skinHumidity   SkinHumidity? @relation(fields: [skinHumidityId], references: [id], onDelete: Restrict)
 
-  skinSmell         String?         @map("skin_smell")
-  skinTemp          SkinTemp?       @relation(fields: [skinTempId], references: [id], onDelete: Restrict)
-  skinTempId        String?         @map("skin_temp_id") @db.Uuid
+  skinSmell  String?   @map("skin_smell")
+  skinTemp   SkinTemp? @relation(fields: [skinTempId], references: [id], onDelete: Restrict)
+  skinTempId String?   @map("skin_temp_id") @db.Uuid
 
-  skinSurface       String?         @map("skin_surface")
+  skinSurface String? @map("skin_surface")
 
-  skinElasticityId  String?         @map("skin_elasticity_id") @db.Uuid
-  skinElasticity    SkinElasticity? @relation(fields: [skinElasticityId], references: [id], onDelete: Restrict)
+  skinElasticityId String?         @map("skin_elasticity_id") @db.Uuid
+  skinElasticity   SkinElasticity? @relation(fields: [skinElasticityId], references: [id], onDelete: Restrict)
 
-  skinSensitivity   String?         @map("skin_sensitivity")
-  skinPain          String?         @map("skin_pain")
+  skinSensitivity String? @map("skin_sensitivity")
+  skinPain        String? @map("skin_pain")
 
   // --- Lymph Nodes (Limfa tugunlari) ---
-  lymphSizeId        String?           @map("lymph_size_id") @db.Uuid
-  lymphSize          LymphSize?        @relation(fields: [lymphSizeId], references: [id], onDelete: Restrict)
+  lymphSizeId String?    @map("lymph_size_id") @db.Uuid
+  lymphSize   LymphSize? @relation(fields: [lymphSizeId], references: [id], onDelete: Restrict)
 
-  lymphShapeId       String?           @map("lymph_shape_id") @db.Uuid
-  lymphShape         LymphShape?       @relation(fields: [lymphShapeId], references: [id], onDelete: Restrict)
+  lymphShapeId String?     @map("lymph_shape_id") @db.Uuid
+  lymphShape   LymphShape? @relation(fields: [lymphShapeId], references: [id], onDelete: Restrict)
 
-  lymphSurfaceId     String?           @map("lymph_surface_id") @db.Uuid
-  lymphSurface       LymphSurface?     @relation(fields: [lymphSurfaceId], references: [id], onDelete: Restrict)
+  lymphSurfaceId String?       @map("lymph_surface_id") @db.Uuid
+  lymphSurface   LymphSurface? @relation(fields: [lymphSurfaceId], references: [id], onDelete: Restrict)
 
   lymphConsistencyId String?           @map("lymph_consistency_id") @db.Uuid
   lymphConsistency   LymphConsistency? @relation(fields: [lymphConsistencyId], references: [id], onDelete: Restrict)
 
-  lymphTempId        String?           @map("lymph_temp_id") @db.Uuid
-  lymphTemp          LymphTemp?        @relation(fields: [lymphTempId], references: [id], onDelete: Restrict)
+  lymphTempId String?    @map("lymph_temp_id") @db.Uuid
+  lymphTemp   LymphTemp? @relation(fields: [lymphTempId], references: [id], onDelete: Restrict)
 
-  lymphPainId        String?           @map("lymph_pain_id") @db.Uuid
-  lymphPain          LymphPain?        @relation(fields: [lymphPainId], references: [id], onDelete: Restrict)
+  lymphPainId String?    @map("lymph_pain_id") @db.Uuid
+  lymphPain   LymphPain? @relation(fields: [lymphPainId], references: [id], onDelete: Restrict)
 
-  lymphMobilityId    String?           @map("lymph_mobility_id") @db.Uuid
-  lymphMobility      LymphMobility?    @relation(fields: [lymphMobilityId], references: [id], onDelete: Restrict)
+  lymphMobilityId String?        @map("lymph_mobility_id") @db.Uuid
+  lymphMobility   LymphMobility? @relation(fields: [lymphMobilityId], references: [id], onDelete: Restrict)
 
   // --- Rumen Fluid ---
   rumenInfusoriaCount Float?  @map("rumen_infusoria_count")
@@ -94,191 +94,213 @@ model ClinicalExam {
 // --- Lookup Tables (former Prisma enums) ---
 
 model BodyType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("body_types")
 }
 
 model ObesityType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("obesity_types")
 }
 
 model BodyPosition {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("body_positions")
 }
 
 model Constitution {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("constitutions")
 }
 
 model Temperament {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("temperaments")
 }
 
 model WoolType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("wool_types")
 }
 
 model DownType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("down_types")
 }
 
 model HairType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("hair_types")
 }
 
 model FeatherType {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("feather_types")
 }
 
 model SkinColor {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("skin_colors")
 }
 
 model SkinHumidity {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("skin_humidities")
 }
 
 model SkinTemp {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("skin_temps")
 }
 
 model SkinElasticity {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("skin_elasticities")
 }
 
 model LymphSize {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_sizes")
 }
 
 model LymphShape {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_shapes")
 }
 
 model LymphSurface {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_surfaces")
 }
 
 model LymphConsistency {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_consistencies")
 }
 
 model LymphTemp {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_temps")
 }
 
 model LymphPain {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_pains")
 }
 
 model LymphMobility {
-  id           String        @id @default(uuid()) @db.Uuid
-  name_ru      String        @db.VarChar(255)
-  name_uz      String        @db.VarChar(255)
-  numericValue Int           @unique @map("numeric_value")
+  id            String         @id @default(uuid()) @db.Uuid
+  name_ru       String         @db.VarChar(255)
+  name_uz       String         @db.VarChar(255)
+  numericValue  Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
+
   @@map("lymph_mobilities")
 }
 
 model MucosaType {
-  id           String       @id @default(uuid()) @db.Uuid
-  name_ru      String       @db.VarChar(255)
-  name_uz      String       @db.VarChar(255)
-  numericValue Int          @unique @map("numeric_value")
-  mucosaExams  MucosaExam[]
+  id                String             @id @default(uuid()) @db.Uuid
+  name_ru           String             @db.VarChar(255)
+  name_uz           String             @db.VarChar(255)
+  numericValue      Int                @unique @map("numeric_value")
+  mucosaExams       MucosaExam[]
+  mucosaAppearances MucosaAppearance[]
+
   @@map("mucosa_types")
 }
 
