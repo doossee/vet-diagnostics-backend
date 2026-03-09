@@ -3,12 +3,10 @@ import {
   IsNotEmpty,
   IsUUID,
   IsInt,
-  IsEnum,
   IsDateString,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { AnimalSex } from 'src/shared/enums';
 
 export class CreateAnimalDto {
   @IsDateString()
@@ -35,13 +33,13 @@ export class CreateAnimalDto {
   })
   readonly age: number;
 
-  @IsEnum(AnimalSex)
+  @IsUUID()
+  @IsOptional()
   @ApiProperty({
-    description: 'Sex of the animal',
-    enum: AnimalSex,
-    example: AnimalSex.FEMALE,
+    description: 'UUID of the animal sex lookup entry',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
   })
-  readonly sex: AnimalSex;
+  readonly sexId?: string;
 
   @IsUUID()
   @IsOptional()

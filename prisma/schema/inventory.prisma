@@ -1,10 +1,11 @@
 
-enum AnimalSex {
-  MALE // erkak
-  FEMALE // ayol
-  NEUTERED // kastratsiya qilingan erkak
-  SPAYED // sterilizatsiya qilingan ayol
-  UNKNOWN // noma'lum
+model AnimalSex {
+  id           String   @id @default(uuid()) @db.Uuid
+  name_ru      String   @db.VarChar(255)
+  name_uz      String   @db.VarChar(255)
+  numericValue Int      @unique @map("numeric_value")
+  animals      Animal[]
+  @@map("animal_sexes")
 }
 
 model Animal {
@@ -12,8 +13,9 @@ model Animal {
 
   arrivalDate DateTime @map("arrival_date")
 
-  age Int       @db.SmallInt
-  sex AnimalSex @default(UNKNOWN)
+  age   Int        @db.SmallInt
+  sexId String?    @map("sex_id") @db.Uuid
+  sex   AnimalSex? @relation(fields: [sexId], references: [id], onDelete: Restrict)
 
   animalNameCode String @unique @map("animal_name_code") @db.VarChar(50)
   // weight Float
@@ -44,7 +46,7 @@ model Animal {
   @@index([farmerId])
   @@index([animalTypeId])
   @@index([animalBreedId])
-  @@index([sex])
+  @@index([sexId])
   @@map("animals")
 }
 
