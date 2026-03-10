@@ -65,6 +65,7 @@ model VetProfile {
   experience     Int?    @default(0)
 
   farmers FarmerProfile[]
+  medicalSessions MedicalSession[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

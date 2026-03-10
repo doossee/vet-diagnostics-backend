@@ -13,6 +13,7 @@ import { FecesSmellModule } from './feces-smell/feces-smell.module';
 import { FecesConsistencyModule } from './feces-consistency/feces-consistency.module';
 import { FecesFormModule } from './feces-form/feces-form.module';
 import { MucosaAppearanceModule } from './mucosa-appearance/mucosa-appearance.module';
+import { MedicalSessionModule } from './medical-session/medical-session.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MucosaAppearanceModule } from './mucosa-appearance/mucosa-appearance.mo
     FecesConsistencyModule,
     FecesFormModule,
     MucosaAppearanceModule,
+    MedicalSessionModule,
   ],
 })
 export class DiagnosticsModule {}
