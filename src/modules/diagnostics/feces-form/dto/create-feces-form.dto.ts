@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsInt, IsString, IsUUID } from 'class-validator';
 
 export class CreateFecesFormDto {
   @ApiProperty({ example: 'Оформленный' })
@@ -10,7 +10,12 @@ export class CreateFecesFormDto {
   @IsString()
   name_uz: string;
 
+  @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
+  @IsInt()
+  numericValue: number;
+
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   animalTypeId: string;
 }
+

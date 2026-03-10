@@ -1,10 +1,11 @@
+model AnimalSex {
+  id           String   @id @default(uuid()) @db.Uuid
+  name_ru      String   @db.VarChar(255)
+  name_uz      String   @db.VarChar(255)
+  numericValue Int      @unique @map("numeric_value")
+  animals      Animal[]
 
-enum AnimalSex {
-  MALE // erkak
-  FEMALE // ayol
-  NEUTERED // kastratsiya qilingan erkak
-  SPAYED // sterilizatsiya qilingan ayol
-  UNKNOWN // noma'lum
+  @@map("animal_sexes")
 }
 
 model Animal {
@@ -12,39 +13,40 @@ model Animal {
 
   arrivalDate DateTime @map("arrival_date")
 
-  age Int       @db.SmallInt
-  sex AnimalSex @default(UNKNOWN)
+  age   Int        @db.SmallInt
+  sexId String?    @map("sex_id") @db.Uuid
+  sex   AnimalSex? @relation(fields: [sexId], references: [id], onDelete: Restrict)
 
   animalNameCode String @unique @map("animal_name_code") @db.VarChar(50)
   // weight Float
 
-  farmerId String? @map("farmer_id") @db.Uuid
+  farmerId String?        @map("farmer_id") @db.Uuid
   farmer   FarmerProfile? @relation(fields: [farmerId], references: [id], onDelete: Restrict)
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
 
-  animalBreedId String      @map("animal_breed_id") @db.Uuid
-  animalBreed   Breed @relation(fields: [animalBreedId], references: [id], onDelete: Restrict)
+  animalBreedId String @map("animal_breed_id") @db.Uuid
+  animalBreed   Breed  @relation(fields: [animalBreedId], references: [id], onDelete: Restrict)
 
-  animalColorId String      @map("color_id") @db.Uuid
-  animalColor   Color @relation(fields: [animalColorId], references: [id], onDelete: Restrict)
+  animalColorId String @map("color_id") @db.Uuid
+  animalColor   Color  @relation(fields: [animalColorId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  vaccines Prophylaxis[]
-  diseases Disease[]
-  urineAnalyses UrineExam[]
-  fecesAnalyses FecesExam[]
-  mucosaAnalyses MucosaExam[]
-  bloodAnalyses BloodExam[]
+  vaccines         Prophylaxis[]
+  diseases         Disease[]
+  urineAnalyses    UrineExam[]
+  fecesAnalyses    FecesExam[]
+  mucosaAnalyses   MucosaExam[]
+  bloodAnalyses    BloodExam[]
   clinicalAnalyses ClinicalExam[]
 
   @@index([farmerId])
   @@index([animalTypeId])
   @@index([animalBreedId])
-  @@index([sex])
+  @@index([sexId])
   @@map("animals")
 }
 

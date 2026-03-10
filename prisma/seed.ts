@@ -1,15 +1,338 @@
-import {
-  PrismaClient,
-  ProphylaxisType,
-  UserRole,
-  UserGender,
-} from '@prisma/client';
+import { PrismaClient, ProphylaxisType, UserRole, UserGender } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('Start seeding ...');
+
+  // --- 0. Clinical Exam Lookup Tables (former Prisma enums) ---
+
+  const bodyTypes = [
+    { name_ru: 'Кучли жуссали', name_uz: 'Kuchli jussali', numericValue: 0 },       // STRONG
+    { name_ru: 'Ўртача жуссали', name_uz: "O'rtacha jussali", numericValue: 1 },     // MEDIUM
+    { name_ru: 'Кучсиз жуссали', name_uz: 'Kuchsiz jussali', numericValue: 2 },      // WEAK
+  ];
+  for (const item of bodyTypes) {
+    await prisma.bodyType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const obesityTypes = [
+    { name_ru: 'Яхши, юқори семиз', name_uz: 'Yaxshi, yuqori semiz', numericValue: 0 },  // HIGH
+    { name_ru: 'Ўртача семиз', name_uz: "O'rtacha semiz", numericValue: 1 },               // MEDIUM
+    { name_ru: 'Ўртадан паст семиз', name_uz: "O'rtadan past semiz", numericValue: 2 },    // LOW
+    { name_ru: 'Кахексия', name_uz: 'Kaxeksiya', numericValue: 3 },                        // CACHEXIA
+  ];
+  for (const item of obesityTypes) {
+    await prisma.obesityType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const bodyPositions = [
+    { name_ru: 'Табиий', name_uz: 'Tabiiy', numericValue: 0 },                                          // NATURAL
+    { name_ru: 'Мажбурий тик турган', name_uz: 'Majburiy tik turgan', numericValue: 1 },                // FORCED_STANDING
+    { name_ru: 'Мажбурий ётган', name_uz: 'Majburiy yotgan', numericValue: 2 },                         // FORCED_LYING
+    { name_ru: 'Мажбурий ўтирган', name_uz: "Majburiy o'tirgan", numericValue: 3 },                     // FORCED_SITTING
+    { name_ru: 'Табиий бўлмаган холат', name_uz: "Tabiiy bo'lmagan holat", numericValue: 4 },           // NON_THERAPEUTIC
+    { name_ru: 'Ихтиёрсиз ҳаракатлар', name_uz: 'Ixtiyorsiz harakatlar', numericValue: 5 },             // INVOLUNTARY
+    { name_ru: 'Монежли ҳаракат', name_uz: 'Monejli harakat', numericValue: 6 },                        // MANEGE
+    { name_ru: 'Айланма ҳаракат', name_uz: 'Aylanma harakat', numericValue: 7 },                        // CIRCULAR
+    { name_ru: 'Олдинга қараб ҳаракат', name_uz: 'Oldinga qarab harakat', numericValue: 8 },            // FORWARD
+    { name_ru: 'Орқага қараб ҳаракат', name_uz: 'Orqaga qarab harakat', numericValue: 9 },              // BACKWARD
+    { name_ru: 'Ағанаб ётган жойдаги ҳаракат', name_uz: "Ag'anab yotgan joyidagi harakat", numericValue: 10 }, // ROLLING
+  ];
+  for (const item of bodyPositions) {
+    await prisma.bodyPosition.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const constitutions = [
+    { name_ru: 'Юмшоқ', name_uz: 'Yumshoq', numericValue: 0 },           // LOOSE
+    { name_ru: 'Мустаҳкам', name_uz: "Mustahkam", numericValue: 1 },       // DENSE
+    { name_ru: 'Отларда', name_uz: 'Otlarda', numericValue: 2 },           // HORSES
+    { name_ru: 'Паррандаларда', name_uz: 'Parranda', numericValue: 3 },    // BIRDS
+  ];
+  for (const item of constitutions) {
+    await prisma.constitution.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const temperaments = [
+    { name_ru: 'Меланхолик', name_uz: 'Melanxolik', numericValue: 0 },    // MELANCHOLIC
+    { name_ru: 'Флегматик', name_uz: 'Flegmatik', numericValue: 1 },       // PHLEGMATIC
+  ];
+  for (const item of temperaments) {
+    await prisma.temperament.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const woolTypes = [
+    { name_ru: 'Бир текис', name_uz: 'Bir tekis', numericValue: 0 },                                          // EVEN
+    { name_ru: 'Бир текис эмас', name_uz: 'Bir tekis emas', numericValue: 1 },                                // UNEVEN
+    { name_ru: 'Терига ётиб туради', name_uz: 'Teriga yotib turadi', numericValue: 2 },                       // LYING_FLAT
+    { name_ru: 'Ялтироқ', name_uz: 'Yaltiroq', numericValue: 3 },                                             // SHINY
+    { name_ru: 'Хира', name_uz: 'Xira', numericValue: 4 },                                                    // MATTE
+    { name_ru: 'Тушмайди', name_uz: 'Tushmaydi', numericValue: 5 },                                           // NOT_FALLING
+    { name_ru: 'Ҳурпайган', name_uz: 'Hurpaygan', numericValue: 6 },                                          // DISHEVELED
+    { name_ru: 'Бир-бирига ёпишган', name_uz: 'Bir-biriga yopishgan', numericValue: 7 },                      // MATTED
+    { name_ru: 'Теринг айрим жойларида жунлар тушган', name_uz: 'Terining ayrim joylarida junlar tushgan', numericValue: 8 }, // BALD_PATCHES
+    { name_ru: 'Қалин', name_uz: 'Qalin', numericValue: 9 },                                                  // THICK
+    { name_ru: 'Сийрак', name_uz: 'Siyrak', numericValue: 10 },                                               // SPARSE
+    { name_ru: 'Физиологик тулаш', name_uz: 'Fiziologik tullash', numericValue: 11 },                         // PHYSIOLOGICAL_MOLT
+    { name_ru: 'Патологик тулаш', name_uz: 'Patologik tullash', numericValue: 12 },                           // PATHOLOGICAL_MOLT
+    { name_ru: 'Жун тушаяпти', name_uz: 'Jun tushayapti', numericValue: 13 },                                 // FALLING
+    { name_ru: 'Жун тушмаяпти', name_uz: 'Jun tushmayapti', numericValue: 14 },                               // NOT_FALLING_OUT
+  ];
+  for (const item of woolTypes) {
+    await prisma.woolType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const downTypes = [
+    { name_ru: 'Зич', name_uz: 'Zich', numericValue: 0 },               // DENSE
+    { name_ru: 'Сийрак', name_uz: 'Siyrak', numericValue: 1 },          // SPARSE
+    { name_ru: 'Йўқ', name_uz: "Yo'q", numericValue: 2 },               // NONE
+    { name_ru: 'Юмшоқ', name_uz: 'Yumshoq', numericValue: 3 },          // SOFT
+    { name_ru: 'Силлиқ', name_uz: 'Silliq', numericValue: 4 },          // SMOOTH
+    { name_ru: 'Хира', name_uz: 'Xira', numericValue: 5 },              // MATTE
+    { name_ru: 'Ялтироқ', name_uz: 'Yaltiroq', numericValue: 6 },       // SHINY
+    { name_ru: 'Қуруқ', name_uz: 'Quruq', numericValue: 7 },            // DRY
+    { name_ru: 'Чанг босган', name_uz: 'Chang bosgan', numericValue: 8 }, // DUSTY
+    { name_ru: 'Бир текис', name_uz: 'Bir tekis', numericValue: 9 },    // EVEN
+    { name_ru: 'Оқ рангли', name_uz: 'Oq rangli', numericValue: 10 },   // WHITE
+    { name_ru: 'Кулранг', name_uz: 'Kulrang', numericValue: 11 },       // GRAY
+    { name_ru: 'Сарғайган', name_uz: "Sarg'aygan", numericValue: 12 },  // YELLOWISH
+    { name_ru: 'Қорамтир', name_uz: 'Qoramtir', numericValue: 13 },     // DARK
+    { name_ru: 'Нам', name_uz: 'Nam', numericValue: 14 },               // MOIST
+  ];
+  for (const item of downTypes) {
+    await prisma.downType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const hairTypes = [
+    { name_ru: 'Дағал', name_uz: "Dag'al", numericValue: 0 },           // COARSE
+    { name_ru: 'Сийрак', name_uz: 'Siyrak', numericValue: 1 },          // SPARSE
+  ];
+  for (const item of hairTypes) {
+    await prisma.hairType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const featherTypes = [
+    { name_ru: 'Ялтироқ', name_uz: 'Yaltiroq', numericValue: 0 },      // SHINY
+    { name_ru: 'Хира', name_uz: 'Xira', numericValue: 1 },              // MATTE
+    { name_ru: 'Тўлиқ', name_uz: "To'liq", numericValue: 2 },           // FULL
+    { name_ru: 'Тўкилган', name_uz: "To'kilgan", numericValue: 3 },     // FALLEN
+    { name_ru: 'Синиқ', name_uz: 'Siniq', numericValue: 4 },            // BROKEN
+  ];
+  for (const item of featherTypes) {
+    await prisma.featherType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const skinColors = [
+    { name_ru: 'Оч бинафша', name_uz: 'Och binafsha', numericValue: 0 }, // PALE_VIOLET
+    { name_ru: 'Оқарган', name_uz: 'Oqargan', numericValue: 1 },          // PALE
+    { name_ru: 'Қизарган', name_uz: 'Qizargan', numericValue: 2 },        // RED
+    { name_ru: 'Кўкарган', name_uz: "Ko'kargan", numericValue: 3 },       // BLUE
+    { name_ru: 'Сарғайган', name_uz: "Sarg'aygan", numericValue: 4 },     // YELLOW
+  ];
+  for (const item of skinColors) {
+    await prisma.skinColor.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const skinHumidities = [
+    { name_ru: 'Ўртача нам', name_uz: "O'rtacha nam", numericValue: 0 },    // MODERATE
+    { name_ru: 'Гипергидроз', name_uz: 'Gipergidroz', numericValue: 1 },     // HYPERHIDROSIS
+    { name_ru: 'Маҳаллий терлаган', name_uz: 'Mahalliy terlagan', numericValue: 2 }, // LOCAL_SWEAT
+    { name_ru: 'Қуруқ — ангидоз', name_uz: 'Quruq – angidoz', numericValue: 3 }, // DRY
+  ];
+  for (const item of skinHumidities) {
+    await prisma.skinHumidity.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const skinTemps = [
+    { name_ru: 'Тери ҳарорати умумий кўтарилган', name_uz: "Teri harorati umumiy ko'tarilgan", numericValue: 0 }, // GENERAL_HIGH
+    { name_ru: 'Тери ҳарорати маҳаллий кўтарилган', name_uz: "Teri harorati mahalliy ko'tarilgan", numericValue: 1 }, // LOCAL_HIGH
+    { name_ru: 'Тери ҳарорати умумий пасайган', name_uz: 'Teri harorati umumiy pasaygan', numericValue: 2 },           // GENERAL_LOW
+    { name_ru: 'Тери ҳарорати маҳаллий пасайган', name_uz: 'Teri harorati mahalliy pasaygan', numericValue: 3 },       // LOCAL_LOW
+    { name_ru: 'Тери ҳарорати ҳар хил', name_uz: 'Teri harorati har xil', numericValue: 4 },                          // UNEVEN
+  ];
+  for (const item of skinTemps) {
+    await prisma.skinTemp.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const skinElasticities = [
+    { name_ru: 'Эластик', name_uz: 'Elastik', numericValue: 0 },                                          // ELASTIC
+    { name_ru: 'Тери эластиклиги камайган', name_uz: 'Teri elastikgi kamaygan', numericValue: 1 },         // REDUCED
+    { name_ru: 'Тери эластиклиги умуман йўқ', name_uz: "Teri elastikligi umuman yo'q", numericValue: 2 }, // NONE
+  ];
+  for (const item of skinElasticities) {
+    await prisma.skinElasticity.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphSizes = [
+    { name_ru: 'Катталмаган', name_uz: 'Kattarmagan', numericValue: 0 }, // NORMAL
+    { name_ru: 'Катталган', name_uz: 'Kattargan', numericValue: 1 },     // ENLARGED
+  ];
+  for (const item of lymphSizes) {
+    await prisma.lymphSize.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphShapes = [
+    { name_ru: 'Ясси', name_uz: 'Yassi', numericValue: 0 },      // FLAT
+    { name_ru: 'Думалоқ', name_uz: 'Dumaloq', numericValue: 1 }, // ROUND
+    { name_ru: 'Катталган', name_uz: 'Kattargan', numericValue: 2 }, // ENLARGED
+    { name_ru: 'Шишган', name_uz: 'Shishgan', numericValue: 3 },  // SWOLLEN
+  ];
+  for (const item of lymphShapes) {
+    await prisma.lymphShape.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphSurfaces = [
+    { name_ru: 'Силлиқ', name_uz: 'Silliq', numericValue: 0 },           // SMOOTH
+    { name_ru: 'Ғадир-будир', name_uz: "G'adir-budir", numericValue: 1 }, // ROUGH
+  ];
+  for (const item of lymphSurfaces) {
+    await prisma.lymphSurface.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphConsistencies = [
+    { name_ru: 'Зич', name_uz: 'Zich', numericValue: 0 },               // DENSE
+    { name_ru: 'Билқиллаган', name_uz: 'Bilqillagan', numericValue: 1 }, // SOFT
+    { name_ru: 'Ўзига хос', name_uz: "O'ziga xos", numericValue: 2 },   // SPECIFIC
+  ];
+  for (const item of lymphConsistencies) {
+    await prisma.lymphConsistency.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphTemps = [
+    { name_ru: 'Ўртача', name_uz: "O'rtacha", numericValue: 0 }, // NORMAL
+    { name_ru: 'Ошган', name_uz: 'Oshgan', numericValue: 1 },    // ELEVATED
+  ];
+  for (const item of lymphTemps) {
+    await prisma.lymphTemp.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphPains = [
+    { name_ru: 'Оғриқсиз', name_uz: "Og'riqsiz", numericValue: 0 }, // PAINLESS
+    { name_ru: 'Оғриқли', name_uz: "Og'riqli", numericValue: 1 },    // PAINFUL
+  ];
+  for (const item of lymphPains) {
+    await prisma.lymphPain.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const lymphMobilities = [
+    { name_ru: 'Ҳаракатчан', name_uz: 'Harakatchan', numericValue: 0 },         // MOBILE
+    { name_ru: 'Кам ҳаракатчан', name_uz: 'Kam harakatchan', numericValue: 1 }, // LOW_MOBILITY
+  ];
+  for (const item of lymphMobilities) {
+    await prisma.lymphMobility.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const mucosaTypes = [
+    { name_ru: 'Оғиз', name_uz: "Og'iz", numericValue: 0 },               // ORAL
+    { name_ru: 'Бурун', name_uz: 'Burun', numericValue: 1 },               // NASAL
+    { name_ru: 'Кўз', name_uz: "Ko'z", numericValue: 2 },                  // OCULAR
+    { name_ru: 'Репродуктив', name_uz: 'Reproduktiv organ', numericValue: 3 }, // REPRODUCTIVE
+  ];
+  for (const item of mucosaTypes) {
+    await prisma.mucosaType.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  const animalSexes = [
+    { name_ru: 'Эркак', name_uz: 'Erkak', numericValue: 0 },                                        // MALE
+    { name_ru: 'Аёл', name_uz: 'Ayol', numericValue: 1 },                                           // FEMALE
+    { name_ru: 'Кастрация қилинган эркак', name_uz: 'Kastratsiya qilingan erkak', numericValue: 2 }, // NEUTERED
+    { name_ru: 'Стерилизация қилинган аёл', name_uz: 'Sterilizatsiya qilingan ayol', numericValue: 3 }, // SPAYED
+    { name_ru: "Номаълум", name_uz: "Noma'lum", numericValue: 4 },                                   // UNKNOWN
+  ];
+  for (const item of animalSexes) {
+    await prisma.animalSex.upsert({
+      where: { numericValue: item.numericValue },
+      update: {},
+      create: item,
+    });
+  }
+
+  console.log('Clinical exam lookup tables seeded.');
 
   // --- 1. Regions and Districts ---
   const regionsWithDistricts = [
@@ -29,11 +352,11 @@ async function main() {
 
   for (const region of regionsWithDistricts) {
     await prisma.region.upsert({
-      where: { name_ru: region.name }, // Assuming name is RU for now
+      where: { name_ru: region.name },
       update: {},
       create: {
         name_ru: region.name,
-        name_uz: region.name, // Placeholder
+        name_uz: region.name,
         districts: {
           create: region.districts.map((d) => ({ name_ru: d, name_uz: d })),
         },
@@ -43,7 +366,6 @@ async function main() {
   console.log('Regions and Districts seeded.');
 
   // --- 2. Users ---
-  // Create a district to link user to
   const district = await prisma.district.findFirst();
   if (district) {
     await prisma.user.upsert({
@@ -72,7 +394,7 @@ async function main() {
       children: [
         {
           name_ru: 'Крупный рогатый скот',
-          name_uz: 'Qoramol', // Yirik shoxli hayvonlar / Qoramol
+          name_uz: 'Qoramol',
           children: [],
           breeds: [
             { name_ru: 'Голштинская порода', name_uz: 'Holstein' },
@@ -97,7 +419,7 @@ async function main() {
             { name_ru: 'Пестрый', name_uz: 'Ola-bula' },
             { name_ru: 'Рыжеватый', name_uz: "Qizg'ish" },
             { name_ru: 'Серый', name_uz: 'Sur' },
-            { name_ru: 'Серо-бурый', name_uz: 'Kulrang' }, // Mapping based on order
+            { name_ru: 'Серо-бурый', name_uz: 'Kulrang' },
             { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
           ],
         },
@@ -151,22 +473,10 @@ async function main() {
                 { name_ru: 'Испанская порода', name_uz: 'Spanish' },
                 { name_ru: 'Ангорская коза', name_uz: 'Angora' },
                 { name_ru: 'Кашмирская коза', name_uz: 'Kashmir' },
-                {
-                  name_ru: 'Узбекская чёрная коза',
-                  name_uz: 'O‘zbekiston qora echkisi',
-                },
-                {
-                  name_ru: 'Узбекская пуховая коза',
-                  name_uz: 'O‘zbekiston mo‘ynali echkisi',
-                },
-                {
-                  name_ru: 'Киргизская горная коза',
-                  name_uz: 'Qirg‘iz tog‘ echkisi',
-                },
-                {
-                  name_ru: 'Таджикская горная коза',
-                  name_uz: 'Tojik tog‘ echkisi',
-                },
+                { name_ru: 'Узбекская чёрная коза', name_uz: 'O\'zbekiston qora echkisi' },
+                { name_ru: 'Узбекская пуховая коза', name_uz: 'O\'zbekiston mo\'ynali echkisi' },
+                { name_ru: 'Киргизская горная коза', name_uz: 'Qirg\'iz tog\' echkisi' },
+                { name_ru: 'Таджикская горная коза', name_uz: 'Tojik tog\' echkisi' },
                 { name_ru: 'Сирийская коза', name_uz: 'Suriyalik echki' },
                 { name_ru: 'Мархур', name_uz: 'Markhor' },
                 { name_ru: 'Битальская порода', name_uz: 'Beetal' },
@@ -179,13 +489,10 @@ async function main() {
                 { name_ru: 'Чёрный', name_uz: 'Qora' },
                 { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
                 { name_ru: 'Серый', name_uz: 'Kulrang' },
-                {
-                  name_ru: 'Красновато-коричневый',
-                  name_uz: 'Qizg‘ish-jigarrang',
-                },
+                { name_ru: 'Красновато-коричневый', name_uz: 'Qizg\'ish-jigarrang' },
                 { name_ru: 'Белый с чёрным', name_uz: 'Oq-qora' },
                 { name_ru: 'Золотистый', name_uz: 'Oltin' },
-                { name_ru: 'Пепельный', name_uz: 'Bo‘r rang' },
+                { name_ru: 'Пепельный', name_uz: 'Bo\'r rang' },
               ],
             },
           ],
@@ -198,62 +505,47 @@ async function main() {
               name_ru: 'Одногорбый',
               name_uz: 'Bir o`rkachli',
               breeds: [
-                { name_ru: 'Афганская порода', name_uz: 'Afg‘on tuya zoti' },
+                { name_ru: 'Афганская порода', name_uz: 'Afg\'on tuya zoti' },
                 { name_ru: 'Арабская порода', name_uz: 'Arab tuya zoti' },
                 { name_ru: 'Сомалийская порода', name_uz: 'Somali tuya zoti' },
                 { name_ru: 'Индийская порода', name_uz: 'Hind tuya zoti' },
-                {
-                  name_ru: 'Пакистанская порода',
-                  name_uz: 'Pokiston tuya zoti',
-                },
+                { name_ru: 'Пакистанская порода', name_uz: 'Pokiston tuya zoti' },
                 { name_ru: 'Суданская порода', name_uz: 'Sudan tuya zoti' },
                 { name_ru: 'Иранская порода', name_uz: 'Eron tuya zoti' },
                 { name_ru: 'Туркменская порода', name_uz: 'Turkman tuya zoti' },
-                {
-                  name_ru: 'Белуджистанская порода',
-                  name_uz: 'Balujiston tuya zoti',
-                },
-                { name_ru: 'Магрибская порода', name_uz: 'Mag‘rib tuya zoti' },
+                { name_ru: 'Белуджистанская порода', name_uz: 'Balujiston tuya zoti' },
+                { name_ru: 'Магрибская порода', name_uz: 'Mag\'rib tuya zoti' },
               ],
               colors: [
                 { name_ru: 'Белый', name_uz: 'Oq' },
-                { name_ru: 'Желтоватый', name_uz: 'Sarg‘ish' },
+                { name_ru: 'Желтоватый', name_uz: 'Sarg\'ish' },
                 { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
-                { name_ru: 'Красноватый', name_uz: 'Qizg‘ish' },
+                { name_ru: 'Красноватый', name_uz: 'Qizg\'ish' },
                 { name_ru: 'Чёрный', name_uz: 'Qora' },
                 { name_ru: 'Серый', name_uz: 'Kulrang' },
-                { name_ru: 'Бурый', name_uz: 'Qo‘ng‘ir' },
+                { name_ru: 'Бурый', name_uz: 'Qo\'ng\'ir' },
               ],
             },
             {
               name_ru: 'Двугорбые',
               name_uz: 'Ikki o`rkachli',
               breeds: [
-                {
-                  name_ru: 'Казахстанская порода',
-                  name_uz: 'Qozog‘iston tuya zoti',
-                },
+                { name_ru: 'Казахстанская порода', name_uz: 'Qozog\'iston tuya zoti' },
                 { name_ru: 'Монгольская порода', name_uz: 'Mongol tuya zoti' },
                 { name_ru: 'Иранская порода', name_uz: 'Eron tuya zoti' },
                 { name_ru: 'Китайская порода', name_uz: 'Xitoy tuya zoti' },
                 { name_ru: 'Туркменская порода', name_uz: 'Turkman tuya zoti' },
-                {
-                  name_ru: 'Узбекская порода',
-                  name_uz: 'O‘zbekiston tuya zoti',
-                },
-                {
-                  name_ru: 'Каракалпакская порода',
-                  name_uz: 'Qoraqalpoq tuya zoti',
-                },
+                { name_ru: 'Узбекская порода', name_uz: 'O\'zbekiston tuya zoti' },
+                { name_ru: 'Каракалпакская порода', name_uz: 'Qoraqalpoq tuya zoti' },
               ],
               colors: [
                 { name_ru: 'Белый', name_uz: 'Oq' },
-                { name_ru: 'Желтоватый', name_uz: 'Sarg‘ish' },
+                { name_ru: 'Желтоватый', name_uz: 'Sarg\'ish' },
                 { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
-                { name_ru: 'Красноватый', name_uz: 'Qizg‘ish' },
+                { name_ru: 'Красноватый', name_uz: 'Qizg\'ish' },
                 { name_ru: 'Чёрный', name_uz: 'Qora' },
                 { name_ru: 'Серый', name_uz: 'Kulrang' },
-                { name_ru: 'Бурый', name_uz: 'Qo‘ng‘ir' },
+                { name_ru: 'Бурый', name_uz: 'Qo\'ng\'ir' },
               ],
             },
           ],
@@ -265,16 +557,16 @@ async function main() {
           breeds: [
             { name_ru: 'Арабская лошадь', name_uz: 'Arab oti' },
             { name_ru: 'Английская скаковая', name_uz: 'Ingliz chopard oti' },
-            { name_ru: 'Орловский рысак', name_uz: 'Orlov yo‘rg‘asi' },
+            { name_ru: 'Орловский рысак', name_uz: 'Orlov yo\'rg\'asi' },
             { name_ru: 'Донская лошадь', name_uz: 'Don oti' },
-            { name_ru: 'Казахстанская лошадь', name_uz: 'Qozog‘iston oti' },
+            { name_ru: 'Казахстанская лошадь', name_uz: 'Qozog\'iston oti' },
             { name_ru: 'Карабаирская лошадь', name_uz: 'Qorabair oti' },
             { name_ru: 'Ахалтекинская лошадь', name_uz: 'Achal-tekinskiy oti' },
             { name_ru: 'Будённовская лошадь', name_uz: 'Budennovsk oti' },
             { name_ru: 'Кабардинская лошадь', name_uz: 'Kabardin oti' },
-            { name_ru: 'Киргизская лошадь', name_uz: 'Qirg‘iz oti' },
-            { name_ru: 'Узбекская лошадь', name_uz: 'O‘zbek oti' },
-            { name_ru: 'Монгольская лошадь', name_uz: 'Mo‘g‘ul oti' },
+            { name_ru: 'Киргизская лошадь', name_uz: 'Qirg\'iz oti' },
+            { name_ru: 'Узбекская лошадь', name_uz: 'O\'zbek oti' },
+            { name_ru: 'Монгольская лошадь', name_uz: 'Mo\'g\'ul oti' },
             { name_ru: 'Фризская лошадь', name_uz: 'Friz oti' },
             { name_ru: 'Шетландский пони', name_uz: 'Shetland poni' },
             { name_ru: 'Гафлингер', name_uz: 'Haflinger' },
@@ -288,11 +580,11 @@ async function main() {
             { name_ru: 'Чёрный', name_uz: 'Qora' },
             { name_ru: 'Белый', name_uz: 'Oq' },
             { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
-            { name_ru: 'Красновато-коричневый', name_uz: 'Qizg‘ish-jigarrang' },
+            { name_ru: 'Красновато-коричневый', name_uz: 'Qizg\'ish-jigarrang' },
             { name_ru: 'Серый', name_uz: 'Kulrang' },
-            { name_ru: 'Пепельный', name_uz: 'Bo‘r rang' },
-            { name_ru: 'Желтоватый', name_uz: 'Sarg‘ish' },
-            { name_ru: 'Бурый', name_uz: 'Qo‘ng‘ir' },
+            { name_ru: 'Пепельный', name_uz: 'Bo\'r rang' },
+            { name_ru: 'Желтоватый', name_uz: 'Sarg\'ish' },
+            { name_ru: 'Бурый', name_uz: 'Qo\'ng\'ir' },
             { name_ru: 'Алазан', name_uz: 'Alazan' },
             { name_ru: 'Буланый', name_uz: 'Bulan' },
           ],
@@ -302,30 +594,27 @@ async function main() {
           name_uz: 'Eshaklar',
           children: [],
           breeds: [
-            { name_ru: 'Узбекский осёл', name_uz: 'O‘zbekiston eshagi' },
+            { name_ru: 'Узбекский осёл', name_uz: 'O\'zbekiston eshagi' },
             { name_ru: 'Каракалпакский осёл', name_uz: 'Qoraqalpoq eshagi' },
             { name_ru: 'Туркменский осёл', name_uz: 'Turkman eshagi' },
             { name_ru: 'Таджикский осёл', name_uz: 'Tojik eshagi' },
-            { name_ru: 'Киргизский осёл', name_uz: 'Qirg‘iz eshagi' },
+            { name_ru: 'Киргизский осёл', name_uz: 'Qirg\'iz eshagi' },
             { name_ru: 'Китайский осёл', name_uz: 'Xitoy eshagi' },
             { name_ru: 'Сомалийский осёл', name_uz: 'Somali eshagi' },
             { name_ru: 'Нубийский осёл', name_uz: 'Nubian eshagi' },
             { name_ru: 'Андалузский осёл', name_uz: 'Andalusiya eshagi' },
             { name_ru: 'Каталонский осёл', name_uz: 'Kataloniya eshagi' },
             { name_ru: 'Пуату осёл', name_uz: 'Poitou eshagi' },
-            {
-              name_ru: 'Американский мини-осёл',
-              name_uz: 'Amerika mini eshagi',
-            },
+            { name_ru: 'Американский мини-осёл', name_uz: 'Amerika mini eshagi' },
           ],
           colors: [
             { name_ru: 'Белый', name_uz: 'Oq' },
             { name_ru: 'Чёрный', name_uz: 'Qora' },
             { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
             { name_ru: 'Серый', name_uz: 'Kulrang' },
-            { name_ru: 'Желтоватый', name_uz: 'Sarg‘ish' },
-            { name_ru: 'Бурый', name_uz: 'Qo‘ng‘ir' },
-            { name_ru: 'Красновато-коричневый', name_uz: 'Qizg‘ish-jigarrang' },
+            { name_ru: 'Желтоватый', name_uz: 'Sarg\'ish' },
+            { name_ru: 'Бурый', name_uz: 'Qo\'ng\'ir' },
+            { name_ru: 'Красновато-коричневый', name_uz: 'Qizg\'ish-jigarrang' },
             { name_ru: 'Белый с коричневым', name_uz: 'Oq-jigarrang aralash' },
           ],
         },
@@ -336,20 +625,17 @@ async function main() {
           breeds: [
             { name_ru: 'Равнинная зебра', name_uz: 'Tekislik zebrasi' },
             { name_ru: 'Зебра Греви', name_uz: 'Grevi zebrasi' },
-            { name_ru: 'Горная зебра', name_uz: 'Tog‘ zebrasi' },
+            { name_ru: 'Горная зебра', name_uz: 'Tog\' zebrasi' },
             { name_ru: 'Зебра Гранта', name_uz: 'Grant zebrasi' },
             { name_ru: 'Зебра Чапмана', name_uz: 'Chapman zebrasi' },
-            {
-              name_ru: 'Горная зебра Хартмана',
-              name_uz: 'Hartmann tog‘ zebrasi',
-            },
+            { name_ru: 'Горная зебра Хартмана', name_uz: 'Hartmann tog\' zebrasi' },
           ],
           colors: [
             { name_ru: 'Белый с чёрным', name_uz: 'Oq-qora' },
             { name_ru: 'Белый с коричневым', name_uz: 'Oq-jigarrang' },
             { name_ru: 'Чёрный с коричневым', name_uz: 'Qora-jigarrang' },
             { name_ru: 'Белый с серым', name_uz: 'Oq-kulrang' },
-            { name_ru: 'Белый с желтоватым', name_uz: 'Oq-sarg‘ish' },
+            { name_ru: 'Белый с желтоватым', name_uz: 'Oq-sarg\'ish' },
           ],
         },
         {
@@ -357,27 +643,18 @@ async function main() {
           name_uz: "Cho'chqalar",
           children: [],
           breeds: [
-            { name_ru: 'Узбекская свинья', name_uz: 'O‘zbekiston cho‘chqasi' },
-            { name_ru: 'Крупная белая свинья', name_uz: 'Katta oq cho‘chqa' },
+            { name_ru: 'Узбекская свинья', name_uz: 'O\'zbekiston cho\'chqasi' },
+            { name_ru: 'Крупная белая свинья', name_uz: 'Katta oq cho\'chqa' },
             { name_ru: 'Ландрас', name_uz: 'Landras' },
             { name_ru: 'Дюрок', name_uz: 'Durok' },
             { name_ru: 'Гемпшир', name_uz: 'Hampshire' },
             { name_ru: 'Йоркшир', name_uz: 'Yorshir' },
             { name_ru: 'Беркшир', name_uz: 'Berkshir' },
             { name_ru: 'Эстонский бекон', name_uz: 'Estoniya bekoni' },
-            {
-              name_ru: 'Латвийская белая свинья',
-              name_uz: 'Latviya oq cho‘chqasi',
-            },
-            {
-              name_ru: 'Украинская порода',
-              name_uz: 'Ukrainaning cho‘chqa zoti',
-            },
-            { name_ru: 'Белорусская белая', name_uz: 'Belorus oq cho‘chqasi' },
-            {
-              name_ru: 'Вьетнамская вислобрюхая',
-              name_uz: 'Vyetnam vislobryux cho‘chqasi',
-            },
+            { name_ru: 'Латвийская белая свинья', name_uz: 'Latviya oq cho\'chqasi' },
+            { name_ru: 'Украинская порода', name_uz: 'Ukrainaning cho\'chqa zoti' },
+            { name_ru: 'Белорусская белая', name_uz: 'Belorus oq cho\'chqasi' },
+            { name_ru: 'Вьетнамская вислобрюхая', name_uz: 'Vyetnam vislobryux cho\'chqasi' },
             { name_ru: 'Пьетрен', name_uz: 'Pietren' },
             { name_ru: 'Тамворт', name_uz: 'Tamvort' },
             { name_ru: 'Мангалица', name_uz: 'Mangalitsa' },
@@ -409,10 +686,7 @@ async function main() {
             { name_ru: 'Лхаса апсо', name_uz: 'Lhasa Apso' },
             { name_ru: 'Йоркширский терьер', name_uz: 'Yorkshire Terrier' },
             { name_ru: 'Бишон фризе', name_uz: 'Bichon Frise' },
-            {
-              name_ru: 'Кавалер Кинг Чарльз',
-              name_uz: 'Cavalier King Charles Spaniel',
-            },
+            { name_ru: 'Кавалер Кинг Чарльз', name_uz: 'Cavalier King Charles Spaniel' },
             { name_ru: 'Французский бульдог', name_uz: 'French Bulldog' },
             { name_ru: 'Бостон-терьер', name_uz: 'Boston Terrier' },
             { name_ru: 'Гаванская собака', name_uz: 'Havanese' },
@@ -427,7 +701,7 @@ async function main() {
             { name_ru: 'Рыжий', name_uz: 'Qizil' },
             { name_ru: 'Серый', name_uz: 'Kulrang' },
             { name_ru: 'Смешанный', name_uz: 'Aralash' },
-            { name_ru: 'Жёлтоватый', name_uz: 'Sarg‘ish' },
+            { name_ru: 'Жёлтоватый', name_uz: 'Sarg\'ish' },
             { name_ru: 'Бежевый', name_uz: 'Bej' },
           ],
         },
@@ -439,20 +713,14 @@ async function main() {
             { name_ru: 'Сфинкс', name_uz: 'Sphinx' },
             { name_ru: 'Сиамская кошка', name_uz: 'Siamese' },
             { name_ru: 'Мейн-кун', name_uz: 'Maine Coon' },
-            {
-              name_ru: 'Британская короткошерстная',
-              name_uz: 'British Shorthair',
-            },
+            { name_ru: 'Британская короткошерстная', name_uz: 'British Shorthair' },
             { name_ru: 'Шотландская вислоухая', name_uz: 'Scottish Fold' },
             { name_ru: 'Рэгдолл', name_uz: 'Ragdoll' },
             { name_ru: 'Бенгальская кошка', name_uz: 'Bengal' },
             { name_ru: 'Абиссинская кошка', name_uz: 'Abyssinian' },
             { name_ru: 'Русская голубая', name_uz: 'Russian Blue' },
             { name_ru: 'Норвежская лесная', name_uz: 'Norwegian Forest Cat' },
-            {
-              name_ru: 'Восточная короткошерстная',
-              name_uz: 'Oriental Shorthair',
-            },
+            { name_ru: 'Восточная короткошерстная', name_uz: 'Oriental Shorthair' },
             { name_ru: 'Турецкая ангора', name_uz: 'Turkish Angora' },
             { name_ru: 'Бурманская кошка', name_uz: 'Burmese' },
             { name_ru: 'Корниш-рекс', name_uz: 'Cornish Rex' },
@@ -463,7 +731,7 @@ async function main() {
             { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
             { name_ru: 'Серый', name_uz: 'Kulrang' },
             { name_ru: 'Рыжий', name_uz: 'Qizil' },
-            { name_ru: 'Жёлтоватый', name_uz: 'Sarg‘ish' },
+            { name_ru: 'Жёлтоватый', name_uz: 'Sarg\'ish' },
             { name_ru: 'Голубой', name_uz: 'Moviy' },
             { name_ru: 'Пёстрый', name_uz: 'Aralash' },
             { name_ru: 'Бежевый', name_uz: 'Bej' },
@@ -501,7 +769,7 @@ async function main() {
         { name_ru: 'Коричневый', name_uz: 'Jigarrang' },
         { name_ru: 'Красный', name_uz: 'Qizil' },
         { name_ru: 'Серый', name_uz: 'Kulrang' },
-        { name_ru: 'Жёлтоватый', name_uz: 'Sarg‘ish' },
+        { name_ru: 'Жёлтоватый', name_uz: 'Sarg\'ish' },
         { name_ru: 'Смешанный', name_uz: 'Aralash' },
       ],
     },
@@ -542,28 +810,18 @@ async function main() {
       },
     });
 
-    // Seed Breeds
     if (typeData.breeds) {
       for (const breed of typeData.breeds) {
         await prisma.breed.create({
           data: {
             name_ru: breed.name_ru,
             name_uz: breed.name_uz,
-            animals: { connect: [] }, // No animals yet
-            // Note: Schema doesn't link Breed directly to Type, but Animal links to both.
-            // Wait, schema has AnimalBreed model but no relation to AnimalType?
-            // Checking schema... AnimalType has no relation to Breed.
-            // Animal has relation to both.
-            // So we just create breeds independently? Or should we link them?
-            // The schema `inventory.prisma` shows `model Breed` has no `animalTypeId`.
-            // This means breeds are global or we need to rely on naming convention.
-            // For now, I will just create them.
+            animals: { connect: [] },
           },
         });
       }
     }
 
-    // Seed Colors
     if (typeData.colors) {
       for (const color of typeData.colors) {
         await prisma.color.create({
@@ -575,7 +833,6 @@ async function main() {
       }
     }
 
-    // Recursively seed children
     if (typeData.children) {
       for (const child of typeData.children) {
         await seedAnimalType(child, type.id);
@@ -598,10 +855,7 @@ async function main() {
       diseases: [
         { name_ru: 'Стоматит', name_uz: 'Stomatit' },
         { name_ru: 'Фарингит', name_uz: 'Faringit' },
-        {
-          name_ru: 'Гипотония преджелудков',
-          name_uz: 'Oshqozon Oldi gipotoniyasi',
-        },
+        { name_ru: 'Гипотония преджелудков', name_uz: 'Oshqozon Oldi gipotoniyasi' },
         { name_ru: 'Атония преджелудков', name_uz: 'Oshqozon Oldi atoniyasi' },
         { name_ru: 'Парез рубца', name_uz: 'Rubets parezi' },
         { name_ru: 'Ацидоз', name_uz: 'Atsidoz' },
@@ -630,11 +884,10 @@ async function main() {
         { name_ru: 'Хроническая гематурия', name_uz: 'Xronik gematuriya' },
       ],
     },
-    // ... Add other categories similarly (abbreviated for brevity, but you should include all)
   ];
 
   for (const category of diseaseCategories) {
-    const cat = await prisma.diseaseCategory.create({
+    await prisma.diseaseCategory.create({
       data: {
         name_ru: category.name_ru,
         name_uz: category.name_uz,
@@ -653,18 +906,10 @@ async function main() {
   const vaccines = [
     { name_ru: 'Вакцина против бруцеллёза', name_uz: 'Brucella vaksina' },
     { name_ru: 'Вакцина против пастереллёза', name_uz: 'Pasteurella vaksina' },
-    // ... others
   ];
 
   const vaccineStrains = [
-    'S19',
-    'P52',
-    'Oregon C24V',
-    'Nigeria 75/1',
-    'A, B, C',
-    'K88, K99',
-    'Typhimurium',
-    'S-6',
+    'S19', 'P52', 'Oregon C24V', 'Nigeria 75/1', 'A, B, C', 'K88, K99', 'Typhimurium', 'S-6',
   ];
 
   for (const v of vaccines) {
@@ -681,77 +926,62 @@ async function main() {
   }
 
   // --- 6. Reference Data (Urine, Feces, Mucosa) ---
-  // We need to fetch AnimalTypes to link them.
-  // Assuming 'Крупный рогатый скот' (Cattle) corresponds to specific ID.
-  // For simplicity, I will fetch all types and try to match by name if possible,
-  // or just seed generally if the schema allows optional relation?
-  // Schema: `animalTypeId String @map("animal_type_id") @db.Uuid` -> Required.
-
-  // I will implement a helper to find type by RU name.
   const findType = async (name: string) =>
     prisma.animalType.findUnique({ where: { name_ru: name } });
 
-  const cattle = await findType('Крупный рогатый скот');
-  const smallCattle = await findType('Мелкий рогатый скот'); // This is a category, maybe link to Sheep/Goat?
-  // The document lists YShH (Cattle), MShH (Small Cattle), Otlar (Horses), Cho'chqalar (Pigs) for Urine.
-
   const targetTypes = [
-    { name: 'Крупный рогатый скот', code: 'YShH' },
-    { name: 'Мелкий рогатый скот', code: 'MShH' },
-    { name: 'Лошади', code: 'Otlar' },
-    { name: 'Свиньи', code: "Cho'chqalar" },
+    { name: 'Крупный рогатый скот' },
+    { name: 'Мелкий рогатый скот' },
+    { name: 'Лошади' },
+    { name: 'Свиньи' },
   ];
 
-  // Urine Colors (4 lists in doc, matching 4 types)
   const urineColorsData = [
     // Cattle
     [
-      { ru: 'Тёмно-жёлтый', uz: 'To’q sariq' },
-      { ru: 'Жёлтый', uz: 'Sariq' },
-      { ru: 'Светло-жёлтый', uz: 'Och sariq' },
-      { ru: 'Коричневый', uz: 'Jigarrang' },
-      { ru: 'Красный', uz: 'Qizil' },
-      { ru: 'Почти чёрный', uz: 'Qoramtir' },
-      { ru: 'Молочный', uz: 'Sut rang' },
+      { ru: 'Тёмно-жёлтый', uz: 'To\'q sariq', numericValue: 0 },
+      { ru: 'Жёлтый', uz: 'Sariq', numericValue: 1 },
+      { ru: 'Светло-жёлтый', uz: 'Och sariq', numericValue: 2 },
+      { ru: 'Коричневый', uz: 'Jigarrang', numericValue: 3 },
+      { ru: 'Красный', uz: 'Qizil', numericValue: 4 },
+      { ru: 'Почти чёрный', uz: 'Qoramtir', numericValue: 5 },
+      { ru: 'Молочный', uz: 'Sut rang', numericValue: 6 },
     ],
     // Small Cattle
     [
-      { ru: 'Тёмно-жёлтый', uz: 'To’q sariq' },
-      { ru: 'Красный', uz: 'Qizil' },
-      { ru: 'Розовый', uz: 'Pushti' },
-      { ru: 'Коричневый', uz: 'Jigarrang' },
+      { ru: 'Тёмно-жёлтый', uz: 'To\'q sariq', numericValue: 0 },
+      { ru: 'Красный', uz: 'Qizil', numericValue: 1 },
+      { ru: 'Розовый', uz: 'Pushti', numericValue: 2 },
+      { ru: 'Коричневый', uz: 'Jigarrang', numericValue: 3 },
     ],
     // Horses
     [
-      { ru: 'Тёмно-жёлтый', uz: 'To’q sariq' },
-      { ru: 'Коричневый', uz: 'Jigarrang' },
-      { ru: 'Красный', uz: 'Qizil' },
-      { ru: 'Молочного цвета', uz: 'Sut rang' },
+      { ru: 'Тёмно-жёлтый', uz: 'To\'q sariq', numericValue: 0 },
+      { ru: 'Коричневый', uz: 'Jigarrang', numericValue: 1 },
+      { ru: 'Красный', uz: 'Qizil', numericValue: 2 },
+      { ru: 'Молочного цвета', uz: 'Sut rang', numericValue: 3 },
     ],
     // Pigs
     [
-      { ru: 'Светло-жёлтый', uz: 'Och sariq' },
-      { ru: 'Коричневый', uz: 'Jigarrang' },
-      { ru: 'Красный', uz: 'Qizil' },
-      { ru: 'Молочный', uz: 'Sut rang' }, // Assuming implied from doc structure
+      { ru: 'Светло-жёлтый', uz: 'Och sariq', numericValue: 0 },
+      { ru: 'Коричневый', uz: 'Jigarrang', numericValue: 1 },
+      { ru: 'Красный', uz: 'Qizil', numericValue: 2 },
+      { ru: 'Молочный', uz: 'Sut rang', numericValue: 3 },
     ],
   ];
 
   for (let i = 0; i < targetTypes.length; i++) {
-    const typeName = targetTypes[i].name;
-    const type = await findType(typeName);
-    if (type) {
-      // Seed Urine Colors
-      if (urineColorsData[i]) {
-        for (const color of urineColorsData[i]) {
-          await prisma.urineColor.create({
-            data: {
-              name_ru: color.ru,
-              name_uz: color.uz,
-              animalTypeId: type.id,
-            },
-          });
-        }
+    const type = await findType(targetTypes[i].name);
+    if (type && urineColorsData[i]) {
+      for (const color of urineColorsData[i]) {
+        await prisma.urineColor.create({
+          data: {
+            name_ru: color.ru,
+            name_uz: color.uz,
+            numericValue: color.numericValue,
+            animalTypeId: type.id,
+          },
+        });
       }
     }
   }

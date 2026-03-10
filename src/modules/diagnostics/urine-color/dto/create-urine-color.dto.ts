@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateUrineColorDto {
   @IsString()
@@ -20,6 +20,14 @@ export class CreateUrineColorDto {
   })
   readonly name_uz: string;
 
+  @IsInt()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Numeric value for ML mapping',
+    example: 1,
+    type: Number,
+  })
+  readonly numericValue: number;
   @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
@@ -29,3 +37,4 @@ export class CreateUrineColorDto {
   })
   readonly animalTypeId: string;
 }
+

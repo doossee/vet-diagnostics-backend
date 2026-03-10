@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID, IsEnum } from 'class-validator';
-import { MucosaType } from 'src/shared/enums';
+import { IsInt, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateMucosaAppearanceDto {
   @IsString()
@@ -21,14 +20,23 @@ export class CreateMucosaAppearanceDto {
   })
   readonly name_uz: string;
 
-  @IsEnum(MucosaType)
+  @IsInt()
   @IsNotEmpty()
   @ApiProperty({
-    enum: MucosaType,
-    description: 'Type of mucosa',
-    example: MucosaType.ORAL,
+    description: 'Numeric value for ML mapping',
+    example: 1,
+    type: Number,
   })
-  readonly mucosaType: MucosaType;
+  readonly numericValue: number;
+
+  @IsUUID()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Mucosa type ID',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+    format: 'uuid',
+  })
+  readonly mucosaTypeId: string;
 
   @IsUUID()
   @IsNotEmpty()
