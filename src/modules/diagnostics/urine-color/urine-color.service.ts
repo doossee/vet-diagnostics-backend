@@ -33,9 +33,10 @@ export class UrineColorService {
    * @returns Paginated urine colors
    */
   async findAll(query: UrineColorQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.UrineColorWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

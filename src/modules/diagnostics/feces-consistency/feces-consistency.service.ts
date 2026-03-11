@@ -33,9 +33,10 @@ export class FecesConsistencyService {
    * @returns Paginated feces consistencies
    */
   async findAll(query: FecesConsistencyQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.FecesConsistencyWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

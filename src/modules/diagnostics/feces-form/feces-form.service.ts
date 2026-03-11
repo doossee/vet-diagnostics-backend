@@ -33,9 +33,10 @@ export class FecesFormService {
    * @returns Paginated feces forms
    */
   async findAll(query: FecesFormQueryParamsDto) {
-    const { page, perPage, search, byId } = query;
+    const { page, perPage, search, byId, animalTypeId } = query;
 
     const where: Prisma.FecesFormWhereInput = {
+      ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },
