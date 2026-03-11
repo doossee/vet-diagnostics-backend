@@ -2,7 +2,6 @@ import { IsOptional, IsString, IsUUID, IsEnum } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { SortOrder } from 'src/shared/dto';
-import { MucosaType } from 'src/shared/enums';
 
 export class MucosaAppearanceQueryParamsDto {
   @IsOptional()
@@ -36,12 +35,12 @@ export class MucosaAppearanceQueryParamsDto {
   animalTypeId?: string;
 
   @IsOptional()
-  @IsEnum(MucosaType)
+  @IsUUID()
   @ApiPropertyOptional({
-    enum: MucosaType,
-    description: 'Filter by mucosa type',
+    description: 'Filter by mucosa type ID',
+    format: 'uuid',
   })
-  mucosaType?: MucosaType;
+  mucosaTypeId?: string;
 
   @IsOptional()
   @IsEnum(SortOrder)

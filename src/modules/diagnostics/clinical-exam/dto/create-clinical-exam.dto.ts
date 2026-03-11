@@ -1,38 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  BodyType,
-  ObesityType,
-  BodyPosition,
-  Constitution,
-  Temperament,
-  WoolType,
-  DownType,
-  HairType,
-  FeatherType,
-  SkinColor,
-  SkinHumidity,
-  SkinTemp,
-  SkinElasticity,
-  LymphSize,
-  LymphShape,
-  LymphSurface,
-  LymphConsistency,
-  LymphTemp,
-  LymphPain,
-  LymphMobility,
-} from 'src/shared/enums';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateClinicalExamDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   animalId: string;
+
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000', description: 'Medical session ID' })
+  @IsUUID()
+  @IsOptional()
+  sessionId?: string;
 
   @ApiPropertyOptional({ example: 80 })
   @IsNumber()
@@ -54,80 +31,83 @@ export class CreateClinicalExamDto {
   @IsOptional()
   respiratoryRate?: number;
 
-  @ApiPropertyOptional({ enum: BodyType })
-  @IsEnum(BodyType)
+  // --- Habitus ---
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  bodyType?: BodyType;
+  bodyTypeId?: string;
 
-  @ApiPropertyOptional({ enum: ObesityType })
-  @IsEnum(ObesityType)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  obesity?: ObesityType;
+  obesityId?: string;
 
-  @ApiPropertyOptional({ enum: BodyPosition })
-  @IsEnum(BodyPosition)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  bodyPosition?: BodyPosition;
+  bodyPositionId?: string;
 
-  @ApiPropertyOptional({ enum: Constitution })
-  @IsEnum(Constitution)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  constitution?: Constitution;
+  constitutionId?: string;
 
-  @ApiPropertyOptional({ enum: Temperament })
-  @IsEnum(Temperament)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  temperament?: Temperament;
+  temperamentId?: string;
 
-  @ApiPropertyOptional({ enum: WoolType })
-  @IsEnum(WoolType)
+  // --- Skin Cover ---
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  wool?: WoolType;
+  woolId?: string;
 
-  @ApiPropertyOptional({ enum: DownType })
-  @IsEnum(DownType)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  down?: DownType;
+  downId?: string;
 
-  @ApiPropertyOptional({ enum: HairType })
-  @IsEnum(HairType)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  hair?: HairType;
+  hairId?: string;
 
-  @ApiPropertyOptional({ enum: FeatherType })
-  @IsEnum(FeatherType)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  feathers?: FeatherType;
+  feathersId?: string;
 
-  @ApiPropertyOptional({ enum: SkinColor })
-  @IsEnum(SkinColor)
+  // --- Skin ---
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinColor?: SkinColor;
+  skinColorId?: string;
 
-  @ApiPropertyOptional({ enum: SkinHumidity })
-  @IsEnum(SkinHumidity)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinHumidity?: SkinHumidity;
+  skinHumidityId?: string;
 
   @ApiPropertyOptional({ example: 'Normal' })
   @IsString()
   @IsOptional()
   skinSmell?: string;
 
-  @ApiPropertyOptional({ enum: SkinTemp })
-  @IsEnum(SkinTemp)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinTemp?: SkinTemp;
+  skinTempId?: string;
 
   @ApiPropertyOptional({ example: 'Smooth' })
   @IsString()
   @IsOptional()
   skinSurface?: string;
 
-  @ApiPropertyOptional({ enum: SkinElasticity })
-  @IsEnum(SkinElasticity)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinElasticity?: SkinElasticity;
+  skinElasticityId?: string;
 
   @ApiPropertyOptional({ example: 'Normal' })
   @IsString()
@@ -139,41 +119,43 @@ export class CreateClinicalExamDto {
   @IsOptional()
   skinPain?: string;
 
-  @ApiPropertyOptional({ enum: LymphSize })
-  @IsEnum(LymphSize)
+  // --- Lymph Nodes ---
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphSize?: LymphSize;
+  lymphSizeId?: string;
 
-  @ApiPropertyOptional({ enum: LymphShape })
-  @IsEnum(LymphShape)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphShape?: LymphShape;
+  lymphShapeId?: string;
 
-  @ApiPropertyOptional({ enum: LymphSurface })
-  @IsEnum(LymphSurface)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphSurface?: LymphSurface;
+  lymphSurfaceId?: string;
 
-  @ApiPropertyOptional({ enum: LymphConsistency })
-  @IsEnum(LymphConsistency)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphConsistency?: LymphConsistency;
+  lymphConsistencyId?: string;
 
-  @ApiPropertyOptional({ enum: LymphTemp })
-  @IsEnum(LymphTemp)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphTemp?: LymphTemp;
+  lymphTempId?: string;
 
-  @ApiPropertyOptional({ enum: LymphPain })
-  @IsEnum(LymphPain)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphPain?: LymphPain;
+  lymphPainId?: string;
 
-  @ApiPropertyOptional({ enum: LymphMobility })
-  @IsEnum(LymphMobility)
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  lymphMobility?: LymphMobility;
+  lymphMobilityId?: string;
 
+  // --- Rumen ---
   @IsNumber()
   @IsOptional()
   rumenInfusoriaCount?: number;

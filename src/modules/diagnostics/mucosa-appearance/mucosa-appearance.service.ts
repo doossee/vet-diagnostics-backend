@@ -33,11 +33,10 @@ export class MucosaAppearanceService {
    * @returns Paginated mucosa appearances
    */
   async findAll(query: MucosaAppearanceQueryParamsDto) {
-    const { page, perPage, search, byId, mucosaType, animalTypeId } = query;
+    const { page, perPage, search, byId, mucosaTypeId } = query;
 
     const where: Prisma.MucosaAppearanceWhereInput = {
-      ...(animalTypeId && { animalTypeId }),
-      ...(mucosaType && { mucosaType }),
+      ...(mucosaTypeId && { mucosaTypeId }),
       ...(search && {
         OR: [
           { name_ru: { contains: search, mode: 'insensitive' } },

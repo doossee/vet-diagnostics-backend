@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsInt, IsString, IsUUID } from 'class-validator';
 
 export class CreateFecesColorDto {
   @ApiProperty({ example: 'Коричневый' })
@@ -9,6 +9,10 @@ export class CreateFecesColorDto {
   @ApiProperty({ example: 'Jigarrang' })
   @IsString()
   name_uz: string;
+
+  @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
+  @IsInt()
+  numericValue: number;
 
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()

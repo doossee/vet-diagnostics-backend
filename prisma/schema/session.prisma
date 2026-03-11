@@ -1,0 +1,56 @@
+// Medical Session — groups all exams from a single examination visit
+model MedicalSession {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String @map("animal_id") @db.Uuid
+  animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  veterinarianId String?     @map("veterinarian_id") @db.Uuid
+  veterinarian   VetProfile? @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
+
+  date   DateTime      @default(now())
+  status SessionStatus @default(DRAFT)
+  notes  String?       @db.Text
+
+  // Exams belonging to this session (1:1 except mucosa which is 1:N)
+  clinicalExam ClinicalExam?
+  bloodExam    BloodExam?
+  urineExam    UrineExam?
+  fecesExam    FecesExam?
+  mucosaExams  MucosaExam[]
+
+  // AI prediction result
+  prediction Prediction?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([animalId])
+  @@index([veterinarianId])
+  @@index([status])
+  @@index([date])
+  @@map("medical_sessions")
+}
+
+enum SessionStatus {
+  DRAFT     // still collecting exams
+  READY     // all required exams done, ready for prediction
+  SUBMITTED // submitted to AI model, prediction stored
+}
+
+// Stores the AI model prediction result and the exact input that produced it
+model Prediction {
+  id String @id @default(uuid()) @db.Uuid
+
+  sessionId String         @unique @map("session_id") @db.Uuid
+  session   MedicalSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  inputVector  Json    @map("input_vector")  // exact numeric array sent to model
+  rawOutput    Json    @map("raw_output")     // model's raw response
+  modelVersion String? @map("model_version") @db.VarChar(50)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([sessionId])
+  @@map("predictions")
+}

@@ -8,6 +8,30 @@ import {
 } from './dto';
 import { Prisma } from '@prisma/client';
 
+const clinicalExamInclude: Prisma.ClinicalExamInclude = {
+  animal: true,
+  bodyType: true,
+  obesity: true,
+  bodyPosition: true,
+  constitution: true,
+  temperament: true,
+  wool: true,
+  down: true,
+  hair: true,
+  feathers: true,
+  skinColor: true,
+  skinHumidity: true,
+  skinTemp: true,
+  skinElasticity: true,
+  lymphSize: true,
+  lymphShape: true,
+  lymphSurface: true,
+  lymphConsistency: true,
+  lymphTemp: true,
+  lymphPain: true,
+  lymphMobility: true,
+};
+
 @Injectable()
 export class ClinicalExamService {
   constructor(
@@ -15,32 +39,18 @@ export class ClinicalExamService {
     private readonly paginationService: PaginationService,
   ) {}
 
-  /**
-   * Create a new clinical exam
-   * @param data - Clinical exam creation data
-   * @returns Created clinical exam
-   */
   async create(data: CreateClinicalExamDto) {
     return await this.prisma.clinicalExam.create({
       data,
-      include: { animal: true },
+      include: clinicalExamInclude,
     });
   }
 
-  /**
-   * Get paginated list of clinical exams
-   * @param query - Query parameters including filters and pagination
-   * @returns Paginated clinical exams
-   */
   async findAll(query: ClinicalExamQueryParamsDto) {
     const { page, perPage, search, byId, animalId } = query;
 
     const where: Prisma.ClinicalExamWhereInput = {
       ...(animalId && { animalId }),
-      ...(search &&
-        {
-          // Add search logic if needed
-        }),
     };
 
     const orderBy: Prisma.ClinicalExamOrderByWithRelationInput = {
@@ -48,64 +58,36 @@ export class ClinicalExamService {
       ...(!byId && { createdAt: 'desc' }),
     };
 
-    const include: Prisma.ClinicalExamInclude = {
-      animal: true,
-    };
-
     return await this.paginationService.paginate(
       this.prisma.clinicalExam,
-      { where, orderBy, include },
+      { where, orderBy, include: clinicalExamInclude },
       { page, perPage },
     );
   }
 
-  /**
-   * Get a single clinical exam by ID
-   * @param id - Clinical exam UUID
-   * @returns Clinical exam
-   * @throws PrismaClientKnownRequestError if not found
-   */
   async findOne(id: string) {
     return await this.prisma.clinicalExam.findUniqueOrThrow({
       where: { id },
-      include: { animal: true },
+      include: clinicalExamInclude,
     });
   }
 
-  /**
-   * Update clinical exam
-   * @param id - Clinical exam UUID
-   * @param data - Updated clinical exam data
-   * @returns Updated clinical exam
-   * @throws PrismaClientKnownRequestError if not found
-   */
   async update(id: string, data: UpdateClinicalExamDto) {
     return await this.prisma.clinicalExam.update({
       where: { id },
       data,
-      include: { animal: true },
+      include: clinicalExamInclude,
     });
   }
 
-  /**
-   * Get the last clinical exam for a specific animal
-   * @param animalId - Animal UUID
-   * @returns Last clinical exam for the animal or null if not found
-   */
   async findLastByAnimalId(animalId: string) {
     return await this.prisma.clinicalExam.findFirst({
       where: { animalId },
       orderBy: { createdAt: 'desc' },
-      include: { animal: true },
+      include: clinicalExamInclude,
     });
   }
 
-  /**
-   * Delete clinical exam
-   * @param id - Clinical exam UUID
-   * @returns Deleted clinical exam
-   * @throws PrismaClientKnownRequestError if not found
-   */
   async delete(id: string) {
     return await this.prisma.clinicalExam.delete({
       where: { id },

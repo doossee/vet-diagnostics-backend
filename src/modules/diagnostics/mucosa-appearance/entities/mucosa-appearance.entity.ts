@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MucosaAppearance } from '@prisma/client';
-import { MucosaType } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class MucosaAppearanceEntity implements MucosaAppearance {
@@ -26,11 +25,19 @@ export class MucosaAppearanceEntity implements MucosaAppearance {
   name_uz: string;
 
   @ApiProperty({
-    description: 'Mucosa Type',
-    enum: MucosaType,
+    description: 'Numeric value for ML mapping',
+    example: 1,
   })
   @Expose()
-  mucosaType: MucosaType;
+  numericValue: number;
+
+  @ApiProperty({
+    description: 'Mucosa Type ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
+  })
+  @Expose()
+  mucosaTypeId: string | null;
 
   @ApiProperty({
     description: 'Animal Type ID',

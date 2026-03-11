@@ -1,7 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsUUID, IsEnum } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 import { BaseQueryParamsDto } from 'src/shared/dto';
-import { AnimalSex } from 'src/shared/enums';
 
 export class AnimalQueryParamsDto extends BaseQueryParamsDto {
   @IsOptional()
@@ -15,7 +14,7 @@ export class AnimalQueryParamsDto extends BaseQueryParamsDto {
   readonly animalTypeId?: string;
 
   @IsOptional()
-  @IsEnum(AnimalSex)
-  @ApiPropertyOptional({ enum: AnimalSex })
-  readonly sex?: AnimalSex;
+  @IsUUID()
+  @ApiPropertyOptional({ description: 'Filter by sex lookup ID' })
+  readonly sexId?: string;
 }
