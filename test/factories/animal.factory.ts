@@ -10,8 +10,8 @@ export class AnimalFactory {
     if (!animalTypeId) {
       const animalType = await this.prisma.animalType.create({
         data: {
-          name_ru: 'Крупный рогатый скот',
-          name_uz: 'Qoramol',
+          nameRu: 'Крупный рогатый скот',
+          nameUz: 'Qoramol',
         },
       });
       animalTypeId = animalType.id;
@@ -21,8 +21,8 @@ export class AnimalFactory {
     if (!animalBreedId) {
       const breed = await this.prisma.breed.create({
         data: {
-          name_ru: 'Голштинская',
-          name_uz: 'Holstein',
+          nameRu: 'Голштинская',
+          nameUz: 'Holstein',
         },
       });
       animalBreedId = breed.id;
@@ -32,8 +32,8 @@ export class AnimalFactory {
     if (!animalColorId) {
       const color = await this.prisma.color.create({
         data: {
-          name_ru: 'Белый',
-          name_uz: 'Oq',
+          nameRu: 'Белый',
+          nameUz: 'Oq',
         },
       });
       animalColorId = color.id;
@@ -70,8 +70,8 @@ export class AnimalTypeFactory {
   async create(overrides?: Partial<AnimalType>): Promise<AnimalType> {
     return this.prisma.animalType.create({
       data: {
-        name_ru: overrides?.name_ru || `Тип ${Date.now()}`,
-        name_uz: overrides?.name_uz || `Type ${Date.now()}`,
+        nameRu: overrides?.nameRu || `Тип ${Date.now()}`,
+        nameUz: overrides?.nameUz || `Type ${Date.now()}`,
         parentId: overrides?.parentId || null,
       },
     });

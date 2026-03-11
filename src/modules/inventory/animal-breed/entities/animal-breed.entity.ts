@@ -16,12 +16,12 @@ export class AnimalBreedEntity implements Breed {
     example: 'Голштинская порода',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Holstein',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 }

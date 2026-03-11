@@ -33,8 +33,8 @@ export class RegionService {
     const where: Prisma.RegionWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };

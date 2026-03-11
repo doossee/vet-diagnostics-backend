@@ -11,6 +11,10 @@ export class ClinicalExamEntity implements ClinicalExam {
   @Expose()
   animalId: string;
 
+  @ApiProperty({ description: 'Session ID', example: '123e4567-e89b-12d3-a456-426614174000', required: false })
+  @Expose()
+  sessionId: string | null;
+
   @ApiProperty({ description: 'Pulse', example: 80, required: false })
   @Expose()
   pulse: number | null;

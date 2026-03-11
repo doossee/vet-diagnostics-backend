@@ -17,14 +17,14 @@ export class RegionEntity implements Region {
     example: 'Ташкент',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name of the region in Uzbek',
     example: 'Toshkent',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiPropertyOptional({
     description: 'List of districts in this region',

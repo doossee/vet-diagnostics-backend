@@ -24,14 +24,14 @@ export class AnimalBreedService {
     const where: Prisma.BreedWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };
     const orderBy: Prisma.BreedOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
     return await this.paginationService.paginate(
       this.prisma.breed,

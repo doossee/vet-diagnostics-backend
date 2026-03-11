@@ -10,11 +10,11 @@ export class DiseaseEntity implements Disease {
 
   @ApiProperty()
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty()
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty()
   @Expose()

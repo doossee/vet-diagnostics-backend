@@ -27,15 +27,15 @@ export class ProphylaxisDetailService {
     const where: Prisma.ProphylaxisDetailWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
       ...(itemId && { itemId }),
     };
     const orderBy: Prisma.ProphylaxisDetailOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
     const include: Prisma.ProphylaxisDetailInclude = { item: true };
     return await this.paginationService.paginate(

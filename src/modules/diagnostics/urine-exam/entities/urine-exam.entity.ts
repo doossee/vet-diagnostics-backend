@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UrineExam } from '@prisma/client';
-import { UrineAnalysisType } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class UrineExamEntity implements UrineExam {
@@ -12,18 +11,19 @@ export class UrineExamEntity implements UrineExam {
   id: string;
 
   @ApiProperty({
-    description: 'Analysis Type',
-    enum: UrineAnalysisType,
-  })
-  @Expose()
-  analysisType: UrineAnalysisType;
-
-  @ApiProperty({
     description: 'Animal ID',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @Expose()
   animalId: string | null;
+
+  @ApiProperty({
+    description: 'Session ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
+  })
+  @Expose()
+  sessionId: string | null;
 
   @ApiProperty({
     description: 'Urine Color ID',

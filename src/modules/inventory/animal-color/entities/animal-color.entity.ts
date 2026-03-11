@@ -16,12 +16,12 @@ export class AnimalColorEntity implements Color {
     example: 'Белый',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Oq',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 }

@@ -1,0 +1,59 @@
+// =============================================================================
+// MUCOSA EXAM & LOOKUP TABLES
+// =============================================================================
+
+model MucosaExam {
+  id String @id @default(uuid()) @db.Uuid
+
+  mucosaTypeId String?     @map("mucosa_type_id") @db.Uuid
+  mucosaType   MucosaType? @relation(fields: [mucosaTypeId], references: [id], onDelete: Restrict)
+
+  animalId String? @map("animal_id") @db.Uuid
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  mucosaAppearanceId String?           @map("mucosa_appearance_id") @db.Uuid
+  mucosaAppearance   MucosaAppearance? @relation(fields: [mucosaAppearanceId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([animalId])
+  @@index([sessionId])
+  @@index([mucosaTypeId])
+  @@index([mucosaAppearanceId])
+  @@map("mucosa_analyses")
+}
+
+model MucosaType {
+  id                String             @id @default(uuid()) @db.Uuid
+  nameRu            String             @map("name_ru") @db.VarChar(255)
+  nameUz            String             @map("name_uz") @db.VarChar(255)
+  numericValue      Int                @unique @map("numeric_value")
+  mucosaExams       MucosaExam[]
+  mucosaAppearances MucosaAppearance[]
+
+  @@map("mucosa_types")
+}
+
+model MucosaAppearance {
+  id String @id @default(uuid()) @db.Uuid
+
+  nameRu       String @map("name_ru") @db.VarChar(255)
+  nameUz       String @map("name_uz") @db.VarChar(255)
+  numericValue Int    @map("numeric_value")
+
+  mucosaTypeId String?     @map("mucosa_type_id") @db.Uuid
+  mucosaType   MucosaType? @relation(fields: [mucosaTypeId], references: [id], onDelete: Restrict)
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  mucosaAnalyses MucosaExam[]
+
+  @@index([mucosaTypeId])
+  @@index([animalTypeId])
+  @@map("mucosa_appearances")
+}

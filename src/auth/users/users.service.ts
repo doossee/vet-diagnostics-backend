@@ -109,8 +109,8 @@ export class UsersService {
       district: {
         select: {
           id: true,
-          name_ru: true,
-          name_uz: true,
+          nameRu: true,
+          nameUz: true,
           regionId: true,
         },
       },

@@ -15,6 +15,10 @@ export class MucosaExamEntity implements MucosaExam {
   @Expose()
   animalId: string | null;
 
+  @ApiProperty({ description: 'Session ID', example: '123e4567-e89b-12d3-a456-426614174000', required: false })
+  @Expose()
+  sessionId: string | null;
+
   @ApiProperty({ description: 'Mucosa Appearance ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @Expose()
   mucosaAppearanceId: string | null;

@@ -9,7 +9,7 @@ export class CreateVetStationDto {
     example: 'Ветеринарная станция №1',
     type: String,
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,7 +18,7 @@ export class CreateVetStationDto {
     example: 'Veterinariya stantsiyasi №1',
     type: String,
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsString()
   @IsNotEmpty()

@@ -27,8 +27,8 @@ export class AnimalTypeService {
     const where: Prisma.AnimalTypeWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
       ...(parentId === null && { parentId: null }),
@@ -36,7 +36,7 @@ export class AnimalTypeService {
     };
     const orderBy: Prisma.AnimalTypeOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
     const include: Prisma.AnimalTypeInclude = {
       parent: true,

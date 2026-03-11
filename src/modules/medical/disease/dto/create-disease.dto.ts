@@ -5,12 +5,12 @@ export class CreateDiseaseDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'Стоматит' })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'Stomatit' })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsUUID()
   @IsNotEmpty()

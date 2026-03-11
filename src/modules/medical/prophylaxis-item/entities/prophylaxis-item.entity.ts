@@ -9,11 +9,11 @@ export class ProphylaxisItemEntity implements ProphylaxisItem {
 
   @ApiProperty()
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty()
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({ enum: ProphylaxisType })
   @Expose()

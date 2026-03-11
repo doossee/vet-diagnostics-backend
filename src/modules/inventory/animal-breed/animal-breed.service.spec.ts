@@ -37,7 +37,7 @@ describe('AnimalBreedService', () => {
 
   describe('create', () => {
     it('should create a breed', async () => {
-      const dto = { name_ru: 'Голштинская', name_uz: 'Holstein' };
+      const dto = { nameRu: 'Голштинская', nameUz: 'Holstein' };
       const mockBreed = { id: 'uuid', ...dto };
 
       mockPrismaService.breed.create.mockResolvedValue(mockBreed);
@@ -51,7 +51,7 @@ describe('AnimalBreedService', () => {
   describe('findAll', () => {
     it('should return paginated breeds', async () => {
       const mockResult = {
-        data: [{ id: 'uuid', name_ru: 'Порода', name_uz: 'Breed' }],
+        data: [{ id: 'uuid', nameRu: 'Порода', nameUz: 'Breed' }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
 
@@ -65,7 +65,7 @@ describe('AnimalBreedService', () => {
 
   describe('findOne', () => {
     it('should return a breed', async () => {
-      const mockBreed = { id: 'uuid', name_ru: 'Порода' };
+      const mockBreed = { id: 'uuid', nameRu: 'Порода' };
       mockPrismaService.breed.findUniqueOrThrow.mockResolvedValue(mockBreed);
 
       const result = await service.findOne('uuid');
@@ -76,7 +76,7 @@ describe('AnimalBreedService', () => {
 
   describe('update', () => {
     it('should update a breed', async () => {
-      const dto = { name_ru: 'Updated' };
+      const dto = { nameRu: 'Updated' };
       const mockBreed = { id: 'uuid', ...dto };
 
       mockPrismaService.breed.update.mockResolvedValue(mockBreed);

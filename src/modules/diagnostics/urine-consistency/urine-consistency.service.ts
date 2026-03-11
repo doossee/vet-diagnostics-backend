@@ -39,15 +39,15 @@ export class UrineConsistencyService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };
 
     const orderBy: Prisma.UrineConsistencyOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
 
     const include: Prisma.UrineConsistencyInclude = {

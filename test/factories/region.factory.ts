@@ -7,8 +7,8 @@ export class RegionFactory {
   async create(overrides?: Partial<Region>): Promise<Region> {
     return this.prisma.region.create({
       data: {
-        name_ru: overrides?.name_ru || `Регион ${Date.now()}`,
-        name_uz: overrides?.name_uz || `Region ${Date.now()}`,
+        nameRu: overrides?.nameRu || `Регион ${Date.now()}`,
+        nameUz: overrides?.nameUz || `Region ${Date.now()}`,
       },
     });
   }
@@ -19,8 +19,8 @@ export class RegionFactory {
     for (let i = 0; i < districtCount; i++) {
       await this.prisma.district.create({
         data: {
-          name_ru: `Район ${i + 1}`,
-          name_uz: `District ${i + 1}`,
+          nameRu: `Район ${i + 1}`,
+          nameUz: `District ${i + 1}`,
           regionId: region.id,
         },
       });
@@ -42,8 +42,8 @@ export class DistrictFactory {
   ): Promise<District> {
     return this.prisma.district.create({
       data: {
-        name_ru: overrides?.name_ru || `Район ${Date.now()}`,
-        name_uz: overrides?.name_uz || `District ${Date.now()}`,
+        nameRu: overrides?.nameRu || `Район ${Date.now()}`,
+        nameUz: overrides?.nameUz || `District ${Date.now()}`,
         regionId: regionId,
       },
     });

@@ -1,3 +1,7 @@
+// =============================================================================
+// AUTH — Users, Vet Profiles, Farmer Profiles
+// =============================================================================
+
 model User {
   id String @id @default(uuid()) @db.Uuid
 
@@ -63,11 +67,11 @@ model VetProfile {
   specialization String? @map("specialization") @db.VarChar(100)
   experience     Int?    @default(0)
 
-  farmers FarmerProfile[]
+  farmers         FarmerProfile[]
   medicalSessions MedicalSession[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   @@index([licenseNumber])
   @@map("veterinarians")
@@ -86,8 +90,8 @@ model FarmerProfile {
 
   animals Animal[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   @@index([veterinarianId])
   @@map("farmers")

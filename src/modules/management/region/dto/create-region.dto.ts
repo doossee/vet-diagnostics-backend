@@ -9,7 +9,7 @@ export class CreateRegionDto {
     example: 'Ташкент',
     type: String,
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,5 +18,5 @@ export class CreateRegionDto {
     example: 'Toshkent',
     type: String,
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 }

@@ -38,8 +38,8 @@ describe('VetStationService', () => {
   describe('create', () => {
     it('should create a vet station', async () => {
       const dto = {
-        name_ru: 'Станция №1',
-        name_uz: 'Station #1',
+        nameRu: 'Станция №1',
+        nameUz: 'Station #1',
         address: 'Address',
         districtId: 'district-id',
       };
@@ -60,7 +60,7 @@ describe('VetStationService', () => {
 
   describe('findOne', () => {
     it('should return a vet station', async () => {
-      const mockStation = { id: 'uuid', name_ru: 'Станция №1' };
+      const mockStation = { id: 'uuid', nameRu: 'Станция №1' };
       mockPrismaService.vetStation.findUniqueOrThrow.mockResolvedValue(
         mockStation,
       );
@@ -73,7 +73,7 @@ describe('VetStationService', () => {
 
   describe('update', () => {
     it('should update a vet station', async () => {
-      const dto = { name_ru: 'Updated' };
+      const dto = { nameRu: 'Updated' };
       const mockStation = { id: 'uuid', ...dto };
 
       mockPrismaService.vetStation.update.mockResolvedValue(mockStation);

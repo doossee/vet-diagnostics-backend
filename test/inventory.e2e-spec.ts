@@ -86,13 +86,13 @@ describe('Inventory (e2e)', () => {
         .post('/animal-types')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          name_ru: 'Крупный рогатый скот',
-          name_uz: 'Qoramol',
+          nameRu: 'Крупный рогатый скот',
+          nameUz: 'Qoramol',
         })
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.name_ru).toBe('Крупный рогатый скот');
+      expect(response.body.nameRu).toBe('Крупный рогатый скот');
     });
   });
 });

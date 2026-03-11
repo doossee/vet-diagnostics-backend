@@ -1,0 +1,66 @@
+// =============================================================================
+// BLOOD EXAM
+// =============================================================================
+
+model BloodExam {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String? @map("animal_id") @db.Uuid
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // Qonning morfologik tekshirishlari
+  coe              Float?
+  erythrocyteCount Float? @map("erythrocyte_count")
+  leukocyteCount   Float? @map("leukocyte_count")
+  thrombocyteCount Float? @map("thrombocyte_count")
+  hemoglobin       Float?
+  glutathione      Float?
+  waterPercentage  Float? @map("water_percentage")
+  dryResidue       Float? @map("dry_residue")
+
+  // Qon Serum tekshiruvi
+  totalProtein      Float? @map("total_protein")
+  totalCalcium      Float? @map("total_calcium")
+  organicPhosphorus Float? @map("organic_phosphorus")
+  albumin           Float?
+  alphaGlobulin     Float? @map("alpha_globulin")
+  betaGlobulin      Float? @map("beta_globulin")
+  gammaGlobulin     Float? @map("gamma_globulin")
+  residualNitrogen  Float? @map("residual_nitrogen")
+  urea              Float?
+  uricAcid          Float? @map("uric_acid")
+  creatine          Float?
+  creatinine        Float?
+  alkalineReserve   Float? @map("alkaline_reserve")
+  glucose           Float?
+  ketoneBodies      Float? @map("ketone_bodies")
+  totalBilirubin    Float? @map("total_bilirubin")
+  directBilirubin   Float? @map("direct_bilirubin")
+  totalCholesterol  Float? @map("total_cholesterol")
+  totalLipids       Float? @map("total_lipids")
+  phospholipids     Float?
+  lacticAcid        Float? @map("lactic_acid")
+  pyruvicAcid       Float? @map("pyruvic_acid")
+  citricAcid        Float? @map("citric_acid")
+  carotene          Float?
+  vitaminA          Float? @map("vitamin_a")
+  vitaminB          Float? @map("vitamin_b")
+  vitaminC          Float? @map("vitamin_c")
+
+  // Mikroelementlar
+  copper    Float?
+  cobalt    Float?
+  manganese Float?
+  zinc      Float?
+
+  conclusion String? @db.Text()
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([animalId])
+  @@map("blood_analyses")
+}

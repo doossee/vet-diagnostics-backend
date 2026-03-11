@@ -12,11 +12,11 @@ export class DiseaseCategoryEntity implements DiseaseCategory {
 
   @ApiProperty({ example: 'Болезни пищеварительной системы' })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({ example: 'Hazm qilish tizimi kasalliklari' })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
