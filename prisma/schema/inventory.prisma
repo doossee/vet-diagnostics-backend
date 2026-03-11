@@ -42,6 +42,7 @@ model Animal {
   mucosaAnalyses   MucosaExam[]
   bloodAnalyses    BloodExam[]
   clinicalAnalyses ClinicalExam[]
+  medicalSessions MedicalSession[]
 
   @@index([farmerId])
   @@index([animalTypeId])

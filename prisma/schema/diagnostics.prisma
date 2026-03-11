@@ -5,6 +5,9 @@ model ClinicalExam {
   animalId String @map("animal_id") @db.Uuid
   animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
   // --- General ---
   pulse           Int? // puls
   rumination      Int? // ruminatsiya
@@ -311,6 +314,9 @@ model BloodExam {
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
   // Qonning morfologik tekshirishlari
   coe              Float?
   erythrocyteCount Float? @map("erythrocyte_count")
@@ -369,6 +375,9 @@ model UrineExam {
 
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
 
   urineColorId String?     @map("urine_color_id") @db.Uuid
   urineColor   UrineColor? @relation(fields: [urineColorId], references: [id], onDelete: Restrict)
@@ -469,6 +478,9 @@ model FecesExam {
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
 
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
   fecesColorId String?     @map("feces_color_id") @db.Uuid
   fecesColor   FecesColor? @relation(fields: [fecesColorId], references: [id], onDelete: Restrict)
 
@@ -559,6 +571,9 @@ model MucosaExam {
 
   animalId String? @map("animal_id") @db.Uuid
   animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
 
   mucosaAppearanceId String?           @map("mucosa_appearance_id") @db.Uuid
   mucosaAppearance   MucosaAppearance? @relation(fields: [mucosaAppearanceId], references: [id], onDelete: Restrict)
