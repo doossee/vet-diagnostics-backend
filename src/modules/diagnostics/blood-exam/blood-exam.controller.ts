@@ -24,7 +24,9 @@ import {
   BloodExamQueryParamsDto,
 } from './dto';
 import { BloodExamEntity, PaginatedBloodExamEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('blood-exams')
 @Controller('blood-exams')
 export class BloodExamController {

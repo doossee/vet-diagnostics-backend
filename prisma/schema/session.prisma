@@ -53,8 +53,35 @@ model Prediction {
   rawOutput    Json    @map("raw_output")     // model's raw response
   modelVersion String? @map("model_version") @db.VarChar(50)
 
+  feedbacks Feedback[]
+
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
 
   @@index([sessionId])
   @@map("predictions")
+}
+
+// Stores veterinarian feedback on AI prediction quality
+model Feedback {
+  id String @id @default(uuid()) @db.Uuid
+
+  predictionId String     @map("prediction_id") @db.Uuid
+  prediction   Prediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+
+  veterinarianId String     @map("veterinarian_id") @db.Uuid
+  veterinarian   VetProfile @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
+
+  rating  Int     // 1-5 scale of prediction accuracy
+  comment String? @db.Text
+
+  // Optional: vet's suggested correct disease
+  suggestedDiseaseId String?  @map("suggested_disease_id") @db.Uuid
+  suggestedDisease   Disease? @relation(fields: [suggestedDiseaseId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([predictionId])
+  @@index([veterinarianId])
+  @@map("feedbacks")
 }

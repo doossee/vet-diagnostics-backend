@@ -27,7 +27,9 @@ import {
   MedicalSessionEntity,
   PaginatedMedicalSessionEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('medical-sessions')
 @Controller('medical-sessions')
 export class MedicalSessionController {

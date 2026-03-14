@@ -27,7 +27,9 @@ import {
   MucosaAppearanceEntity,
   PaginatedMucosaAppearanceEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('mucosa-appearances')
 @Controller('mucosa-appearances')
 export class MucosaAppearanceController {

@@ -24,7 +24,9 @@ import {
   DistrictQueryParamsDto,
 } from './dto';
 import { DistrictEntity, PaginatedDistrictEntity } from './entities';
+import { IsAdminUser } from 'src/shared/decorators';
 
+@IsAdminUser()
 @ApiTags('districts')
 @Controller('districts')
 export class DistrictController {

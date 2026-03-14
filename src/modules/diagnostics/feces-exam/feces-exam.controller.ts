@@ -24,7 +24,9 @@ import {
   FecesExamQueryParamsDto,
 } from './dto';
 import { FecesExamEntity, PaginatedFecesExamEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('feces-exams')
 @Controller('feces-exams')
 export class FecesExamController {

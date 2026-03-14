@@ -243,9 +243,25 @@ export class MedicalSessionService {
 
     // Call the AI prediction service
     const uri = this.config.get<string>('PREDICT_API_URI');
-    const response = await axios.post<Record<string, any>>(uri!, {
-      params: numericArray,
-    });
+
+    let response: { data: Record<string, any> };
+    try {
+      response = await axios.post<Record<string, any>>(uri!, {
+        params: numericArray,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          throw new BadRequestException(
+            `AI prediction service returned error: ${error.response.status}`,
+          );
+        }
+        throw new BadRequestException(
+          'AI prediction service is unavailable. Please try again later.',
+        );
+      }
+      throw new BadRequestException('Failed to get prediction from AI service.');
+    }
 
     // Store prediction and update session status atomically
     const updatedSession = await this.prisma.medicalSession.update({

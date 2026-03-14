@@ -23,7 +23,9 @@ import {
   DiseaseQueryParamsDto,
 } from './dto';
 import { DiseaseEntity, PaginatedDiseaseEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('diseases')
 @Controller('diseases')
 export class DiseaseController {

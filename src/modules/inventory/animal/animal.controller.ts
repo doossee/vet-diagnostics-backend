@@ -19,7 +19,9 @@ import {
 import { AnimalService } from './animal.service';
 import { CreateAnimalDto, UpdateAnimalDto, AnimalQueryParamsDto } from './dto';
 import { AnimalEntity, PaginatedAnimalEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('animals')
 @Controller('animals')
 export class AnimalController {

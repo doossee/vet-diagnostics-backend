@@ -23,7 +23,9 @@ import {
   ProphylaxisQueryParamsDto,
 } from './dto';
 import { ProphylaxisEntity, PaginatedProphylaxisEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('prophylaxis')
 @Controller('prophylaxis')
 export class ProphylaxisController {

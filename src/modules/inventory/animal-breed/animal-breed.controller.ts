@@ -24,7 +24,9 @@ import {
   AnimalBreedQueryParamsDto,
 } from './dto';
 import { AnimalBreedEntity, PaginatedAnimalBreedEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('breeds')
 @Controller('breeds')
 export class AnimalBreedController {
