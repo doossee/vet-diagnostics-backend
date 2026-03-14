@@ -6,7 +6,7 @@ import {
   VetStationQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class VetStationService {
@@ -28,8 +28,8 @@ export class VetStationService {
     const where: Prisma.VetStationWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
           { address: { contains: search, mode: 'insensitive' } },
         ],
       }),

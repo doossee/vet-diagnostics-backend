@@ -27,7 +27,9 @@ import {
   UrineConsistencyEntity,
   PaginatedUrineConsistencyEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('urine-consistencies')
 @Controller('urine-consistencies')
 export class UrineConsistencyController {

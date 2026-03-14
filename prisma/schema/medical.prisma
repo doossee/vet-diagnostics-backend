@@ -1,16 +1,21 @@
+// =============================================================================
+// MEDICAL — Diseases, Prophylaxis
+// =============================================================================
+
 model Disease {
   id String @id @default(uuid()) @db.Uuid
 
-  name_ru String @db.VarChar(100)
-  name_uz String @db.VarChar(100)
+  nameRu String @map("name_ru") @db.VarChar(100)
+  nameUz String @map("name_uz") @db.VarChar(100)
 
-  diseaseCategoryId String          @map("type_id") @db.Uuid
+  diseaseCategoryId String          @map("disease_category_id") @db.Uuid
   diseaseCategory   DiseaseCategory @relation(fields: [diseaseCategoryId], references: [id], onDelete: Restrict)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
-  animals Animal[]
+  animals   Animal[]
+  feedbacks Feedback[]
 
   @@index([diseaseCategoryId])
   @@map("diseases")
@@ -19,8 +24,8 @@ model Disease {
 model DiseaseCategory {
   id String @id @default(uuid()) @db.Uuid
 
-  name_ru String @db.VarChar(100)
-  name_uz String @db.VarChar(100)
+  nameRu String @map("name_ru") @db.VarChar(100)
+  nameUz String @map("name_uz") @db.VarChar(100)
 
   parentId String?          @map("parent_id") @db.Uuid
   parent   DiseaseCategory? @relation("DiseaseCategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
@@ -28,7 +33,8 @@ model DiseaseCategory {
   diseases Disease[]
   children DiseaseCategory[] @relation("DiseaseCategoryHierarchy")
 
-  @@map("disease_types")
+  @@index([parentId])
+  @@map("disease_categories")
 }
 
 model Prophylaxis {
@@ -48,8 +54,8 @@ model Prophylaxis {
 
   date DateTime @map("date")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   @@index([animalId])
   @@index([type])
@@ -60,16 +66,16 @@ model Prophylaxis {
 model ProphylaxisItem {
   id String @id @default(uuid()) @db.Uuid
 
-  name_ru String @db.VarChar(255)
-  name_uz String @db.VarChar(255)
+  nameRu String @map("name_ru") @db.VarChar(255)
+  nameUz String @map("name_uz") @db.VarChar(255)
 
   type ProphylaxisType
 
   records Prophylaxis[]
   details ProphylaxisDetail[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   @@index([type])
   @@map("prophylactic_items")
@@ -78,16 +84,16 @@ model ProphylaxisItem {
 model ProphylaxisDetail {
   id String @id @default(uuid()) @db.Uuid
 
-  name_ru String @db.VarChar(255)
-  name_uz String @db.VarChar(255)
+  nameRu String @map("name_ru") @db.VarChar(255)
+  nameUz String @map("name_uz") @db.VarChar(255)
 
   itemId String          @map("item_id") @db.Uuid
   item   ProphylaxisItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   records Prophylaxis[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 
   @@index([itemId])
   @@map("prophylactic_details")

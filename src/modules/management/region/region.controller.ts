@@ -20,7 +20,9 @@ import {
 import { RegionService } from './region.service';
 import { CreateRegionDto, UpdateRegionDto, RegionQueryParamsDto } from './dto';
 import { RegionEntity, PaginatedRegionEntity } from './entities';
+import { IsAdminUser } from 'src/shared/decorators';
 
+@IsAdminUser()
 @ApiTags('regions')
 @Controller('regions')
 export class RegionController {

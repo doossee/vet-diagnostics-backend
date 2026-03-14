@@ -25,7 +25,9 @@ describe('ProphylaxisItemController', () => {
       ],
     }).compile();
 
-    controller = module.get<ProphylaxisItemController>(ProphylaxisItemController);
+    controller = module.get<ProphylaxisItemController>(
+      ProphylaxisItemController,
+    );
     service = module.get<ProphylaxisItemService>(ProphylaxisItemService);
   });
 
@@ -37,9 +39,9 @@ describe('ProphylaxisItemController', () => {
     it('should create a record', async () => {
       const dto = { name: 'Test' };
       const result = { id: 'uuid', ...dto };
-      
+
       mockService.create.mockResolvedValue(result);
-      
+
       expect(await controller.create(dto as any)).toEqual(result);
       expect(service.create).toHaveBeenCalledWith(dto);
     });
@@ -51,9 +53,9 @@ describe('ProphylaxisItemController', () => {
         data: [{ id: 'uuid', name: 'Test' }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
-      
+
       mockService.findAll.mockResolvedValue(result);
-      
+
       expect(await controller.findAll({} as any)).toEqual(result);
       expect(service.findAll).toHaveBeenCalled();
     });
@@ -62,9 +64,9 @@ describe('ProphylaxisItemController', () => {
   describe('findOne', () => {
     it('should return a single record', async () => {
       const result = { id: 'uuid', name: 'Test' };
-      
+
       mockService.findOne.mockResolvedValue(result);
-      
+
       expect(await controller.findOne('uuid')).toEqual(result);
       expect(service.findOne).toHaveBeenCalledWith('uuid');
     });
@@ -74,9 +76,9 @@ describe('ProphylaxisItemController', () => {
     it('should update a record', async () => {
       const dto = { name: 'Updated' };
       const result = { id: 'uuid', ...dto };
-      
+
       mockService.update.mockResolvedValue(result);
-      
+
       expect(await controller.update('uuid', dto as any)).toEqual(result);
       expect(service.update).toHaveBeenCalledWith('uuid', dto);
     });
@@ -85,9 +87,9 @@ describe('ProphylaxisItemController', () => {
   describe('delete', () => {
     it('should delete a record', async () => {
       const result = { id: 'uuid' };
-      
+
       mockService.delete.mockResolvedValue(result);
-      
+
       expect(await controller.delete('uuid')).toEqual(result);
       expect(service.delete).toHaveBeenCalledWith('uuid');
     });

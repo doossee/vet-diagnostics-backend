@@ -3,7 +3,7 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User } from 'src/generated/prisma/client';
 import * as bcrypt from 'bcryptjs';
 import {
   CreateUserDto,
@@ -109,8 +109,8 @@ export class UsersService {
       district: {
         select: {
           id: true,
-          name_ru: true,
-          name_uz: true,
+          nameRu: true,
+          nameUz: true,
           regionId: true,
         },
       },

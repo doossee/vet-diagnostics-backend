@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Breed } from '@prisma/client';
+import { Breed } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class AnimalBreedEntity implements Breed {
@@ -16,12 +16,12 @@ export class AnimalBreedEntity implements Breed {
     example: 'Голштинская порода',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Holstein',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MucosaAppearance } from '@prisma/client';
+import { MucosaAppearance } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class MucosaAppearanceEntity implements MucosaAppearance {
@@ -15,14 +15,14 @@ export class MucosaAppearanceEntity implements MucosaAppearance {
     example: 'Бледная',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Oqargan',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',

@@ -51,13 +51,13 @@ describe('Management (e2e)', () => {
         .post('/regions')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          name_ru: 'Ташкент',
-          name_uz: 'Toshkent',
+          nameRu: 'Ташкент',
+          nameUz: 'Toshkent',
         })
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.name_ru).toBe('Ташкент');
+      expect(response.body.nameRu).toBe('Ташкент');
     });
   });
 
@@ -82,14 +82,14 @@ describe('Management (e2e)', () => {
         .post('/districts')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          name_ru: 'Юнусабад',
-          name_uz: 'Yunusabad',
+          nameRu: 'Юнусабад',
+          nameUz: 'Yunusabad',
           regionId: region.id,
         })
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.name_ru).toBe('Юнусабад');
+      expect(response.body.nameRu).toBe('Юнусабад');
     });
   });
 
@@ -102,15 +102,15 @@ describe('Management (e2e)', () => {
         .post('/vet-stations')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          name_ru: 'Станция №1',
-          name_uz: 'Station #1',
+          nameRu: 'Станция №1',
+          nameUz: 'Station #1',
           address: 'Test Address',
           districtId: district.id,
         })
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.name_ru).toBe('Станция №1');
+      expect(response.body.nameRu).toBe('Станция №1');
     });
   });
 });

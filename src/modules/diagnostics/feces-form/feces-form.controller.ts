@@ -24,7 +24,9 @@ import {
   FecesFormQueryParamsDto,
 } from './dto';
 import { FecesFormEntity, PaginatedFecesFormEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('feces-forms')
 @Controller('feces-forms')
 export class FecesFormController {

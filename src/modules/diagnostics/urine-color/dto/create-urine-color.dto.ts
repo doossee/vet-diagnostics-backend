@@ -9,7 +9,7 @@ export class CreateUrineColorDto {
     example: 'Желтый',
     type: String,
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,7 +18,7 @@ export class CreateUrineColorDto {
     example: 'Sariq',
     type: String,
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsInt()
   @IsNotEmpty()
@@ -37,4 +37,3 @@ export class CreateUrineColorDto {
   })
   readonly animalTypeId: string;
 }
-

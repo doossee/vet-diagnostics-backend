@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Region } from '@prisma/client';
+import { Region } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 import { DistrictEntity } from '../../district/entities';
 
@@ -17,14 +17,14 @@ export class RegionEntity implements Region {
     example: 'Ташкент',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name of the region in Uzbek',
     example: 'Toshkent',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiPropertyOptional({
     description: 'List of districts in this region',

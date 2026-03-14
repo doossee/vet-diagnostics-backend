@@ -6,12 +6,12 @@ export class CreateProphylaxisItemDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'Вакцина против бруцеллёза' })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'Brucella vaksina' })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsEnum(ProphylaxisType)
   @ApiProperty({ enum: ProphylaxisType, example: 'VACCINE' })

@@ -8,7 +8,7 @@ export class CreateDiseaseCategoryDto {
     description: 'Name in Russian',
     example: 'Болезни пищеварительной системы',
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -16,7 +16,7 @@ export class CreateDiseaseCategoryDto {
     description: 'Name in Uzbek',
     example: 'Hazm qilish tizimi kasalliklari',
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsOptional()
   @IsUUID()

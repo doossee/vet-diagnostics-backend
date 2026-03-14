@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProphylaxisDetail } from '@prisma/client';
+import { ProphylaxisDetail } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class ProphylaxisDetailEntity implements ProphylaxisDetail {
@@ -9,11 +9,11 @@ export class ProphylaxisDetailEntity implements ProphylaxisDetail {
 
   @ApiProperty()
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty()
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty()
   @Expose()

@@ -4,11 +4,11 @@ import { IsInt, IsString, IsUUID } from 'class-validator';
 export class CreateFecesFormDto {
   @ApiProperty({ example: 'Оформленный' })
   @IsString()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({ example: 'Shakllangan' })
   @IsString()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
   @IsInt()
@@ -18,4 +18,3 @@ export class CreateFecesFormDto {
   @IsUUID()
   animalTypeId: string;
 }
-

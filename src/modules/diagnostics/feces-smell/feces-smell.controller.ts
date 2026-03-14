@@ -24,7 +24,9 @@ import {
   FecesSmellQueryParamsDto,
 } from './dto';
 import { FecesSmellEntity, PaginatedFecesSmellEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('feces-smells')
 @Controller('feces-smells')
 export class FecesSmellController {

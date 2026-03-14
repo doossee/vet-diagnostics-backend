@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { CreateRegionDto, UpdateRegionDto, RegionQueryParamsDto } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class RegionService {
@@ -33,8 +33,8 @@ export class RegionService {
     const where: Prisma.RegionWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };

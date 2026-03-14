@@ -4,11 +4,11 @@ import { IsInt, IsString, IsUUID } from 'class-validator';
 export class CreateFecesColorDto {
   @ApiProperty({ example: 'Коричневый' })
   @IsString()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({ example: 'Jigarrang' })
   @IsString()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
   @IsInt()

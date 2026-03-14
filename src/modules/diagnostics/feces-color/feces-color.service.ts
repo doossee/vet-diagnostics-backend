@@ -6,7 +6,7 @@ import {
   UpdateFecesColorDto,
   FecesColorQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class FecesColorService {
@@ -39,15 +39,15 @@ export class FecesColorService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
     };
 
     const orderBy: Prisma.FecesColorOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
 
     const include: Prisma.FecesColorInclude = {

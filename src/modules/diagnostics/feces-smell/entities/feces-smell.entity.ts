@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesSmell } from '@prisma/client';
+import { FecesSmell } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesSmellEntity implements FecesSmell {
@@ -15,14 +15,14 @@ export class FecesSmellEntity implements FecesSmell {
     example: 'Зловонный',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: "Badbo'y",
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',
@@ -37,4 +37,3 @@ export class FecesSmellEntity implements FecesSmell {
   @Expose()
   animalTypeId: string;
 }
-

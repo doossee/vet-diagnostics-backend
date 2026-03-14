@@ -24,7 +24,9 @@ import {
   UrineColorQueryParamsDto,
 } from './dto';
 import { UrineColorEntity, PaginatedUrineColorEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('urine-colors')
 @Controller('urine-colors')
 export class UrineColorController {

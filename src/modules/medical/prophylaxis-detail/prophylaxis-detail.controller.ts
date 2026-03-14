@@ -26,7 +26,9 @@ import {
   ProphylaxisDetailEntity,
   PaginatedProphylaxisDetailEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('prophylaxis-details')
 @Controller('prophylaxis-details')
 export class ProphylaxisDetailController {

@@ -9,7 +9,7 @@ export class CreateMucosaAppearanceDto {
     example: 'Бледный',
     type: String,
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,7 +18,7 @@ export class CreateMucosaAppearanceDto {
     example: 'Oqargan',
     type: String,
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsInt()
   @IsNotEmpty()

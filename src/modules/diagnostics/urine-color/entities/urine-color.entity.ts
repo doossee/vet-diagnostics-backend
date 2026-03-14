@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineColor } from '@prisma/client';
+import { UrineColor } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class UrineColorEntity implements UrineColor {
@@ -15,14 +15,14 @@ export class UrineColorEntity implements UrineColor {
     example: 'Красный',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Qizil',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',
@@ -37,4 +37,3 @@ export class UrineColorEntity implements UrineColor {
   @Expose()
   animalTypeId: string;
 }
-

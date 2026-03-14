@@ -6,7 +6,7 @@ import {
   UpdateClinicalExamDto,
   ClinicalExamQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 const clinicalExamInclude: Prisma.ClinicalExamInclude = {
   animal: true,
@@ -47,7 +47,7 @@ export class ClinicalExamService {
   }
 
   async findAll(query: ClinicalExamQueryParamsDto) {
-    const { page, perPage, search, byId, animalId } = query;
+    const { page, perPage, byId, animalId } = query;
 
     const where: Prisma.ClinicalExamWhereInput = {
       ...(animalId && { animalId }),

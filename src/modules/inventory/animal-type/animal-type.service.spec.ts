@@ -37,7 +37,7 @@ describe('AnimalTypeService', () => {
 
   describe('create', () => {
     it('should create an animal type', async () => {
-      const dto = { name_ru: 'Крупный рогатый скот', name_uz: 'Qoramol' };
+      const dto = { nameRu: 'Крупный рогатый скот', nameUz: 'Qoramol' };
       const mockType = { id: 'uuid', ...dto, parentId: null };
 
       mockPrismaService.animalType.create.mockResolvedValue(mockType);
@@ -49,8 +49,8 @@ describe('AnimalTypeService', () => {
 
     it('should create an animal type with parent', async () => {
       const dto = {
-        name_ru: 'Подтип',
-        name_uz: 'Subtype',
+        nameRu: 'Подтип',
+        nameUz: 'Subtype',
         parentId: 'parent-id',
       };
       const mockType = { id: 'uuid', ...dto };
@@ -65,7 +65,7 @@ describe('AnimalTypeService', () => {
 
   describe('findOne', () => {
     it('should return an animal type', async () => {
-      const mockType = { id: 'uuid', name_ru: 'Тип', name_uz: 'Type' };
+      const mockType = { id: 'uuid', nameRu: 'Тип', nameUz: 'Type' };
       mockPrismaService.animalType.findUniqueOrThrow.mockResolvedValue(
         mockType,
       );
@@ -78,7 +78,7 @@ describe('AnimalTypeService', () => {
 
   describe('update', () => {
     it('should update an animal type', async () => {
-      const dto = { name_ru: 'Updated' };
+      const dto = { nameRu: 'Updated' };
       const mockType = { id: 'uuid', ...dto };
 
       mockPrismaService.animalType.update.mockResolvedValue(mockType);

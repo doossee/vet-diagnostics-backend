@@ -5,12 +5,12 @@ export class CreateProphylaxisDetailDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'S19' })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'S19' })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsUUID()
   @IsNotEmpty()

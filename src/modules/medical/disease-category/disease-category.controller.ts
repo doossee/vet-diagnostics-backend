@@ -26,7 +26,9 @@ import {
   DiseaseCategoryEntity,
   PaginatedDiseaseCategoryEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('disease-categories')
 @Controller('disease-categories')
 export class DiseaseCategoryController {

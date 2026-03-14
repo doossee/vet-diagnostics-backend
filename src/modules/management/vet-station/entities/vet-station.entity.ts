@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { VetStation } from '@prisma/client';
+import { VetStation } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 import { DistrictEntity } from '../../district/entities';
 
@@ -17,14 +17,14 @@ export class VetStationEntity implements VetStation {
     example: 'Ветеринарная станция №1',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name of the vet station in Uzbek',
     example: 'Veterinariya stantsiyasi №1',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     description: 'Address of the vet station',

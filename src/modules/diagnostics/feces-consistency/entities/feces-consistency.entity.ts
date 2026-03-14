@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesConsistency } from '@prisma/client';
+import { FecesConsistency } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesConsistencyEntity implements FecesConsistency {
@@ -15,14 +15,14 @@ export class FecesConsistencyEntity implements FecesConsistency {
     example: 'Плотная',
   })
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({
     description: 'Name in Uzbek',
     example: 'Qattiq',
   })
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',
@@ -37,4 +37,3 @@ export class FecesConsistencyEntity implements FecesConsistency {
   @Expose()
   animalTypeId: string;
 }
-

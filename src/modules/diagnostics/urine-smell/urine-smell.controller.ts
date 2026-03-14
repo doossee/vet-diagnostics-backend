@@ -24,7 +24,9 @@ import {
   UrineSmellQueryParamsDto,
 } from './dto';
 import { UrineSmellEntity, PaginatedUrineSmellEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('urine-smells')
 @Controller('urine-smells')
 export class UrineSmellController {

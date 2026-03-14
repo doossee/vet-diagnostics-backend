@@ -4,11 +4,11 @@ import { IsInt, IsString, IsUUID } from 'class-validator';
 export class CreateUrineConsistencyDto {
   @ApiProperty({ example: 'Жидкая' })
   @IsString()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty({ example: 'Suyuq' })
   @IsString()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
   @IsInt()
@@ -18,4 +18,3 @@ export class CreateUrineConsistencyDto {
   @IsUUID()
   animalTypeId: string;
 }
-

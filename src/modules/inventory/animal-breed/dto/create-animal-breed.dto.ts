@@ -9,7 +9,7 @@ export class CreateAnimalBreedDto {
     example: 'Голштинская порода',
     type: String,
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,5 +18,5 @@ export class CreateAnimalBreedDto {
     example: 'Holstein',
     type: String,
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 }

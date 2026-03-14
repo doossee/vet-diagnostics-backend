@@ -24,7 +24,9 @@ import {
   UrineExamQueryParamsDto,
 } from './dto';
 import { UrineExamEntity, PaginatedUrineExamEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('urine-exams')
 @Controller('urine-exams')
 export class UrineExamController {

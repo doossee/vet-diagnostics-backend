@@ -37,7 +37,7 @@ describe('DistrictService', () => {
 
   describe('create', () => {
     it('should create a district', async () => {
-      const dto = { name_ru: 'Юнусабад', name_uz: 'Yunusabad', regionId: 1 };
+      const dto = { nameRu: 'Юнусабад', nameUz: 'Yunusabad', regionId: 1 };
       const mockDistrict = { id: 'uuid', ...dto };
 
       mockPrismaService.district.create.mockResolvedValue(mockDistrict);
@@ -56,8 +56,8 @@ describe('DistrictService', () => {
     it('should return a district', async () => {
       const mockDistrict = {
         id: 'uuid',
-        name_ru: 'Юнусабад',
-        name_uz: 'Yunusabad',
+        nameRu: 'Юнусабад',
+        nameUz: 'Yunusabad',
       };
       mockPrismaService.district.findUniqueOrThrow.mockResolvedValue(
         mockDistrict,
@@ -71,7 +71,7 @@ describe('DistrictService', () => {
 
   describe('update', () => {
     it('should update a district', async () => {
-      const dto = { name_ru: 'Updated' };
+      const dto = { nameRu: 'Updated' };
       const mockDistrict = { id: 'uuid', ...dto };
 
       mockPrismaService.district.update.mockResolvedValue(mockDistrict);

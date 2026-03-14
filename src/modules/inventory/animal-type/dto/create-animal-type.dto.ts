@@ -8,7 +8,7 @@ export class CreateAnimalTypeDto {
     description: 'Name of the animal type in Russian',
     example: 'Крупный рогатый скот',
   })
-  readonly name_ru: string;
+  readonly nameRu: string;
 
   @IsString()
   @IsNotEmpty()
@@ -16,7 +16,7 @@ export class CreateAnimalTypeDto {
     description: 'Name of the animal type in Uzbek',
     example: 'Qoramol',
   })
-  readonly name_uz: string;
+  readonly nameUz: string;
 
   @IsOptional()
   @IsUUID()

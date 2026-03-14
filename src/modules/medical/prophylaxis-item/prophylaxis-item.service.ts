@@ -6,7 +6,7 @@ import {
   ProphylaxisItemQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ProphylaxisItemService {
@@ -24,15 +24,15 @@ export class ProphylaxisItemService {
     const where: Prisma.ProphylaxisItemWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { nameRu: { contains: search, mode: 'insensitive' } },
+          { nameUz: { contains: search, mode: 'insensitive' } },
         ],
       }),
       ...(type && { type }),
     };
     const orderBy: Prisma.ProphylaxisItemOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { nameRu: 'asc' }),
     };
     return await this.paginationService.paginate(
       this.prisma.prophylaxisItem,

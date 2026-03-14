@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Disease } from '@prisma/client';
+import { Disease } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 import { DiseaseCategoryEntity } from '../../disease-category/entities';
 
@@ -10,11 +10,11 @@ export class DiseaseEntity implements Disease {
 
   @ApiProperty()
   @Expose()
-  name_ru: string;
+  nameRu: string;
 
   @ApiProperty()
   @Expose()
-  name_uz: string;
+  nameUz: string;
 
   @ApiProperty()
   @Expose()

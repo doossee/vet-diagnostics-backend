@@ -24,7 +24,9 @@ import {
   VetStationQueryParamsDto,
 } from './dto';
 import { VetStationEntity, PaginatedVetStationEntity } from './entities';
+import { IsAdminUser } from 'src/shared/decorators';
 
+@IsAdminUser()
 @ApiTags('vet-stations')
 @Controller('vet-stations')
 export class VetStationController {
