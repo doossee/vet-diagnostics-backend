@@ -15,7 +15,6 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
-  ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { AnimalBreedService } from './animal-breed.service';
 import {

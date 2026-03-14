@@ -29,7 +29,7 @@ export class MucosaExamService {
   }
 
   async findAll(query: MucosaExamQueryParamsDto) {
-    const { page, perPage, search, byId, animalId } = query;
+    const { page, perPage, byId, animalId } = query;
 
     const where: Prisma.MucosaExamWhereInput = {
       ...(animalId && { animalId }),
