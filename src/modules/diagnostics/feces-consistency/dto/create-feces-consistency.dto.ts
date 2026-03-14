@@ -18,4 +18,3 @@ export class CreateFecesConsistencyDto {
   @IsUUID()
   animalTypeId: string;
 }
-

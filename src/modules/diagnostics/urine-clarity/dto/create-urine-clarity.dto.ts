@@ -18,4 +18,3 @@ export class CreateUrineClarityDto {
   @IsUUID()
   animalTypeId: string;
 }
-

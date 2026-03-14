@@ -37,4 +37,3 @@ export class UrineClarityEntity implements UrineClarity {
   @Expose()
   animalTypeId: string;
 }
-

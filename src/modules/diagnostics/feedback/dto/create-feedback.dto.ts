@@ -16,12 +16,18 @@ export class CreateFeedbackDto {
   @Max(5)
   rating: number;
 
-  @ApiPropertyOptional({ example: 'The prediction was incorrect, symptoms suggest a different disease.' })
+  @ApiPropertyOptional({
+    example:
+      'The prediction was incorrect, symptoms suggest a different disease.',
+  })
   @IsString()
   @IsOptional()
   comment?: string;
 
-  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000', description: 'Suggested correct disease ID' })
+  @ApiPropertyOptional({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Suggested correct disease ID',
+  })
   @IsUUID()
   @IsOptional()
   suggestedDiseaseId?: string;

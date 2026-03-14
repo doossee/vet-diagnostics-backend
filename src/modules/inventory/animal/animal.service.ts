@@ -33,7 +33,8 @@ export class AnimalService {
   }
 
   async findAll(query: AnimalQueryParamsDto) {
-    const { page, perPage, farmerId, animalTypeId, sexId, byId, search } = query;
+    const { page, perPage, farmerId, animalTypeId, sexId, byId, search } =
+      query;
     const where: Prisma.AnimalWhereInput = {
       ...(farmerId && { farmerId }),
       ...(animalTypeId && { animalTypeId }),
@@ -229,7 +230,9 @@ export class AnimalService {
     };
 
     const response = await axios.post<Record<number, number>>(uri!, {
-      params: Object.values(payload).map((v) => (v === null ? null : Number(v))),
+      params: Object.values(payload).map((v) =>
+        v === null ? null : Number(v),
+      ),
     });
 
     return response.data;

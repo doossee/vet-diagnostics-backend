@@ -37,4 +37,3 @@ export class FecesColorEntity implements FecesColor {
   @Expose()
   animalTypeId: string;
 }
-

@@ -37,4 +37,3 @@ export class FecesFormEntity implements FecesForm {
   @Expose()
   animalTypeId: string;
 }
-

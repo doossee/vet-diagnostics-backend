@@ -33,9 +33,7 @@ import { IsAuthenticated } from 'src/shared/decorators';
 @ApiTags('medical-sessions')
 @Controller('medical-sessions')
 export class MedicalSessionController {
-  constructor(
-    private readonly medicalSessionService: MedicalSessionService,
-  ) {}
+  constructor(private readonly medicalSessionService: MedicalSessionService) {}
 
   @ApiOperation({
     summary: 'Create medical session',

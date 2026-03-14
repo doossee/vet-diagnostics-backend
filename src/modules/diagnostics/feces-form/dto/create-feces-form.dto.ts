@@ -18,4 +18,3 @@ export class CreateFecesFormDto {
   @IsUUID()
   animalTypeId: string;
 }
-

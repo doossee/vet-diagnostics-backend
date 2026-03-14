@@ -18,4 +18,3 @@ export class CreateUrineConsistencyDto {
   @IsUUID()
   animalTypeId: string;
 }
-

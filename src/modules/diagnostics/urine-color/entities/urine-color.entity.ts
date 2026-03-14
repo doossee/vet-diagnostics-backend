@@ -37,4 +37,3 @@ export class UrineColorEntity implements UrineColor {
   @Expose()
   animalTypeId: string;
 }
-

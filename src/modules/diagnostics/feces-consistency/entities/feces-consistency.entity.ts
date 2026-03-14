@@ -37,4 +37,3 @@ export class FecesConsistencyEntity implements FecesConsistency {
   @Expose()
   animalTypeId: string;
 }
-

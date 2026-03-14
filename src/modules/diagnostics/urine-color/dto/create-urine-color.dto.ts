@@ -37,4 +37,3 @@ export class CreateUrineColorDto {
   })
   readonly animalTypeId: string;
 }
-

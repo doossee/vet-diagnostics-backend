@@ -18,4 +18,3 @@ export class CreateUrineSmellDto {
   @IsUUID()
   animalTypeId: string;
 }
-

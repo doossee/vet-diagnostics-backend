@@ -132,8 +132,14 @@ export class MedicalSessionService {
       );
     }
 
-    const { clinicalExam, bloodExam, urineExam, fecesExam, mucosaExams, animal } =
-      session;
+    const {
+      clinicalExam,
+      bloodExam,
+      urineExam,
+      fecesExam,
+      mucosaExams,
+      animal,
+    } = session;
 
     if (!clinicalExam || !bloodExam) {
       throw new BadRequestException(
@@ -170,13 +176,15 @@ export class MedicalSessionService {
       skinColor: (clinicalExam as any).skinColor?.numericValue ?? null,
       skinHumidity: (clinicalExam as any).skinHumidity?.numericValue ?? null,
       skinTemp: (clinicalExam as any).skinTemp?.numericValue ?? null,
-      skinElasticity: (clinicalExam as any).skinElasticity?.numericValue ?? null,
+      skinElasticity:
+        (clinicalExam as any).skinElasticity?.numericValue ?? null,
 
       // Clinical — lymph
       lymphSize: (clinicalExam as any).lymphSize?.numericValue ?? null,
       lymphShape: (clinicalExam as any).lymphShape?.numericValue ?? null,
       lymphSurface: (clinicalExam as any).lymphSurface?.numericValue ?? null,
-      lymphConsistency: (clinicalExam as any).lymphConsistency?.numericValue ?? null,
+      lymphConsistency:
+        (clinicalExam as any).lymphConsistency?.numericValue ?? null,
       lymphTemp: (clinicalExam as any).lymphTemp?.numericValue ?? null,
       lymphPain: (clinicalExam as any).lymphPain?.numericValue ?? null,
       lymphMobility: (clinicalExam as any).lymphMobility?.numericValue ?? null,
@@ -220,7 +228,8 @@ export class MedicalSessionService {
       urineColor: (urineExam as any)?.urineColor?.numericValue ?? null,
       urineSmell: (urineExam as any)?.urineSmell?.numericValue ?? null,
       urineClarity: (urineExam as any)?.urineClarity?.numericValue ?? null,
-      urineConsistency: (urineExam as any)?.urineConsistency?.numericValue ?? null,
+      urineConsistency:
+        (urineExam as any)?.urineConsistency?.numericValue ?? null,
 
       // Feces — numeric
       fecesAmount: fecesExam?.amount ?? null,
@@ -229,12 +238,14 @@ export class MedicalSessionService {
       // Feces — lookups
       fecesColor: (fecesExam as any)?.fecesColor?.numericValue ?? null,
       fecesSmell: (fecesExam as any)?.fecesSmell?.numericValue ?? null,
-      fecesConsistency: (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
+      fecesConsistency:
+        (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
       fecesForm: (fecesExam as any)?.fecesForm?.numericValue ?? null,
 
       // Mucosa — from first exam (if any)
       mucosaType: (mucosaExams?.[0] as any)?.mucosaType?.numericValue ?? null,
-      mucosaAppearance: (mucosaExams?.[0] as any)?.mucosaAppearance?.numericValue ?? null,
+      mucosaAppearance:
+        (mucosaExams?.[0] as any)?.mucosaAppearance?.numericValue ?? null,
     };
 
     const numericArray = Object.values(inputVector).map((v) =>
@@ -260,7 +271,9 @@ export class MedicalSessionService {
           'AI prediction service is unavailable. Please try again later.',
         );
       }
-      throw new BadRequestException('Failed to get prediction from AI service.');
+      throw new BadRequestException(
+        'Failed to get prediction from AI service.',
+      );
     }
 
     // Store prediction and update session status atomically
@@ -272,7 +285,8 @@ export class MedicalSessionService {
           create: {
             inputVector,
             rawOutput: response.data,
-            modelVersion: this.config.get<string>('PREDICT_MODEL_VERSION') ?? null,
+            modelVersion:
+              this.config.get<string>('PREDICT_MODEL_VERSION') ?? null,
           },
         },
       },

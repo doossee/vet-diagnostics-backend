@@ -18,4 +18,3 @@ export class CreateFecesSmellDto {
   @IsUUID()
   animalTypeId: string;
 }
-

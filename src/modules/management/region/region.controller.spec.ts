@@ -37,9 +37,9 @@ describe('RegionController', () => {
     it('should create a record', async () => {
       const dto = { name: 'Test' };
       const result = { id: 'uuid', ...dto };
-      
+
       mockService.create.mockResolvedValue(result);
-      
+
       expect(await controller.create(dto as any)).toEqual(result);
       expect(service.create).toHaveBeenCalledWith(dto);
     });
@@ -51,9 +51,9 @@ describe('RegionController', () => {
         data: [{ id: 'uuid', name: 'Test' }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
-      
+
       mockService.findAll.mockResolvedValue(result);
-      
+
       expect(await controller.findAll({} as any)).toEqual(result);
       expect(service.findAll).toHaveBeenCalled();
     });
@@ -62,9 +62,9 @@ describe('RegionController', () => {
   describe('findOne', () => {
     it('should return a single record', async () => {
       const result = { id: 'uuid', name: 'Test' };
-      
+
       mockService.findOne.mockResolvedValue(result);
-      
+
       expect(await controller.findOne(1)).toEqual(result);
       expect(service.findOne).toHaveBeenCalledWith(1);
     });
@@ -74,9 +74,9 @@ describe('RegionController', () => {
     it('should update a record', async () => {
       const dto = { name: 'Updated' };
       const result = { id: 'uuid', ...dto };
-      
+
       mockService.update.mockResolvedValue(result);
-      
+
       expect(await controller.update(1, dto as any)).toEqual(result);
       expect(service.update).toHaveBeenCalledWith(1, dto);
     });
@@ -85,9 +85,9 @@ describe('RegionController', () => {
   describe('delete', () => {
     it('should delete a record', async () => {
       const result = { id: 'uuid' };
-      
+
       mockService.delete.mockResolvedValue(result);
-      
+
       expect(await controller.delete(1)).toEqual(result);
       expect(service.delete).toHaveBeenCalledWith(1);
     });

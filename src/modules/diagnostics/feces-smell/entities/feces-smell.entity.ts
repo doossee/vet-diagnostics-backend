@@ -37,4 +37,3 @@ export class FecesSmellEntity implements FecesSmell {
   @Expose()
   animalTypeId: string;
 }
-
