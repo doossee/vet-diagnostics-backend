@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineConsistency } from '@prisma/client';
+import { UrineConsistency } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class UrineConsistencyEntity implements UrineConsistency {

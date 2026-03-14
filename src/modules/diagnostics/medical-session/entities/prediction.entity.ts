@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Prediction } from '@prisma/client';
+import { Prediction } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
-import { JsonValue } from '@prisma/client/runtime/library';
+import { JsonValue } from '@prisma/client/runtime/client';
 
 export class PredictionEntity implements Prediction {
   @ApiProperty({ description: 'Unique identifier' })

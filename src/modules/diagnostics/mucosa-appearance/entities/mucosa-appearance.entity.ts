@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MucosaAppearance } from '@prisma/client';
+import { MucosaAppearance } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class MucosaAppearanceEntity implements MucosaAppearance {

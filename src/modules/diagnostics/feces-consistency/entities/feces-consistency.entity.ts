@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesConsistency } from '@prisma/client';
+import { FecesConsistency } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesConsistencyEntity implements FecesConsistency {

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { VetStation } from '@prisma/client';
+import { VetStation } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 import { DistrictEntity } from '../../district/entities';
 

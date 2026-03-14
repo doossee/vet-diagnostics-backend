@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Color } from '@prisma/client';
+import { Color } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class AnimalColorEntity implements Color {

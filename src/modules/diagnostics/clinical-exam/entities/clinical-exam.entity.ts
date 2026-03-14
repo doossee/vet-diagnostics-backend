@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ClinicalExam } from '@prisma/client';
+import { ClinicalExam } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class ClinicalExamEntity implements ClinicalExam {

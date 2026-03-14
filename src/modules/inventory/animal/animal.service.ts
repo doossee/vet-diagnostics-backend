@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { CreateAnimalDto, UpdateAnimalDto, AnimalQueryParamsDto } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 

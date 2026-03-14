@@ -6,7 +6,7 @@ import {
   UpdateMedicalSessionDto,
   MedicalSessionQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 

@@ -65,8 +65,8 @@ describe('RegionController', () => {
       
       mockService.findOne.mockResolvedValue(result);
       
-      expect(await controller.findOne('uuid')).toEqual(result);
-      expect(service.findOne).toHaveBeenCalledWith('uuid');
+      expect(await controller.findOne(1)).toEqual(result);
+      expect(service.findOne).toHaveBeenCalledWith(1);
     });
   });
 
@@ -77,8 +77,8 @@ describe('RegionController', () => {
       
       mockService.update.mockResolvedValue(result);
       
-      expect(await controller.update('uuid', dto as any)).toEqual(result);
-      expect(service.update).toHaveBeenCalledWith('uuid', dto);
+      expect(await controller.update(1, dto as any)).toEqual(result);
+      expect(service.update).toHaveBeenCalledWith(1, dto);
     });
   });
 
@@ -88,8 +88,8 @@ describe('RegionController', () => {
       
       mockService.delete.mockResolvedValue(result);
       
-      expect(await controller.delete('uuid')).toEqual(result);
-      expect(service.delete).toHaveBeenCalledWith('uuid');
+      expect(await controller.delete(1)).toEqual(result);
+      expect(service.delete).toHaveBeenCalledWith(1);
     });
   });
 });

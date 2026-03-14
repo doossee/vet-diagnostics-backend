@@ -6,7 +6,7 @@ import {
   AnimalColorQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class AnimalColorService {

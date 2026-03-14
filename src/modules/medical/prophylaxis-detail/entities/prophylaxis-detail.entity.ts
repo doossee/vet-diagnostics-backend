@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProphylaxisDetail } from '@prisma/client';
+import { ProphylaxisDetail } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class ProphylaxisDetailEntity implements ProphylaxisDetail {

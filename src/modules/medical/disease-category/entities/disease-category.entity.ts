@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DiseaseCategory } from '@prisma/client';
+import { DiseaseCategory } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class DiseaseCategoryEntity implements DiseaseCategory {

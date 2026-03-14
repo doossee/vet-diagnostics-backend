@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesColor } from '@prisma/client';
+import { FecesColor } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesColorEntity implements FecesColor {

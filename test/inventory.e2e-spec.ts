@@ -8,7 +8,7 @@ import { AnimalFactory } from './factories/animal.factory';
 import { AuthTestHelper } from './helpers/auth.helper';
 import { UserFactory } from './factories/user.factory';
 import { RegionFactory, DistrictFactory } from './factories/region.factory';
-import { AnimalSex } from '@prisma/client';
+import { AnimalSex } from '../src/generated/prisma/client';
 
 describe('Inventory (e2e)', () => {
   let app: INestApplication<App>;

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesSmell } from '@prisma/client';
+import { FecesSmell } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesSmellEntity implements FecesSmell {

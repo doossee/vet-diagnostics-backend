@@ -9,7 +9,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import { UserRole } from 'src/shared/enums';
 
 export class CreateUserDto implements Prisma.UserUncheckedCreateInput {

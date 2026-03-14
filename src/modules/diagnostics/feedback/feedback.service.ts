@@ -6,7 +6,7 @@ import {
   UpdateFeedbackDto,
   FeedbackQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 const feedbackInclude: Prisma.FeedbackInclude = {
   prediction: true,

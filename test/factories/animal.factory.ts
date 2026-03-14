@@ -1,4 +1,4 @@
-import { Animal, AnimalSex, AnimalType, Breed, Color } from '@prisma/client';
+import { Animal, AnimalSex, AnimalType, Breed, Color } from '../src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 
 export class AnimalFactory {

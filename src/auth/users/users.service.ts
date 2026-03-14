@@ -3,7 +3,7 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User } from 'src/generated/prisma/client';
 import * as bcrypt from 'bcryptjs';
 import {
   CreateUserDto,

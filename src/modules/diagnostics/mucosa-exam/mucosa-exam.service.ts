@@ -6,7 +6,7 @@ import {
   UpdateMucosaExamDto,
   MucosaExamQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 const mucosaExamInclude: Prisma.MucosaExamInclude = {
   animal: true,

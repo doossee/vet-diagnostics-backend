@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineClarity } from '@prisma/client';
+import { UrineClarity } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class UrineClarityEntity implements UrineClarity {

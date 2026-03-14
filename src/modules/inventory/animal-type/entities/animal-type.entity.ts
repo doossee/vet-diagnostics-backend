@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AnimalType } from '@prisma/client';
+import { AnimalType } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class AnimalTypeEntity implements AnimalType {

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineColor } from '@prisma/client';
+import { UrineColor } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class UrineColorEntity implements UrineColor {

@@ -91,6 +91,7 @@ describe('UsersService', () => {
           role: createUserDto.role,
           districtId: createUserDto.districtId,
         }),
+        include: { district: true },
       });
       expect(result).toBeDefined();
     });
@@ -144,6 +145,7 @@ describe('UsersService', () => {
         data: expect.objectContaining({
           role: UserRole.FARMER,
         }),
+        include: { district: true },
       });
     });
   });
@@ -248,6 +250,7 @@ describe('UsersService', () => {
       expect(prismaService.user.update).toHaveBeenCalledWith({
         where: { id: 'user-id' },
         data: updateData,
+        include: { district: true },
       });
       expect(result.firstName).toBe('Updated');
     });

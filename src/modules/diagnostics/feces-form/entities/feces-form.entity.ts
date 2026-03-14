@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesForm } from '@prisma/client';
+import { FecesForm } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class FecesFormEntity implements FecesForm {

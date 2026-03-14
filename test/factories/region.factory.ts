@@ -1,4 +1,4 @@
-import { Region, District } from '@prisma/client';
+import { Region, District } from '../src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 
 export class RegionFactory {
