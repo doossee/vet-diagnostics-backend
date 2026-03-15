@@ -54,17 +54,23 @@ model ClinicalExam {
   skinHumidityId String?       @map("skin_humidity_id") @db.Uuid
   skinHumidity   SkinHumidity? @relation(fields: [skinHumidityId], references: [id], onDelete: Restrict)
 
-  skinSmell  String?   @map("skin_smell")
+  skinSmellId String?    @map("skin_smell_id") @db.Uuid
+  skinSmell   SkinSmell? @relation(fields: [skinSmellId], references: [id], onDelete: Restrict)
+
   skinTemp   SkinTemp? @relation(fields: [skinTempId], references: [id], onDelete: Restrict)
   skinTempId String?   @map("skin_temp_id") @db.Uuid
 
-  skinSurface String? @map("skin_surface")
+  skinSurfaceId String?      @map("skin_surface_id") @db.Uuid
+  skinSurface   SkinSurface? @relation(fields: [skinSurfaceId], references: [id], onDelete: Restrict)
 
   skinElasticityId String?         @map("skin_elasticity_id") @db.Uuid
   skinElasticity   SkinElasticity? @relation(fields: [skinElasticityId], references: [id], onDelete: Restrict)
 
-  skinSensitivity String? @map("skin_sensitivity")
-  skinPain        String? @map("skin_pain")
+  skinSensitivityId String?          @map("skin_sensitivity_id") @db.Uuid
+  skinSensitivity   SkinSensitivity? @relation(fields: [skinSensitivityId], references: [id], onDelete: Restrict)
+
+  skinPainId String?   @map("skin_pain_id") @db.Uuid
+  skinPain   SkinPain? @relation(fields: [skinPainId], references: [id], onDelete: Restrict)
 
   // --- Lymph Nodes (Limfa tugunlari) ---
   lymphSizeId String?    @map("lymph_size_id") @db.Uuid
@@ -89,8 +95,10 @@ model ClinicalExam {
   lymphMobility   LymphMobility? @relation(fields: [lymphMobilityId], references: [id], onDelete: Restrict)
 
   // --- Rumen Fluid ---
-  rumenInfusoriaCount Float?  @map("rumen_infusoria_count")
-  rumenFluidState     String? @map("rumen_fluid_state")
+  rumenInfusoriaCount Float? @map("rumen_infusoria_count")
+
+  rumenFluidStateId String?          @map("rumen_fluid_state_id") @db.Uuid
+  rumenFluidState   RumenFluidState? @relation(fields: [rumenFluidStateId], references: [id], onDelete: Restrict)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
@@ -231,6 +239,55 @@ model SkinElasticity {
   clinicalExams ClinicalExam[]
 
   @@map("skin_elasticities")
+}
+
+model SkinSmell {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_smells")
+}
+
+model SkinSurface {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_surfaces")
+}
+
+model SkinSensitivity {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_sensitivities")
+}
+
+model SkinPain {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_pains")
+}
+
+// =============================================================================
+// RUMEN FLUID LOOKUP TABLE
+// =============================================================================
+
+model RumenFluidState {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("rumen_fluid_states")
 }
 
 // =============================================================================

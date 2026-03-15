@@ -431,6 +431,21 @@ export class PredictDto {
   @IsOptional()
   skinElasticity?: number;
 
+  @ApiPropertyOptional({ description: 'Skin sensitivity (numeric label)' })
+  @IsNumber()
+  @IsOptional()
+  skinSensitivity?: number;
+
+  @ApiPropertyOptional({ description: 'Skin pain (numeric label)' })
+  @IsNumber()
+  @IsOptional()
+  skinPainValue?: number;
+
+  @ApiPropertyOptional({ description: 'Rumen fluid state (numeric label)' })
+  @IsNumber()
+  @IsOptional()
+  rumenFluidState?: number;
+
   @ApiPropertyOptional({ description: '79. Lymph node size (numeric label)' })
   @IsNumber()
   @IsOptional()
