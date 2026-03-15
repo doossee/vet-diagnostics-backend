@@ -73,7 +73,21 @@ ALTER TABLE "diseases" ALTER COLUMN "name" SET NOT NULL;
 ALTER TABLE "diseases" DROP COLUMN "name_ru";
 ALTER TABLE "diseases" DROP COLUMN "name_uz";
 
--- disease_categories
+-- disease_categories (was disease_types)
+ALTER TABLE "disease_types" RENAME TO "disease_categories";
+ALTER INDEX "disease_types_pkey" RENAME TO "disease_categories_pkey";
+
+-- Rename type_id -> disease_category_id in diseases table
+ALTER TABLE "diseases" RENAME COLUMN "type_id" TO "disease_category_id";
+DROP INDEX IF EXISTS "diseases_type_id_idx";
+CREATE INDEX "diseases_disease_category_id_idx" ON "diseases"("disease_category_id");
+ALTER TABLE "diseases" DROP CONSTRAINT IF EXISTS "diseases_type_id_fkey";
+ALTER TABLE "diseases" ADD CONSTRAINT "diseases_disease_category_id_fkey" FOREIGN KEY ("disease_category_id") REFERENCES "disease_categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- Rename self-referential FK
+ALTER TABLE "disease_categories" DROP CONSTRAINT IF EXISTS "disease_types_parent_id_fkey";
+ALTER TABLE "disease_categories" ADD CONSTRAINT "disease_categories_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "disease_categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
 ALTER TABLE "disease_categories" ADD COLUMN "name" JSONB;
 UPDATE "disease_categories" SET "name" = jsonb_build_object('ru', "name_ru", 'uz', "name_uz");
 ALTER TABLE "disease_categories" ALTER COLUMN "name" SET NOT NULL;

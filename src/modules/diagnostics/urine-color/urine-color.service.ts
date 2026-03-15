@@ -22,7 +22,7 @@ export class UrineColorService {
    */
   async create(data: CreateUrineColorDto) {
     return await this.prisma.urineColor.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class UrineColorService {
   async update(id: string, data: UpdateUrineColorDto) {
     return await this.prisma.urineColor.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

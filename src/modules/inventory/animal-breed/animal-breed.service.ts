@@ -16,7 +16,7 @@ export class AnimalBreedService {
   ) {}
 
   async create(data: CreateAnimalBreedDto) {
-    return await this.prisma.breed.create({ data });
+    return await this.prisma.breed.create({ data: data as any });
   }
 
   async findAll(query: AnimalBreedQueryParamsDto) {
@@ -45,7 +45,7 @@ export class AnimalBreedService {
   }
 
   async update(id: string, data: UpdateAnimalBreedDto) {
-    return await this.prisma.breed.update({ where: { id }, data });
+    return await this.prisma.breed.update({ where: { id }, data: data as any });
   }
 
   async delete(id: string) {

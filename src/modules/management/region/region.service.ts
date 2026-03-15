@@ -18,7 +18,7 @@ export class RegionService {
    */
   async create(data: CreateRegionDto) {
     return await this.prisma.region.create({
-      data,
+      data: data as any,
     });
   }
 
@@ -78,7 +78,7 @@ export class RegionService {
   async update(id: number, data: UpdateRegionDto) {
     return await this.prisma.region.update({
       where: { id },
-      data,
+      data: data as any,
     });
   }
 

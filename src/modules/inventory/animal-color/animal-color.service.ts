@@ -17,7 +17,7 @@ export class AnimalColorService {
 
   async create(data: CreateAnimalColorDto) {
     return await this.prisma.color.create({
-      data,
+      data: data as any,
     });
   }
 
@@ -55,7 +55,7 @@ export class AnimalColorService {
   async update(id: string, data: UpdateAnimalColorDto) {
     return await this.prisma.color.update({
       where: { id },
-      data,
+      data: data as any,
     });
   }
 

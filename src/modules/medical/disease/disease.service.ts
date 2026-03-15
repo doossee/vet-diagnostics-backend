@@ -17,7 +17,7 @@ export class DiseaseService {
 
   async create(data: CreateDiseaseDto) {
     return await this.prisma.disease.create({
-      data,
+      data: data as any,
       include: { diseaseCategory: true },
     });
   }
@@ -55,7 +55,7 @@ export class DiseaseService {
   async update(id: string, data: UpdateDiseaseDto) {
     return await this.prisma.disease.update({
       where: { id },
-      data,
+      data: data as any,
       include: { diseaseCategory: true },
     });
   }

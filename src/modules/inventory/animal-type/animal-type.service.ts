@@ -17,7 +17,7 @@ export class AnimalTypeService {
 
   async create(data: CreateAnimalTypeDto) {
     return await this.prisma.animalType.create({
-      data,
+      data: data as any,
       include: { parent: true, children: true },
     });
   }
@@ -59,7 +59,7 @@ export class AnimalTypeService {
   async update(id: string, data: UpdateAnimalTypeDto) {
     return await this.prisma.animalType.update({
       where: { id },
-      data,
+      data: data as any,
       include: { parent: true, children: true },
     });
   }

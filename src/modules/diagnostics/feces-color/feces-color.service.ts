@@ -22,7 +22,7 @@ export class FecesColorService {
    */
   async create(data: CreateFecesColorDto) {
     return await this.prisma.fecesColor.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesColorService {
   async update(id: string, data: UpdateFecesColorDto) {
     return await this.prisma.fecesColor.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

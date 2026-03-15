@@ -22,7 +22,7 @@ export class FecesConsistencyService {
    */
   async create(data: CreateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesConsistencyService {
   async update(id: string, data: UpdateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

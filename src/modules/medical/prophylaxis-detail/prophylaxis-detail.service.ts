@@ -17,7 +17,7 @@ export class ProphylaxisDetailService {
 
   async create(data: CreateProphylaxisDetailDto) {
     return await this.prisma.prophylaxisDetail.create({
-      data,
+      data: data as any,
       include: { item: true },
     });
   }
@@ -55,7 +55,7 @@ export class ProphylaxisDetailService {
   async update(id: string, data: UpdateProphylaxisDetailDto) {
     return await this.prisma.prophylaxisDetail.update({
       where: { id },
-      data,
+      data: data as any,
       include: { item: true },
     });
   }
