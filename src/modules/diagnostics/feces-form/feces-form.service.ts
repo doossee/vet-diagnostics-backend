@@ -22,7 +22,7 @@ export class FecesFormService {
    */
   async create(data: CreateFecesFormDto) {
     return await this.prisma.fecesForm.create({
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesFormService {
   async update(id: string, data: UpdateFecesFormDto) {
     return await this.prisma.fecesForm.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }

@@ -300,9 +300,10 @@ export class AnomalyDetectionService {
     // Build date filter
     const dateFilter: Prisma.MedicalSessionWhereInput = {};
     if (from || to) {
-      dateFilter.date = {};
-      if (from) (dateFilter.date as any).gte = new Date(from);
-      if (to) (dateFilter.date as any).lte = new Date(to);
+      dateFilter.date = {
+        ...(from && { gte: new Date(from) }),
+        ...(to && { lte: new Date(to) }),
+      };
     }
 
     // Query sessions with the relevant exam included

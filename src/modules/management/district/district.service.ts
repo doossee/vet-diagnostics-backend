@@ -22,7 +22,7 @@ export class DistrictService {
    */
   async create(data: CreateDistrictDto) {
     return await this.prisma.district.create({
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { region: true },
     });
   }
@@ -84,7 +84,7 @@ export class DistrictService {
   async update(id: string, data: UpdateDistrictDto) {
     return await this.prisma.district.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { region: true },
     });
   }

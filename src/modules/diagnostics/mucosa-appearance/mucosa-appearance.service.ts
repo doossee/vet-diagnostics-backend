@@ -22,7 +22,7 @@ export class MucosaAppearanceService {
    */
   async create(data: CreateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.create({
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class MucosaAppearanceService {
   async update(id: string, data: UpdateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }

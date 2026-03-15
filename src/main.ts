@@ -5,18 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { PrismaExceptionFilter } from './shared/filters';
-import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(CoreModule);
 
   const config = app.get(ConfigService);
-
-  // Serve static files from uploads directory with /uploads prefix
-  const uploadsPath = join(process.cwd(), 'uploads');
-  app.useStaticAssets(uploadsPath, {
-    prefix: '/uploads',
-  });
 
   // CORS Configuration
   const corsOrigin = config.get<string>('CORS_ORIGIN');

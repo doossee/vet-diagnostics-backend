@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsUUID, Max, Min } from 'class-validator';
 
 export class CreateClinicalExamDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
@@ -14,23 +14,31 @@ export class CreateClinicalExamDto {
   @IsOptional()
   sessionId?: string;
 
-  @ApiPropertyOptional({ example: 80 })
+  @ApiPropertyOptional({ example: 80, minimum: 10, maximum: 300 })
   @IsNumber()
+  @Min(10)
+  @Max(300)
   @IsOptional()
   pulse?: number;
 
-  @ApiPropertyOptional({ example: 5 })
+  @ApiPropertyOptional({ example: 5, minimum: 0, maximum: 30 })
   @IsNumber()
+  @Min(0)
+  @Max(30)
   @IsOptional()
   rumination?: number;
 
-  @ApiPropertyOptional({ example: 38.5 })
+  @ApiPropertyOptional({ example: 38.5, minimum: 30, maximum: 45 })
   @IsNumber()
+  @Min(30)
+  @Max(45)
   @IsOptional()
   temperature?: number;
 
-  @ApiPropertyOptional({ example: 20 })
+  @ApiPropertyOptional({ example: 20, minimum: 1, maximum: 150 })
   @IsNumber()
+  @Min(1)
+  @Max(150)
   @IsOptional()
   respiratoryRate?: number;
 
@@ -160,6 +168,8 @@ export class CreateClinicalExamDto {
 
   // --- Rumen ---
   @IsNumber()
+  @Min(0)
+  @Max(1_000_000)
   @IsOptional()
   rumenInfusoriaCount?: number;
 

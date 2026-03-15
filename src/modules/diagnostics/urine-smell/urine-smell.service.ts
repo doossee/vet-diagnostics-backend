@@ -22,7 +22,7 @@ export class UrineSmellService {
    */
   async create(data: CreateUrineSmellDto) {
     return await this.prisma.urineSmell.create({
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class UrineSmellService {
   async update(id: string, data: UpdateUrineSmellDto) {
     return await this.prisma.urineSmell.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
