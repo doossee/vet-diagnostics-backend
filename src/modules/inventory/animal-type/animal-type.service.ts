@@ -4,9 +4,11 @@ import {
   CreateAnimalTypeDto,
   UpdateAnimalTypeDto,
   AnimalTypeQueryParamsDto,
+  ResolveAnimalTypeDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
 import { Prisma } from 'src/generated/prisma/client';
+import { computeAgeInMonths } from 'src/shared/utils';
 
 @Injectable()
 export class AnimalTypeService {
@@ -67,5 +69,26 @@ export class AnimalTypeService {
 
   async delete(id: string) {
     return await this.prisma.animalType.delete({ where: { id } });
+  }
+
+  async resolveAnimalType(query: ResolveAnimalTypeDto) {
+    const birthDate = new Date(query.birthYear, query.birthMonth - 1, 1);
+    const totalMonths = computeAgeInMonths(birthDate);
+
+    const children = await this.prisma.animalType.findMany({
+      where: { parentId: query.parentId },
+      include: { sex: true },
+    });
+
+    return (
+      children.find((child) => {
+        const sexMatch = !child.sexId || child.sexId === query.sexId;
+        const minOk =
+          child.minAgeMonths === null || totalMonths >= child.minAgeMonths;
+        const maxOk =
+          child.maxAgeMonths === null || totalMonths <= child.maxAgeMonths;
+        return sexMatch && minOk && maxOk;
+      }) ?? null
+    );
   }
 }

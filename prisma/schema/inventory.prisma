@@ -17,8 +17,7 @@ model Animal {
 
   arrivalDate DateTime @map("arrival_date")
 
-  ageYears  Int  @default(0) @map("age_years") @db.SmallInt
-  ageMonths Int  @default(0) @map("age_months") @db.SmallInt
+  birthDate DateTime @map("birth_date") @db.Date
   sexId String?    @map("sex_id") @db.Uuid
   sex   AnimalSex? @relation(fields: [sexId], references: [id], onDelete: Restrict)
 

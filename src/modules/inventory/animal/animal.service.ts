@@ -23,10 +23,20 @@ export class AnimalService {
   ) {}
 
   async create(data: CreateAnimalDto) {
+    const birthDate = new Date(data.birthYear, data.birthMonth - 1, 1);
+
+    const animalType = await this.prisma.animalType.findUniqueOrThrow({
+      where: { id: data.animalTypeId },
+      select: { sexId: true },
+    });
+
+    const { birthYear, birthMonth, ...rest } = data;
     return await this.prisma.animal.create({
       data: {
-        ...data,
+        ...rest,
+        birthDate,
         arrivalDate: new Date(data.arrivalDate),
+        ...(animalType.sexId && { sexId: animalType.sexId }),
       },
       include: animalInclude,
     });
