@@ -45,6 +45,7 @@ model Animal {
   bloodAnalyses    BloodExam[]
   clinicalAnalyses ClinicalExam[]
   medicalSessions  MedicalSession[]
+  anomalyAlerts    AnomalyAlert[]
 
   @@index([farmerId])
   @@index([animalTypeId])
@@ -82,6 +83,9 @@ model AnimalType {
 
   // Mucosa Analysis Types
   mucosaAppearances MucosaAppearance[]
+
+  // Anomaly Detection
+  referenceRanges ReferenceRange[]
 
   @@index([parentId])
   @@map("animal_types")

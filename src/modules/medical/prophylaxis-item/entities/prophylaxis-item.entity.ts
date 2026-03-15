@@ -7,7 +7,10 @@ export class ProphylaxisItemEntity {
   @Expose()
   id: string;
 
-  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
+  @ApiProperty({
+    description: 'Localized name',
+    example: { ru: 'Название', uz: 'Nomi' },
+  })
   @Expose()
   name: { ru: string; uz: string };
 
