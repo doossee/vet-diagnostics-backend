@@ -21,6 +21,7 @@ import {
   CreateAnimalTypeDto,
   UpdateAnimalTypeDto,
   AnimalTypeQueryParamsDto,
+  ResolveAnimalTypeDto,
 } from './dto';
 import { AnimalTypeEntity, PaginatedAnimalTypeEntity } from './entities';
 import { IsAuthenticated } from 'src/shared/decorators';
@@ -43,6 +44,13 @@ export class AnimalTypeController {
   @Get()
   async findAll(@Query() query: AnimalTypeQueryParamsDto) {
     return await this.animalTypeService.findAll(query);
+  }
+
+  @ApiOperation({ summary: 'Resolve leaf AnimalType from parent + sex + birth month/year' })
+  @ApiOkResponse({ type: AnimalTypeEntity })
+  @Get('resolve')
+  async resolveAnimalType(@Query() query: ResolveAnimalTypeDto) {
+    return await this.animalTypeService.resolveAnimalType(query);
   }
 
   @ApiOperation({ summary: 'Get animal type by ID' })
