@@ -29,8 +29,7 @@ model MucosaExam {
 
 model MucosaType {
   id                String             @id @default(uuid()) @db.Uuid
-  nameRu            String             @map("name_ru") @db.VarChar(255)
-  nameUz            String             @map("name_uz") @db.VarChar(255)
+  name              Json               @db.JsonB
   numericValue      Int                @unique @map("numeric_value")
   mucosaExams       MucosaExam[]
   mucosaAppearances MucosaAppearance[]
@@ -41,9 +40,8 @@ model MucosaType {
 model MucosaAppearance {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu       String @map("name_ru") @db.VarChar(255)
-  nameUz       String @map("name_uz") @db.VarChar(255)
-  numericValue Int    @map("numeric_value")
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
 
   mucosaTypeId String?     @map("mucosa_type_id") @db.Uuid
   mucosaType   MucosaType? @relation(fields: [mucosaTypeId], references: [id], onDelete: Restrict)

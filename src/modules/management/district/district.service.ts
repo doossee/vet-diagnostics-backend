@@ -38,8 +38,8 @@ export class DistrictService {
     const where: Prisma.DistrictWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(regionId && { regionId }),
@@ -47,7 +47,7 @@ export class DistrictService {
 
     const orderBy: Prisma.DistrictOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.DistrictInclude = {

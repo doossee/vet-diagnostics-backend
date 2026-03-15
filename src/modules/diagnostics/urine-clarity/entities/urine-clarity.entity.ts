@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UrineClarity } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
-export class UrineClarityEntity implements UrineClarity {
+export class UrineClarityEntity {
   @ApiProperty({
     description: 'Unique identifier',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -10,19 +9,9 @@ export class UrineClarityEntity implements UrineClarity {
   @Expose()
   id: string;
 
-  @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Прозрачная',
-  })
+  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
   @Expose()
-  nameRu: string;
-
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Tiniq',
-  })
-  @Expose()
-  nameUz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',

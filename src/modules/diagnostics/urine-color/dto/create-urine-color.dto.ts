@@ -1,24 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 
 export class CreateUrineColorDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the urine color in Russian',
-    example: 'Желтый',
-    type: String,
-  })
-  readonly nameRu: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the urine color in Uzbek',
-    example: 'Sariq',
-    type: String,
-  })
-  readonly nameUz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  readonly name: NameDto;
 
   @IsInt()
   @IsNotEmpty()

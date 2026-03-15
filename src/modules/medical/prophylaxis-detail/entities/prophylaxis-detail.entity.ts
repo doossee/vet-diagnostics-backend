@@ -1,19 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProphylaxisDetail } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
-export class ProphylaxisDetailEntity implements ProphylaxisDetail {
+export class ProphylaxisDetailEntity {
   @ApiProperty({ format: 'uuid' })
   @Expose()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
   @Expose()
-  nameRu: string;
-
-  @ApiProperty()
-  @Expose()
-  nameUz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty()
   @Expose()

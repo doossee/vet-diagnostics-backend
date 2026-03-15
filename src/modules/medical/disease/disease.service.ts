@@ -27,15 +27,15 @@ export class DiseaseService {
     const where: Prisma.DiseaseWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(diseaseCategoryId && { diseaseCategoryId }),
     };
     const orderBy: Prisma.DiseaseOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
     const include: Prisma.DiseaseInclude = { diseaseCategory: true };
     return await this.paginationService.paginate(

@@ -28,8 +28,8 @@ export class VetStationService {
     const where: Prisma.VetStationWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
           { address: { contains: search, mode: 'insensitive' } },
         ],
       }),

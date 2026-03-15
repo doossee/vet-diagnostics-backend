@@ -110,8 +110,7 @@ model ClinicalExam {
 
 model BodyType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -120,8 +119,7 @@ model BodyType {
 
 model ObesityType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -130,8 +128,7 @@ model ObesityType {
 
 model BodyPosition {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -140,8 +137,7 @@ model BodyPosition {
 
 model Constitution {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -150,8 +146,7 @@ model Constitution {
 
 model Temperament {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -164,8 +159,7 @@ model Temperament {
 
 model WoolType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -174,8 +168,7 @@ model WoolType {
 
 model DownType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -184,8 +177,7 @@ model DownType {
 
 model HairType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -194,8 +186,7 @@ model HairType {
 
 model FeatherType {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -208,8 +199,7 @@ model FeatherType {
 
 model SkinColor {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -218,8 +208,7 @@ model SkinColor {
 
 model SkinHumidity {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -228,8 +217,7 @@ model SkinHumidity {
 
 model SkinTemp {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -238,8 +226,7 @@ model SkinTemp {
 
 model SkinElasticity {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -252,8 +239,7 @@ model SkinElasticity {
 
 model LymphSize {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -262,8 +248,7 @@ model LymphSize {
 
 model LymphShape {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -272,8 +257,7 @@ model LymphShape {
 
 model LymphSurface {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -282,8 +266,7 @@ model LymphSurface {
 
 model LymphConsistency {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -292,8 +275,7 @@ model LymphConsistency {
 
 model LymphTemp {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -302,8 +284,7 @@ model LymphTemp {
 
 model LymphPain {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 
@@ -312,8 +293,7 @@ model LymphPain {
 
 model LymphMobility {
   id           String         @id @default(uuid()) @db.Uuid
-  nameRu       String         @map("name_ru") @db.VarChar(255)
-  nameUz       String         @map("name_uz") @db.VarChar(255)
+  name         Json           @db.JsonB
   numericValue Int            @unique @map("numeric_value")
   clinicalExams ClinicalExam[]
 

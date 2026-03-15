@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MucosaAppearance } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
-export class MucosaAppearanceEntity implements MucosaAppearance {
+export class MucosaAppearanceEntity {
   @ApiProperty({
     description: 'Unique identifier',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -10,19 +9,9 @@ export class MucosaAppearanceEntity implements MucosaAppearance {
   @Expose()
   id: string;
 
-  @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Бледная',
-  })
+  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
   @Expose()
-  nameRu: string;
-
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Oqargan',
-  })
-  @Expose()
-  nameUz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',

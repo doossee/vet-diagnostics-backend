@@ -1,22 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsUUID } from 'class-validator';
+import { IsOptional, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 
 export class CreateDiseaseCategoryDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Болезни пищеварительной системы',
-  })
-  readonly nameRu: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Hazm qilish tizimi kasalliklari',
-  })
-  readonly nameUz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  readonly name: NameDto;
 
   @IsOptional()
   @IsUUID()

@@ -1,19 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProphylaxisItem, ProphylaxisType } from 'src/generated/prisma/client';
+import { ProphylaxisType } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
-export class ProphylaxisItemEntity implements ProphylaxisItem {
+export class ProphylaxisItemEntity {
   @ApiProperty({ format: 'uuid' })
   @Expose()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
   @Expose()
-  nameRu: string;
-
-  @ApiProperty()
-  @Expose()
-  nameUz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({ enum: ProphylaxisType })
   @Expose()
