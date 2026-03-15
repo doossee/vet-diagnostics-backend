@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 export class AnimalTypeEntity {
   @ApiProperty({
@@ -18,7 +18,35 @@ export class AnimalTypeEntity {
   name: { ru: string; uz: string };
 
   @ApiPropertyOptional({
-    description: 'Parent animal type ID (for hierarchical types)',
+    description: 'AI model key for prediction routing (leaf types only)',
+    example: 'buqa',
+  })
+  @Expose()
+  modelKey: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Sex constraint ID — only animals of this sex belong to this type',
+    example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
+  })
+  @Expose()
+  sexId: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Minimum animal age in total months (inclusive)',
+    example: 36,
+  })
+  @Expose()
+  minAgeMonths: number | null;
+
+  @ApiPropertyOptional({
+    description: 'Maximum animal age in total months (inclusive, null = no upper bound)',
+    example: 35,
+  })
+  @Expose()
+  maxAgeMonths: number | null;
+
+  @ApiPropertyOptional({
+    description: 'Parent animal type ID',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
   })
   @Expose()
@@ -29,6 +57,7 @@ export class AnimalTypeEntity {
     type: () => AnimalTypeEntity,
   })
   @Expose()
+  @Type(() => AnimalTypeEntity)
   parent?: AnimalTypeEntity;
 
   @ApiPropertyOptional({
@@ -36,5 +65,6 @@ export class AnimalTypeEntity {
     type: () => [AnimalTypeEntity],
   })
   @Expose()
+  @Type(() => AnimalTypeEntity)
   children?: AnimalTypeEntity[];
 }

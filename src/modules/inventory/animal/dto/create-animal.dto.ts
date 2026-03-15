@@ -28,10 +28,18 @@ export class CreateAnimalDto {
   @IsInt()
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Age of the animal in months',
-    example: 12,
+    description: 'Age of the animal in full years',
+    example: 2,
   })
-  readonly age: number;
+  readonly ageYears: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Remaining months on top of ageYears (0–11)',
+    example: 6,
+  })
+  readonly ageMonths: number;
 
   @IsUUID()
   @IsOptional()

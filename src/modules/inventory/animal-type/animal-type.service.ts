@@ -18,7 +18,7 @@ export class AnimalTypeService {
   async create(data: CreateAnimalTypeDto) {
     return await this.prisma.animalType.create({
       data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
-      include: { parent: true, children: true },
+      include: { parent: true, children: true, sex: true },
     });
   }
 
@@ -40,6 +40,7 @@ export class AnimalTypeService {
     };
     const include: Prisma.AnimalTypeInclude = {
       parent: true,
+      sex: true,
       _count: { select: { children: true } },
     };
     return await this.paginationService.paginate(
@@ -52,7 +53,7 @@ export class AnimalTypeService {
   async findOne(id: string) {
     return await this.prisma.animalType.findUniqueOrThrow({
       where: { id },
-      include: { parent: true, children: true },
+      include: { parent: true, children: true, sex: true },
     });
   }
 
@@ -60,7 +61,7 @@ export class AnimalTypeService {
     return await this.prisma.animalType.update({
       where: { id },
       data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
-      include: { parent: true, children: true },
+      include: { parent: true, children: true, sex: true },
     });
   }
 

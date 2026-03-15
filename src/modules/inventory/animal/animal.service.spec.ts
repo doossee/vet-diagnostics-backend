@@ -55,7 +55,8 @@ describe('AnimalService', () => {
       const createAnimalDto = {
         arrivalDate: '2024-01-15T00:00:00Z',
         animalNameCode: 'A-001',
-        age: 12,
+        ageYears: 1,
+        ageMonths: 0,
         sexId: 'sex-id',
         farmerId: 'farmer-id',
         animalTypeId: 'type-id',
@@ -67,7 +68,8 @@ describe('AnimalService', () => {
         id: 'animal-id',
         arrivalDate: new Date(createAnimalDto.arrivalDate),
         animalNameCode: createAnimalDto.animalNameCode,
-        age: createAnimalDto.age,
+        ageYears: createAnimalDto.ageYears,
+        ageMonths: createAnimalDto.ageMonths,
         sexId: createAnimalDto.sexId,
         farmerId: createAnimalDto.farmerId,
         animalTypeId: createAnimalDto.animalTypeId,
@@ -84,7 +86,8 @@ describe('AnimalService', () => {
       expect(prismaService.animal.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
           arrivalDate: expect.any(Date),
-          age: 12,
+          ageYears: 1,
+          ageMonths: 0,
         }),
         include: {
           sex: true,
@@ -108,13 +111,15 @@ describe('AnimalService', () => {
       const mockAnimals = [
         {
           id: 'animal-1',
-          age: 12,
+          ageYears: 1,
+          ageMonths: 0,
           sexId: 'sex-id-1',
           arrivalDate: new Date(),
         },
         {
           id: 'animal-2',
-          age: 24,
+          ageYears: 2,
+          ageMonths: 0,
           sexId: 'sex-id-2',
           arrivalDate: new Date(),
         },
@@ -143,7 +148,8 @@ describe('AnimalService', () => {
     it('should return an animal by id', async () => {
       const mockAnimal = {
         id: 'animal-id',
-        age: 12,
+        ageYears: 1,
+        ageMonths: 0,
         sexId: 'sex-id',
         arrivalDate: new Date(),
       };
@@ -169,7 +175,8 @@ describe('AnimalService', () => {
   describe('update', () => {
     it('should update an animal', async () => {
       const updateData = {
-        age: 24,
+        ageYears: 2,
+        ageMonths: 3,
       };
 
       const mockUpdatedAnimal = {
@@ -193,7 +200,7 @@ describe('AnimalService', () => {
           animalColor: true,
         },
       });
-      expect(result.age).toBe(24);
+      expect(result.ageYears).toBe(2);
     });
   });
 
@@ -201,7 +208,8 @@ describe('AnimalService', () => {
     it('should delete an animal', async () => {
       const mockAnimal = {
         id: 'animal-id',
-        age: 12,
+        ageYears: 1,
+        ageMonths: 0,
         sexId: 'sex-id',
       };
 

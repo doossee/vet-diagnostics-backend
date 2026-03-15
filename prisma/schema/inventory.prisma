@@ -3,10 +3,11 @@
 // =============================================================================
 
 model AnimalSex {
-  id           String   @id @default(uuid()) @db.Uuid
-  name         Json     @db.JsonB
-  numericValue Int      @unique @map("numeric_value")
+  id           String       @id @default(uuid()) @db.Uuid
+  name         Json         @db.JsonB
+  numericValue Int          @unique @map("numeric_value")
   animals      Animal[]
+  animalTypes  AnimalType[] @relation("AnimalTypeSex")
 
   @@map("animal_sexes")
 }
@@ -16,7 +17,8 @@ model Animal {
 
   arrivalDate DateTime @map("arrival_date")
 
-  age   Int        @db.SmallInt
+  ageYears  Int  @default(0) @map("age_years") @db.SmallInt
+  ageMonths Int  @default(0) @map("age_months") @db.SmallInt
   sexId String?    @map("sex_id") @db.Uuid
   sex   AnimalSex? @relation(fields: [sexId], references: [id], onDelete: Restrict)
 
@@ -58,7 +60,16 @@ model Animal {
 model AnimalType {
   id String @id @default(uuid()) @db.Uuid
 
-  name Json @db.JsonB
+  name     Json    @db.JsonB
+  modelKey String? @unique @map("model_key")
+
+  // Optional sex constraint (e.g. bull = male only, heifer = female only)
+  sexId String?    @map("sex_id") @db.Uuid
+  sex   AnimalSex? @relation("AnimalTypeSex", fields: [sexId], references: [id], onDelete: Restrict)
+
+  // Optional age range in total months (e.g. calf = 0–11 months)
+  minAgeMonths Int? @map("min_age_months") @db.SmallInt
+  maxAgeMonths Int? @map("max_age_months") @db.SmallInt
 
   parentId String?     @map("parent_id") @db.Uuid
   parent   AnimalType? @relation("AnimalTypeHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
@@ -88,6 +99,7 @@ model AnimalType {
   referenceRanges ReferenceRange[]
 
   @@index([parentId])
+  @@index([sexId])
   @@map("animal_types")
 }
 

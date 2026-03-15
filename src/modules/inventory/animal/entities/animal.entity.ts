@@ -22,9 +22,13 @@ export class AnimalEntity implements Animal {
   @Expose()
   arrivalDate: Date;
 
-  @ApiProperty({ description: 'Age of the animal (in months)', example: 12 })
+  @ApiProperty({ description: 'Age in full years', example: 2 })
   @Expose()
-  age: number;
+  ageYears: number;
+
+  @ApiProperty({ description: 'Remaining months on top of ageYears (0–11)', example: 6 })
+  @Expose()
+  ageMonths: number;
 
   @ApiProperty({
     description: 'ID of the sex lookup entry',
