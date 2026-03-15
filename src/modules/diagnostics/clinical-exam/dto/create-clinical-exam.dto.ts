@@ -92,35 +92,35 @@ export class CreateClinicalExamDto {
   @IsOptional()
   skinHumidityId?: string;
 
-  @ApiPropertyOptional({ example: 'Normal' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSmell?: string;
+  skinSmellId?: string;
 
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   @IsOptional()
   skinTempId?: string;
 
-  @ApiPropertyOptional({ example: 'Smooth' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSurface?: string;
+  skinSurfaceId?: string;
 
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   @IsOptional()
   skinElasticityId?: string;
 
-  @ApiPropertyOptional({ example: 'Normal' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSensitivity?: string;
+  skinSensitivityId?: string;
 
-  @ApiPropertyOptional({ example: 'None' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinPain?: string;
+  skinPainId?: string;
 
   // --- Lymph Nodes ---
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
@@ -163,7 +163,7 @@ export class CreateClinicalExamDto {
   @IsOptional()
   rumenInfusoriaCount?: number;
 
-  @IsString()
+  @IsUUID()
   @IsOptional()
-  rumenFluidState?: string;
+  rumenFluidStateId?: string;
 }
