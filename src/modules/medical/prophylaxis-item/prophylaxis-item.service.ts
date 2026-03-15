@@ -16,7 +16,7 @@ export class ProphylaxisItemService {
   ) {}
 
   async create(data: CreateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.create({ data: data as any });
+    return await this.prisma.prophylaxisItem.create({ data: { ...data, name: data.name as unknown as Prisma.InputJsonValue } });
   }
 
   async findAll(query: ProphylaxisItemQueryParamsDto) {
@@ -50,7 +50,7 @@ export class ProphylaxisItemService {
   async update(id: string, data: UpdateProphylaxisItemDto) {
     return await this.prisma.prophylaxisItem.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 

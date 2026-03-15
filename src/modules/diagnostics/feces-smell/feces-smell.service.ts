@@ -22,7 +22,7 @@ export class FecesSmellService {
    */
   async create(data: CreateFecesSmellDto) {
     return await this.prisma.fecesSmell.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesSmellService {
   async update(id: string, data: UpdateFecesSmellDto) {
     return await this.prisma.fecesSmell.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }

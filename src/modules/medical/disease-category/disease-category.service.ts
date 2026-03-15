@@ -17,7 +17,7 @@ export class DiseaseCategoryService {
 
   async create(data: CreateDiseaseCategoryDto) {
     return await this.prisma.diseaseCategory.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }
@@ -64,7 +64,7 @@ export class DiseaseCategoryService {
   async update(id: string, data: UpdateDiseaseCategoryDto) {
     return await this.prisma.diseaseCategory.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }

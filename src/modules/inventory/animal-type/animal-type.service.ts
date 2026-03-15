@@ -17,7 +17,7 @@ export class AnimalTypeService {
 
   async create(data: CreateAnimalTypeDto) {
     return await this.prisma.animalType.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }
@@ -59,7 +59,7 @@ export class AnimalTypeService {
   async update(id: string, data: UpdateAnimalTypeDto) {
     return await this.prisma.animalType.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }

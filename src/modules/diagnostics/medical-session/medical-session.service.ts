@@ -10,7 +10,7 @@ import { Prisma } from 'src/generated/prisma/client';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 
-const sessionInclude: Prisma.MedicalSessionInclude = {
+const sessionInclude = {
   animal: { include: { sex: true } },
   veterinarian: true,
   clinicalExam: {
@@ -66,7 +66,7 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
     },
   },
   prediction: true,
-};
+} satisfies Prisma.MedicalSessionInclude;
 
 @Injectable()
 export class MedicalSessionService {
@@ -155,7 +155,7 @@ export class MedicalSessionService {
     // Build the numeric input vector from all session exams
     const inputVector = {
       // Animal
-      sex: (animal as any)?.sex?.numericValue ?? null,
+      sex: animal?.sex?.numericValue ?? null,
 
       // Clinical — numeric vitals
       temperature: clinicalExam.temperature,
@@ -165,43 +165,39 @@ export class MedicalSessionService {
       rumenInfusoriaCount: clinicalExam.rumenInfusoriaCount,
 
       // Clinical — habitus
-      bodyType: (clinicalExam as any).bodyType?.numericValue ?? null,
-      obesity: (clinicalExam as any).obesity?.numericValue ?? null,
-      bodyPosition: (clinicalExam as any).bodyPosition?.numericValue ?? null,
-      constitution: (clinicalExam as any).constitution?.numericValue ?? null,
-      temperament: (clinicalExam as any).temperament?.numericValue ?? null,
+      bodyType: clinicalExam.bodyType?.numericValue ?? null,
+      obesity: clinicalExam.obesity?.numericValue ?? null,
+      bodyPosition: clinicalExam.bodyPosition?.numericValue ?? null,
+      constitution: clinicalExam.constitution?.numericValue ?? null,
+      temperament: clinicalExam.temperament?.numericValue ?? null,
 
       // Clinical — skin cover
-      wool: (clinicalExam as any).wool?.numericValue ?? null,
-      down: (clinicalExam as any).down?.numericValue ?? null,
-      hair: (clinicalExam as any).hair?.numericValue ?? null,
-      feathers: (clinicalExam as any).feathers?.numericValue ?? null,
+      wool: clinicalExam.wool?.numericValue ?? null,
+      down: clinicalExam.down?.numericValue ?? null,
+      hair: clinicalExam.hair?.numericValue ?? null,
+      feathers: clinicalExam.feathers?.numericValue ?? null,
 
       // Clinical — skin
-      skinColor: (clinicalExam as any).skinColor?.numericValue ?? null,
-      skinHumidity: (clinicalExam as any).skinHumidity?.numericValue ?? null,
-      skinSmell: (clinicalExam as any).skinSmell?.numericValue ?? null,
-      skinTemp: (clinicalExam as any).skinTemp?.numericValue ?? null,
-      skinSurface: (clinicalExam as any).skinSurface?.numericValue ?? null,
-      skinElasticity:
-        (clinicalExam as any).skinElasticity?.numericValue ?? null,
-      skinSensitivity:
-        (clinicalExam as any).skinSensitivity?.numericValue ?? null,
-      skinPain: (clinicalExam as any).skinPain?.numericValue ?? null,
+      skinColor: clinicalExam.skinColor?.numericValue ?? null,
+      skinHumidity: clinicalExam.skinHumidity?.numericValue ?? null,
+      skinSmell: clinicalExam.skinSmell?.numericValue ?? null,
+      skinTemp: clinicalExam.skinTemp?.numericValue ?? null,
+      skinSurface: clinicalExam.skinSurface?.numericValue ?? null,
+      skinElasticity: clinicalExam.skinElasticity?.numericValue ?? null,
+      skinSensitivity: clinicalExam.skinSensitivity?.numericValue ?? null,
+      skinPain: clinicalExam.skinPain?.numericValue ?? null,
 
       // Clinical — rumen fluid
-      rumenFluidState:
-        (clinicalExam as any).rumenFluidState?.numericValue ?? null,
+      rumenFluidState: clinicalExam.rumenFluidState?.numericValue ?? null,
 
       // Clinical — lymph
-      lymphSize: (clinicalExam as any).lymphSize?.numericValue ?? null,
-      lymphShape: (clinicalExam as any).lymphShape?.numericValue ?? null,
-      lymphSurface: (clinicalExam as any).lymphSurface?.numericValue ?? null,
-      lymphConsistency:
-        (clinicalExam as any).lymphConsistency?.numericValue ?? null,
-      lymphTemp: (clinicalExam as any).lymphTemp?.numericValue ?? null,
-      lymphPain: (clinicalExam as any).lymphPain?.numericValue ?? null,
-      lymphMobility: (clinicalExam as any).lymphMobility?.numericValue ?? null,
+      lymphSize: clinicalExam.lymphSize?.numericValue ?? null,
+      lymphShape: clinicalExam.lymphShape?.numericValue ?? null,
+      lymphSurface: clinicalExam.lymphSurface?.numericValue ?? null,
+      lymphConsistency: clinicalExam.lymphConsistency?.numericValue ?? null,
+      lymphTemp: clinicalExam.lymphTemp?.numericValue ?? null,
+      lymphPain: clinicalExam.lymphPain?.numericValue ?? null,
+      lymphMobility: clinicalExam.lymphMobility?.numericValue ?? null,
 
       // Blood — morphological
       erythrocyteCount: bloodExam.erythrocyteCount,
@@ -239,36 +235,34 @@ export class MedicalSessionService {
       urineErythrocytes: urineExam?.erythrocytes ?? null,
 
       // Urine — lookups
-      urineColor: (urineExam as any)?.urineColor?.numericValue ?? null,
-      urineSmell: (urineExam as any)?.urineSmell?.numericValue ?? null,
-      urineClarity: (urineExam as any)?.urineClarity?.numericValue ?? null,
-      urineConsistency:
-        (urineExam as any)?.urineConsistency?.numericValue ?? null,
+      urineColor: urineExam?.urineColor?.numericValue ?? null,
+      urineSmell: urineExam?.urineSmell?.numericValue ?? null,
+      urineClarity: urineExam?.urineClarity?.numericValue ?? null,
+      urineConsistency: urineExam?.urineConsistency?.numericValue ?? null,
 
       // Feces — numeric
       fecesAmount: fecesExam?.amount ?? null,
       fecesUndigestedFood: fecesExam?.undigestedFood ?? null,
 
       // Feces — lookups
-      fecesColor: (fecesExam as any)?.fecesColor?.numericValue ?? null,
-      fecesSmell: (fecesExam as any)?.fecesSmell?.numericValue ?? null,
-      fecesConsistency:
-        (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
-      fecesForm: (fecesExam as any)?.fecesForm?.numericValue ?? null,
+      fecesColor: fecesExam?.fecesColor?.numericValue ?? null,
+      fecesSmell: fecesExam?.fecesSmell?.numericValue ?? null,
+      fecesConsistency: fecesExam?.fecesConsistency?.numericValue ?? null,
+      fecesForm: fecesExam?.fecesForm?.numericValue ?? null,
 
       // Mucosa — extract appearance for each of the 4 types
       // MucosaType numericValue: 0=oral, 1=nasal, 2=ocular, 3=vaginal
       mucosaOral:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 0)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 0)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaNasal:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 1)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 1)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaOcular:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 2)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 2)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaVaginal:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 3)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 3)
           ?.mucosaAppearance?.numericValue ?? null,
     };
 
