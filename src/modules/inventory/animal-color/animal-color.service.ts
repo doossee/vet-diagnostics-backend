@@ -17,7 +17,7 @@ export class AnimalColorService {
 
   async create(data: CreateAnimalColorDto) {
     return await this.prisma.color.create({
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
@@ -55,7 +55,7 @@ export class AnimalColorService {
   async update(id: string, data: UpdateAnimalColorDto) {
     return await this.prisma.color.update({
       where: { id },
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 

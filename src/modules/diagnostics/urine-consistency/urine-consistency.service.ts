@@ -22,7 +22,7 @@ export class UrineConsistencyService {
    */
   async create(data: CreateUrineConsistencyDto) {
     return await this.prisma.urineConsistency.create({
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class UrineConsistencyService {
   async update(id: string, data: UpdateUrineConsistencyDto) {
     return await this.prisma.urineConsistency.update({
       where: { id },
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }

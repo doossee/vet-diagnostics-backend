@@ -22,7 +22,7 @@ export class FecesColorService {
    */
   async create(data: CreateFecesColorDto) {
     return await this.prisma.fecesColor.create({
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesColorService {
   async update(id: string, data: UpdateFecesColorDto) {
     return await this.prisma.fecesColor.update({
       where: { id },
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }

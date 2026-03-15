@@ -17,7 +17,7 @@ export class VetStationService {
 
   async create(data: CreateVetStationDto) {
     return await this.prisma.vetStation.create({
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { district: { include: { region: true } } },
     });
   }
@@ -62,7 +62,7 @@ export class VetStationService {
   async update(id: string, data: UpdateVetStationDto) {
     return await this.prisma.vetStation.update({
       where: { id },
-      data: { ...data, name: data.name as Prisma.InputJsonValue },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { district: { include: { region: true } } },
     });
   }
