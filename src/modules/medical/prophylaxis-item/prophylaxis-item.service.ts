@@ -48,7 +48,10 @@ export class ProphylaxisItemService {
   }
 
   async update(id: string, data: UpdateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.update({ where: { id }, data: data as any });
+    return await this.prisma.prophylaxisItem.update({
+      where: { id },
+      data: data as any,
+    });
   }
 
   async delete(id: string) {

@@ -26,6 +26,9 @@ model MedicalSession {
   // AI prediction result
   prediction Prediction?
 
+  // Anomaly alerts detected during prediction
+  anomalyAlerts AnomalyAlert[]
+
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
 

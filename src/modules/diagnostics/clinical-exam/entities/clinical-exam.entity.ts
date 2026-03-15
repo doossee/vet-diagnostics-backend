@@ -58,12 +58,12 @@ export class ClinicalExamEntity implements ClinicalExam {
 
   @Expose() skinColorId: string | null;
   @Expose() skinHumidityId: string | null;
-  @Expose() skinSmell: string | null;
+  @Expose() skinSmellId: string | null;
   @Expose() skinTempId: string | null;
-  @Expose() skinSurface: string | null;
+  @Expose() skinSurfaceId: string | null;
   @Expose() skinElasticityId: string | null;
-  @Expose() skinSensitivity: string | null;
-  @Expose() skinPain: string | null;
+  @Expose() skinSensitivityId: string | null;
+  @Expose() skinPainId: string | null;
 
   @Expose() lymphSizeId: string | null;
   @Expose() lymphShapeId: string | null;
@@ -74,7 +74,7 @@ export class ClinicalExamEntity implements ClinicalExam {
   @Expose() lymphMobilityId: string | null;
 
   @Expose() rumenInfusoriaCount: number | null;
-  @Expose() rumenFluidState: string | null;
+  @Expose() rumenFluidStateId: string | null;
 
   @ApiProperty({
     description: 'Creation date',

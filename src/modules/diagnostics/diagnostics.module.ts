@@ -15,6 +15,7 @@ import { FecesFormModule } from './feces-form/feces-form.module';
 import { MucosaAppearanceModule } from './mucosa-appearance/mucosa-appearance.module';
 import { MedicalSessionModule } from './medical-session/medical-session.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { AnomalyDetectionModule } from './anomaly-detection/anomaly-detection.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     MucosaAppearanceModule,
     MedicalSessionModule,
     FeedbackModule,
+    AnomalyDetectionModule,
   ],
 })
 export class DiagnosticsModule {}

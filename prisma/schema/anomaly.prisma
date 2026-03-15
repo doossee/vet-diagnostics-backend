@@ -1,0 +1,69 @@
+// =============================================================================
+// ANOMALY DETECTION — Reference Ranges & Alerts
+// =============================================================================
+
+// Stores normal min/max ranges for each numeric parameter per animal type.
+// Used to detect deviations from norm when exam results are submitted.
+model ReferenceRange {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  parameter String @db.VarChar(100) // e.g. "pulse", "hemoglobin", "glucose"
+  minValue  Float  @map("min_value")
+  maxValue  Float  @map("max_value")
+  unit      String? @db.VarChar(50) // e.g. "bpm", "g/l", "mmol/l"
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@unique([animalTypeId, parameter])
+  @@index([animalTypeId])
+  @@map("reference_ranges")
+}
+
+// Records detected anomalies when exam values fall outside reference ranges.
+// Created automatically during prediction, managed by veterinarians.
+model AnomalyAlert {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String @map("animal_id") @db.Uuid
+  animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String         @map("session_id") @db.Uuid
+  session   MedicalSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  parameter String @db.VarChar(100)
+  value     Float
+  minNorm   Float  @map("min_norm")
+  maxNorm   Float  @map("max_norm")
+
+  severity AlertSeverity @default(LOW)
+  status   AlertStatus   @default(NEW)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([animalId])
+  @@index([sessionId])
+  @@index([severity])
+  @@index([status])
+  @@map("anomaly_alerts")
+}
+
+// Severity based on how far value deviates from normal range:
+// LOW: 0-20% outside, MEDIUM: 20-50%, HIGH: 50-100%, CRITICAL: >100%
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Alert lifecycle: NEW → ACKNOWLEDGED (vet seen it) → RESOLVED (handled)
+enum AlertStatus {
+  NEW
+  ACKNOWLEDGED
+  RESOLVED
+}

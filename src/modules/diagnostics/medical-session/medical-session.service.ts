@@ -26,8 +26,12 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
       feathers: true,
       skinColor: true,
       skinHumidity: true,
+      skinSmell: true,
       skinTemp: true,
+      skinSurface: true,
       skinElasticity: true,
+      skinSensitivity: true,
+      skinPain: true,
       lymphSize: true,
       lymphShape: true,
       lymphSurface: true,
@@ -35,6 +39,7 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
       lymphTemp: true,
       lymphPain: true,
       lymphMobility: true,
+      rumenFluidState: true,
     },
   },
   bloodExam: true,
@@ -175,9 +180,18 @@ export class MedicalSessionService {
       // Clinical — skin
       skinColor: (clinicalExam as any).skinColor?.numericValue ?? null,
       skinHumidity: (clinicalExam as any).skinHumidity?.numericValue ?? null,
+      skinSmell: (clinicalExam as any).skinSmell?.numericValue ?? null,
       skinTemp: (clinicalExam as any).skinTemp?.numericValue ?? null,
+      skinSurface: (clinicalExam as any).skinSurface?.numericValue ?? null,
       skinElasticity:
         (clinicalExam as any).skinElasticity?.numericValue ?? null,
+      skinSensitivity:
+        (clinicalExam as any).skinSensitivity?.numericValue ?? null,
+      skinPain: (clinicalExam as any).skinPain?.numericValue ?? null,
+
+      // Clinical — rumen fluid
+      rumenFluidState:
+        (clinicalExam as any).rumenFluidState?.numericValue ?? null,
 
       // Clinical — lymph
       lymphSize: (clinicalExam as any).lymphSize?.numericValue ?? null,
@@ -242,10 +256,20 @@ export class MedicalSessionService {
         (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
       fecesForm: (fecesExam as any)?.fecesForm?.numericValue ?? null,
 
-      // Mucosa — from first exam (if any)
-      mucosaType: (mucosaExams?.[0] as any)?.mucosaType?.numericValue ?? null,
-      mucosaAppearance:
-        (mucosaExams?.[0] as any)?.mucosaAppearance?.numericValue ?? null,
+      // Mucosa — extract appearance for each of the 4 types
+      // MucosaType numericValue: 0=oral, 1=nasal, 2=ocular, 3=vaginal
+      mucosaOral:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 0)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaNasal:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 1)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaOcular:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 2)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaVaginal:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 3)
+          ?.mucosaAppearance?.numericValue ?? null,
     };
 
     const numericArray = Object.values(inputVector).map((v) =>
