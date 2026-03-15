@@ -5,8 +5,7 @@
 model Region {
   id Int @id @default(autoincrement())
 
-  nameRu String @unique @map("name_ru") @db.VarChar(255)
-  nameUz String @unique @map("name_uz") @db.VarChar(255)
+  name Json @db.JsonB
 
   districts District[]
 
@@ -16,8 +15,7 @@ model Region {
 model District {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu String @map("name_ru") @db.VarChar(255)
-  nameUz String @map("name_uz") @db.VarChar(255)
+  name Json @db.JsonB
 
   regionId Int    @map("region_id")
   region   Region @relation(fields: [regionId], references: [id], onDelete: Cascade)
@@ -32,8 +30,7 @@ model District {
 model VetStation {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu  String @map("name_ru") @db.VarChar(255)
-  nameUz  String @map("name_uz") @db.VarChar(255)
+  name    Json   @db.JsonB
   address String @db.VarChar(255)
 
   districtId String   @map("district_id") @db.Uuid

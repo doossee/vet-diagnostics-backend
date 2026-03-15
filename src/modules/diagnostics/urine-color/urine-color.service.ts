@@ -22,7 +22,7 @@ export class UrineColorService {
    */
   async create(data: CreateUrineColorDto) {
     return await this.prisma.urineColor.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class UrineColorService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.UrineColorOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.UrineColorInclude = {
@@ -84,7 +84,7 @@ export class UrineColorService {
   async update(id: string, data: UpdateUrineColorDto) {
     return await this.prisma.urineColor.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

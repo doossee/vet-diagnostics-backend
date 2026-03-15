@@ -22,7 +22,7 @@ export class UrineConsistencyService {
    */
   async create(data: CreateUrineConsistencyDto) {
     return await this.prisma.urineConsistency.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class UrineConsistencyService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.UrineConsistencyOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.UrineConsistencyInclude = {
@@ -84,7 +84,7 @@ export class UrineConsistencyService {
   async update(id: string, data: UpdateUrineConsistencyDto) {
     return await this.prisma.urineConsistency.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

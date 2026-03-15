@@ -22,7 +22,7 @@ export class UrineClarityService {
    */
   async create(data: CreateUrineClarityDto) {
     return await this.prisma.urineClarity.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class UrineClarityService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.UrineClarityOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.UrineClarityInclude = {
@@ -84,7 +84,7 @@ export class UrineClarityService {
   async update(id: string, data: UpdateUrineClarityDto) {
     return await this.prisma.urineClarity.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

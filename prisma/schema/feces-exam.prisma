@@ -44,9 +44,8 @@ model FecesExam {
 model FecesColor {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu       String @map("name_ru") @db.VarChar(255)
-  nameUz       String @map("name_uz") @db.VarChar(255)
-  numericValue Int    @map("numeric_value")
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
@@ -60,9 +59,8 @@ model FecesColor {
 model FecesSmell {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu       String @map("name_ru") @db.VarChar(255)
-  nameUz       String @map("name_uz") @db.VarChar(255)
-  numericValue Int    @map("numeric_value")
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
@@ -76,9 +74,8 @@ model FecesSmell {
 model FecesConsistency {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu       String @map("name_ru") @db.VarChar(255)
-  nameUz       String @map("name_uz") @db.VarChar(255)
-  numericValue Int    @map("numeric_value")
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
@@ -92,9 +89,8 @@ model FecesConsistency {
 model FecesForm {
   id String @id @default(uuid()) @db.Uuid
 
-  nameRu       String @map("name_ru") @db.VarChar(255)
-  nameUz       String @map("name_uz") @db.VarChar(255)
-  numericValue Int    @map("numeric_value")
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
 
   animalTypeId String     @map("animal_type_id") @db.Uuid
   animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)

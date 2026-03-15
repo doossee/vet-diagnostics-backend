@@ -17,7 +17,7 @@ export class AnimalTypeService {
 
   async create(data: CreateAnimalTypeDto) {
     return await this.prisma.animalType.create({
-      data,
+      data: data as any,
       include: { parent: true, children: true },
     });
   }
@@ -27,8 +27,8 @@ export class AnimalTypeService {
     const where: Prisma.AnimalTypeWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(parentId === null && { parentId: null }),
@@ -36,7 +36,7 @@ export class AnimalTypeService {
     };
     const orderBy: Prisma.AnimalTypeOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
     const include: Prisma.AnimalTypeInclude = {
       parent: true,
@@ -59,7 +59,7 @@ export class AnimalTypeService {
   async update(id: string, data: UpdateAnimalTypeDto) {
     return await this.prisma.animalType.update({
       where: { id },
-      data,
+      data: data as any,
       include: { parent: true, children: true },
     });
   }

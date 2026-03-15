@@ -22,7 +22,7 @@ export class MucosaAppearanceService {
    */
   async create(data: CreateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class MucosaAppearanceService {
       ...(mucosaTypeId && { mucosaTypeId }),
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.MucosaAppearanceOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.MucosaAppearanceInclude = {
@@ -84,7 +84,7 @@ export class MucosaAppearanceService {
   async update(id: string, data: UpdateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

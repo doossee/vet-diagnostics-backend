@@ -22,7 +22,7 @@ export class DistrictService {
    */
   async create(data: CreateDistrictDto) {
     return await this.prisma.district.create({
-      data,
+      data: data as any,
       include: { region: true },
     });
   }
@@ -38,8 +38,8 @@ export class DistrictService {
     const where: Prisma.DistrictWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(regionId && { regionId }),
@@ -47,7 +47,7 @@ export class DistrictService {
 
     const orderBy: Prisma.DistrictOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.DistrictInclude = {
@@ -84,7 +84,7 @@ export class DistrictService {
   async update(id: string, data: UpdateDistrictDto) {
     return await this.prisma.district.update({
       where: { id },
-      data,
+      data: data as any,
       include: { region: true },
     });
   }

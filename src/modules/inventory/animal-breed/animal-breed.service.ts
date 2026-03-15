@@ -16,7 +16,7 @@ export class AnimalBreedService {
   ) {}
 
   async create(data: CreateAnimalBreedDto) {
-    return await this.prisma.breed.create({ data });
+    return await this.prisma.breed.create({ data: data as any });
   }
 
   async findAll(query: AnimalBreedQueryParamsDto) {
@@ -24,14 +24,14 @@ export class AnimalBreedService {
     const where: Prisma.BreedWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
     const orderBy: Prisma.BreedOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { nameRu: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
     return await this.paginationService.paginate(
       this.prisma.breed,
@@ -45,7 +45,7 @@ export class AnimalBreedService {
   }
 
   async update(id: string, data: UpdateAnimalBreedDto) {
-    return await this.prisma.breed.update({ where: { id }, data });
+    return await this.prisma.breed.update({ where: { id }, data: data as any });
   }
 
   async delete(id: string) {

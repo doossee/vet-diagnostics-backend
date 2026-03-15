@@ -18,7 +18,7 @@ export class RegionService {
    */
   async create(data: CreateRegionDto) {
     return await this.prisma.region.create({
-      data,
+      data: data as any,
     });
   }
 
@@ -33,8 +33,8 @@ export class RegionService {
     const where: Prisma.RegionWhereInput = {
       ...(search && {
         OR: [
-          { nameRu: { contains: search, mode: 'insensitive' } },
-          { nameUz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
@@ -78,7 +78,7 @@ export class RegionService {
   async update(id: number, data: UpdateRegionDto) {
     return await this.prisma.region.update({
       where: { id },
-      data,
+      data: data as any,
     });
   }
 

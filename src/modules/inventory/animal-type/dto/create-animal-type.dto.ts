@@ -1,22 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsUUID } from 'class-validator';
+import { IsOptional, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 
 export class CreateAnimalTypeDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the animal type in Russian',
-    example: 'Крупный рогатый скот',
-  })
-  readonly nameRu: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the animal type in Uzbek',
-    example: 'Qoramol',
-  })
-  readonly nameUz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  readonly name: NameDto;
 
   @IsOptional()
   @IsUUID()

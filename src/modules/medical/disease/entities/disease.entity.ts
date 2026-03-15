@@ -1,20 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Disease } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 import { DiseaseCategoryEntity } from '../../disease-category/entities';
 
-export class DiseaseEntity implements Disease {
+export class DiseaseEntity {
   @ApiProperty({ format: 'uuid' })
   @Expose()
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Localized name', example: { ru: 'Название', uz: 'Nomi' } })
   @Expose()
-  nameRu: string;
-
-  @ApiProperty()
-  @Expose()
-  nameUz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty()
   @Expose()
