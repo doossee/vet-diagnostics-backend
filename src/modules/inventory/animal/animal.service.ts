@@ -30,7 +30,7 @@ export class AnimalService {
       select: { sexId: true },
     });
 
-    const { birthYear, birthMonth, ...rest } = data;
+    const { birthYear: _birthYear, birthMonth: _birthMonth, ...rest } = data;
     return await this.prisma.animal.create({
       data: {
         ...rest,
