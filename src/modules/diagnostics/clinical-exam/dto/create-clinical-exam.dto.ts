@@ -1,12 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateClinicalExamDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   animalId: string;
 
-  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000', description: 'Medical session ID' })
+  @ApiPropertyOptional({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Medical session ID',
+  })
   @IsUUID()
   @IsOptional()
   sessionId?: string;
@@ -89,35 +92,35 @@ export class CreateClinicalExamDto {
   @IsOptional()
   skinHumidityId?: string;
 
-  @ApiPropertyOptional({ example: 'Normal' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSmell?: string;
+  skinSmellId?: string;
 
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   @IsOptional()
   skinTempId?: string;
 
-  @ApiPropertyOptional({ example: 'Smooth' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSurface?: string;
+  skinSurfaceId?: string;
 
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   @IsOptional()
   skinElasticityId?: string;
 
-  @ApiPropertyOptional({ example: 'Normal' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinSensitivity?: string;
+  skinSensitivityId?: string;
 
-  @ApiPropertyOptional({ example: 'None' })
-  @IsString()
+  @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsUUID()
   @IsOptional()
-  skinPain?: string;
+  skinPainId?: string;
 
   // --- Lymph Nodes ---
   @ApiPropertyOptional({ example: '123e4567-e89b-12d3-a456-426614174000' })
@@ -160,7 +163,7 @@ export class CreateClinicalExamDto {
   @IsOptional()
   rumenInfusoriaCount?: number;
 
-  @IsString()
+  @IsUUID()
   @IsOptional()
-  rumenFluidState?: string;
+  rumenFluidStateId?: string;
 }

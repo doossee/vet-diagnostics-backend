@@ -6,7 +6,7 @@ import {
   UpdateFecesConsistencyDto,
   FecesConsistencyQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class FecesConsistencyService {
@@ -22,7 +22,7 @@ export class FecesConsistencyService {
    */
   async create(data: CreateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class FecesConsistencyService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.FecesConsistencyOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.FecesConsistencyInclude = {
@@ -84,7 +84,7 @@ export class FecesConsistencyService {
   async update(id: string, data: UpdateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

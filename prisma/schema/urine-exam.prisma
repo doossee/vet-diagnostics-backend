@@ -1,0 +1,114 @@
+// =============================================================================
+// URINE EXAM & LOOKUP TABLES
+// =============================================================================
+
+model UrineExam {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String? @map("animal_id") @db.Uuid
+  animal   Animal? @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  urineColorId String?     @map("urine_color_id") @db.Uuid
+  urineColor   UrineColor? @relation(fields: [urineColorId], references: [id], onDelete: Restrict)
+
+  amount Float?
+
+  urineClarityId String?       @map("urine_clarity_id") @db.Uuid
+  urineClarity   UrineClarity? @relation(fields: [urineClarityId], references: [id], onDelete: Restrict)
+
+  urineConsistencyId String?           @map("urine_consistency_id") @db.Uuid
+  urineConsistency   UrineConsistency? @relation(fields: [urineConsistencyId], references: [id], onDelete: Restrict)
+
+  urineSmellId String?     @map("urine_smell_id") @db.Uuid
+  urineSmell   UrineSmell? @relation(fields: [urineSmellId], references: [id], onDelete: Restrict)
+
+  ph           Float?
+  acetone      Float?
+  protein      Float?
+  bilirubin    Float?
+  urobilinogen Float?
+  sugar        Float?
+
+  leukocytes      Float?
+  epithelium      Float?
+  microbialBodies Float? @map("microbial_bodies")
+  erythrocytes    Float?
+  saltCrystals    Float? @map("salt_crystals")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([animalId])
+  @@index([urineColorId])
+  @@index([urineClarityId])
+  @@index([urineConsistencyId])
+  @@index([urineSmellId])
+  @@map("urine_analyses")
+}
+
+// =============================================================================
+// URINE LOOKUP TABLES
+// =============================================================================
+
+model UrineColor {
+  id String @id @default(uuid()) @db.Uuid
+
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  urineTests UrineExam[]
+
+  @@index([animalTypeId])
+  @@map("urine_colors")
+}
+
+model UrineSmell {
+  id String @id @default(uuid()) @db.Uuid
+
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  urineAnalyses UrineExam[]
+
+  @@index([animalTypeId])
+  @@map("urine_smells")
+}
+
+model UrineClarity {
+  id String @id @default(uuid()) @db.Uuid
+
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  urineAnalyses UrineExam[]
+
+  @@index([animalTypeId])
+  @@map("urine_clarities")
+}
+
+model UrineConsistency {
+  id String @id @default(uuid()) @db.Uuid
+
+  name         Json @db.JsonB
+  numericValue Int  @map("numeric_value")
+
+  animalTypeId String     @map("animal_type_id") @db.Uuid
+  animalType   AnimalType @relation(fields: [animalTypeId], references: [id], onDelete: Restrict)
+
+  urineAnalyses UrineExam[]
+
+  @@index([animalTypeId])
+  @@map("urine_consistencies")
+}

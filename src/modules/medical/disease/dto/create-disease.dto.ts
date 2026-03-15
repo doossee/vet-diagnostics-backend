@@ -1,16 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 
 export class CreateDiseaseDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'Стоматит' })
-  readonly name_ru: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'Stomatit' })
-  readonly name_uz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  readonly name: NameDto;
 
   @IsUUID()
   @IsNotEmpty()

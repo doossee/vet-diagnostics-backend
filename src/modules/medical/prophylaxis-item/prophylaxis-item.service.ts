@@ -6,7 +6,7 @@ import {
   ProphylaxisItemQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ProphylaxisItemService {
@@ -16,7 +16,7 @@ export class ProphylaxisItemService {
   ) {}
 
   async create(data: CreateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.create({ data });
+    return await this.prisma.prophylaxisItem.create({ data: data as any });
   }
 
   async findAll(query: ProphylaxisItemQueryParamsDto) {
@@ -24,15 +24,15 @@ export class ProphylaxisItemService {
     const where: Prisma.ProphylaxisItemWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(type && { type }),
     };
     const orderBy: Prisma.ProphylaxisItemOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
     return await this.paginationService.paginate(
       this.prisma.prophylaxisItem,
@@ -48,7 +48,10 @@ export class ProphylaxisItemService {
   }
 
   async update(id: string, data: UpdateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.update({ where: { id }, data });
+    return await this.prisma.prophylaxisItem.update({
+      where: { id },
+      data: data as any,
+    });
   }
 
   async delete(id: string) {

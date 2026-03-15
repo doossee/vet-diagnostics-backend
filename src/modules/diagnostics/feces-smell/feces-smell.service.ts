@@ -6,7 +6,7 @@ import {
   UpdateFecesSmellDto,
   FecesSmellQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class FecesSmellService {
@@ -22,7 +22,7 @@ export class FecesSmellService {
    */
   async create(data: CreateFecesSmellDto) {
     return await this.prisma.fecesSmell.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class FecesSmellService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.FecesSmellOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.FecesSmellInclude = {
@@ -84,7 +84,7 @@ export class FecesSmellService {
   async update(id: string, data: UpdateFecesSmellDto) {
     return await this.prisma.fecesSmell.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

@@ -48,8 +48,8 @@ describe('RegionService', () => {
   describe('create', () => {
     it('should create a new region', async () => {
       const createRegionDto = {
-        name_ru: 'Ташкент',
-        name_uz: 'Toshkent',
+        nameRu: 'Ташкент',
+        nameUz: 'Toshkent',
       };
 
       const mockRegion = {
@@ -77,8 +77,8 @@ describe('RegionService', () => {
       };
 
       const mockRegions = [
-        { id: 1, name_ru: 'Ташкент', name_uz: 'Toshkent' },
-        { id: 2, name_ru: 'Самарканд', name_uz: 'Samarqand' },
+        { id: 1, nameRu: 'Ташкент', nameUz: 'Toshkent' },
+        { id: 2, nameRu: 'Самарканд', nameUz: 'Samarqand' },
       ];
 
       const mockPaginatedResult = {
@@ -113,7 +113,7 @@ describe('RegionService', () => {
         perPage: 10,
       };
 
-      const mockRegions = [{ id: 1, name_ru: 'Ташкент', name_uz: 'Toshkent' }];
+      const mockRegions = [{ id: 1, nameRu: 'Ташкент', nameUz: 'Toshkent' }];
 
       const mockPaginatedResult = {
         data: mockRegions,
@@ -137,8 +137,8 @@ describe('RegionService', () => {
     it('should return a region by id', async () => {
       const mockRegion = {
         id: 1,
-        name_ru: 'Ташкент',
-        name_uz: 'Toshkent',
+        nameRu: 'Ташкент',
+        nameUz: 'Toshkent',
       };
 
       mockPrismaService.region.findUniqueOrThrow.mockResolvedValue(mockRegion);
@@ -156,8 +156,8 @@ describe('RegionService', () => {
   describe('update', () => {
     it('should update a region', async () => {
       const updateData = {
-        name_ru: 'Ташкент область',
-        name_uz: 'Toshkent viloyati',
+        nameRu: 'Ташкент область',
+        nameUz: 'Toshkent viloyati',
       };
 
       const mockUpdatedRegion = {
@@ -181,8 +181,8 @@ describe('RegionService', () => {
     it('should delete a region', async () => {
       const mockRegion = {
         id: 1,
-        name_ru: 'Ташкент',
-        name_uz: 'Toshkent',
+        nameRu: 'Ташкент',
+        nameUz: 'Toshkent',
       };
 
       mockPrismaService.region.delete.mockResolvedValue(mockRegion);

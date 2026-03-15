@@ -39,11 +39,11 @@ describe('ProphylaxisDetailService', () => {
     it('should create a record', async () => {
       const dto = { name: 'Test' };
       const mockRecord = { id: 'uuid', ...dto };
-      
+
       mockPrismaService.prophylaxisDetail.create.mockResolvedValue(mockRecord);
-      
+
       const result = await service.create(dto as any);
-      
+
       expect(result).toEqual(mockRecord);
     });
   });
@@ -51,10 +51,12 @@ describe('ProphylaxisDetailService', () => {
   describe('findOne', () => {
     it('should return a record', async () => {
       const mockRecord = { id: 'uuid', name: 'Test' };
-      mockPrismaService.prophylaxisDetail.findUniqueOrThrow.mockResolvedValue(mockRecord);
-      
+      mockPrismaService.prophylaxisDetail.findUniqueOrThrow.mockResolvedValue(
+        mockRecord,
+      );
+
       const result = await service.findOne('uuid');
-      
+
       expect(result).toEqual(mockRecord);
     });
   });
@@ -63,11 +65,11 @@ describe('ProphylaxisDetailService', () => {
     it('should update a record', async () => {
       const dto = { name: 'Updated' };
       const mockRecord = { id: 'uuid', ...dto };
-      
+
       mockPrismaService.prophylaxisDetail.update.mockResolvedValue(mockRecord);
-      
+
       const result = await service.update('uuid', dto as any);
-      
+
       expect(result).toEqual(mockRecord);
     });
   });
@@ -76,9 +78,9 @@ describe('ProphylaxisDetailService', () => {
     it('should delete a record', async () => {
       const mockRecord = { id: 'uuid' };
       mockPrismaService.prophylaxisDetail.delete.mockResolvedValue(mockRecord);
-      
+
       const result = await service.delete('uuid');
-      
+
       expect(result).toEqual(mockRecord);
     });
   });

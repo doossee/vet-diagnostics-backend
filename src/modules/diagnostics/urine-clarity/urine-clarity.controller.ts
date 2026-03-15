@@ -24,7 +24,9 @@ import {
   UrineClarityQueryParamsDto,
 } from './dto';
 import { UrineClarityEntity, PaginatedUrineClarityEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('urine-clarities')
 @Controller('urine-clarities')
 export class UrineClarityController {

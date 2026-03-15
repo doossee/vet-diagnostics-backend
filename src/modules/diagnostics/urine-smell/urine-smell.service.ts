@@ -6,7 +6,7 @@ import {
   UpdateUrineSmellDto,
   UrineSmellQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class UrineSmellService {
@@ -22,7 +22,7 @@ export class UrineSmellService {
    */
   async create(data: CreateUrineSmellDto) {
     return await this.prisma.urineSmell.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class UrineSmellService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.UrineSmellOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.UrineSmellInclude = {
@@ -84,7 +84,7 @@ export class UrineSmellService {
   async update(id: string, data: UpdateUrineSmellDto) {
     return await this.prisma.urineSmell.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }

@@ -27,7 +27,9 @@ import {
   FecesConsistencyEntity,
   PaginatedFecesConsistencyEntity,
 } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('feces-consistencies')
 @Controller('feces-consistencies')
 export class FecesConsistencyController {

@@ -24,7 +24,9 @@ import {
   FecesColorQueryParamsDto,
 } from './dto';
 import { FecesColorEntity, PaginatedFecesColorEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('feces-colors')
 @Controller('feces-colors')
 export class FecesColorController {

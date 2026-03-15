@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsUUID, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 
 export class CreateFecesSmellDto {
-  @ApiProperty({ example: 'Зловонный' })
-  @IsString()
-  name_ru: string;
-
-  @ApiProperty({ example: "Badbo'y" })
-  @IsString()
-  name_uz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  name: NameDto;
 
   @ApiProperty({ example: 1, description: 'Numeric value for ML mapping' })
   @IsInt()
@@ -18,4 +17,3 @@ export class CreateFecesSmellDto {
   @IsUUID()
   animalTypeId: string;
 }
-

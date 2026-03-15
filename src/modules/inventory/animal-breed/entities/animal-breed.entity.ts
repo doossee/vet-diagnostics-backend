@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Breed } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
-export class AnimalBreedEntity implements Breed {
+export class AnimalBreedEntity {
   @ApiProperty({
     description: 'Unique identifier',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
@@ -12,16 +11,9 @@ export class AnimalBreedEntity implements Breed {
   id: string;
 
   @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Голштинская порода',
+    description: 'Localized name',
+    example: { ru: 'Название', uz: 'Nomi' },
   })
   @Expose()
-  name_ru: string;
-
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Holstein',
-  })
-  @Expose()
-  name_uz: string;
+  name: { ru: string; uz: string };
 }

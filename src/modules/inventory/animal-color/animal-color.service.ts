@@ -6,7 +6,7 @@ import {
   AnimalColorQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class AnimalColorService {
@@ -17,7 +17,7 @@ export class AnimalColorService {
 
   async create(data: CreateAnimalColorDto) {
     return await this.prisma.color.create({
-      data,
+      data: data as any,
     });
   }
 
@@ -28,15 +28,15 @@ export class AnimalColorService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.ColorOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     return await this.paginationService.paginate(
@@ -55,7 +55,7 @@ export class AnimalColorService {
   async update(id: string, data: UpdateAnimalColorDto) {
     return await this.prisma.color.update({
       where: { id },
-      data,
+      data: data as any,
     });
   }
 

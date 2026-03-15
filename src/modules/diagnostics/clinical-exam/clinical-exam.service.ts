@@ -6,7 +6,7 @@ import {
   UpdateClinicalExamDto,
   ClinicalExamQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 const clinicalExamInclude: Prisma.ClinicalExamInclude = {
   animal: true,
@@ -21,8 +21,13 @@ const clinicalExamInclude: Prisma.ClinicalExamInclude = {
   feathers: true,
   skinColor: true,
   skinHumidity: true,
+  skinSmell: true,
   skinTemp: true,
+  skinSurface: true,
   skinElasticity: true,
+  skinSensitivity: true,
+  skinPain: true,
+  rumenFluidState: true,
   lymphSize: true,
   lymphShape: true,
   lymphSurface: true,
@@ -47,7 +52,7 @@ export class ClinicalExamService {
   }
 
   async findAll(query: ClinicalExamQueryParamsDto) {
-    const { page, perPage, search, byId, animalId } = query;
+    const { page, perPage, byId, animalId } = query;
 
     const where: Prisma.ClinicalExamWhereInput = {
       ...(animalId && { animalId }),

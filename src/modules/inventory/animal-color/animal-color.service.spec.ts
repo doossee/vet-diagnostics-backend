@@ -37,7 +37,7 @@ describe('AnimalColorService', () => {
 
   describe('create', () => {
     it('should create a color', async () => {
-      const dto = { name_ru: 'Белый', name_uz: 'Oq' };
+      const dto = { nameRu: 'Белый', nameUz: 'Oq' };
       const mockColor = { id: 'uuid', ...dto };
 
       mockPrismaService.color.create.mockResolvedValue(mockColor);
@@ -51,7 +51,7 @@ describe('AnimalColorService', () => {
   describe('findAll', () => {
     it('should return paginated colors', async () => {
       const mockResult = {
-        data: [{ id: 'uuid', name_ru: 'Белый', name_uz: 'Oq' }],
+        data: [{ id: 'uuid', nameRu: 'Белый', nameUz: 'Oq' }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
 
@@ -65,7 +65,7 @@ describe('AnimalColorService', () => {
 
   describe('findOne', () => {
     it('should return a color', async () => {
-      const mockColor = { id: 'uuid', name_ru: 'Белый' };
+      const mockColor = { id: 'uuid', nameRu: 'Белый' };
       mockPrismaService.color.findUniqueOrThrow.mockResolvedValue(mockColor);
 
       const result = await service.findOne('uuid');
@@ -76,7 +76,7 @@ describe('AnimalColorService', () => {
 
   describe('update', () => {
     it('should update a color', async () => {
-      const dto = { name_ru: 'Updated' };
+      const dto = { nameRu: 'Updated' };
       const mockColor = { id: 'uuid', ...dto };
 
       mockPrismaService.color.update.mockResolvedValue(mockColor);

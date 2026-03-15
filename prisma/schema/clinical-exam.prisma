@@ -1,0 +1,358 @@
+// =============================================================================
+// CLINICAL EXAM & LOOKUP TABLES
+// =============================================================================
+
+// Clinical / General Inspection
+model ClinicalExam {
+  id String @id @default(uuid()) @db.Uuid
+
+  animalId String @map("animal_id") @db.Uuid
+  animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  sessionId String?         @unique @map("session_id") @db.Uuid
+  session   MedicalSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // --- General ---
+  pulse           Int? // puls
+  rumination      Int? // ruminatsiya
+  temperature     Float? // temperatura
+  respiratoryRate Float? @map("respiratory_rate") // nafas soni
+
+  // --- Habitus ---
+  bodyTypeId String?   @map("body_type_id") @db.Uuid
+  bodyType   BodyType? @relation(fields: [bodyTypeId], references: [id], onDelete: Restrict)
+
+  obesityId String?      @map("obesity_id") @db.Uuid
+  obesity   ObesityType? @relation(fields: [obesityId], references: [id], onDelete: Restrict)
+
+  bodyPositionId String?       @map("body_position_id") @db.Uuid
+  bodyPosition   BodyPosition? @relation(fields: [bodyPositionId], references: [id], onDelete: Restrict)
+
+  constitutionId String?       @map("constitution_id") @db.Uuid
+  constitution   Constitution? @relation(fields: [constitutionId], references: [id], onDelete: Restrict)
+
+  temperamentId String?      @map("temperament_id") @db.Uuid
+  temperament   Temperament? @relation(fields: [temperamentId], references: [id], onDelete: Restrict)
+
+  // --- Skin Cover (Teri qoplamasi) ---
+  woolId String?   @map("wool_id") @db.Uuid
+  wool   WoolType? @relation(fields: [woolId], references: [id], onDelete: Restrict)
+
+  downId String?   @map("down_id") @db.Uuid
+  down   DownType? @relation(fields: [downId], references: [id], onDelete: Restrict)
+
+  hairId String?   @map("hair_id") @db.Uuid
+  hair   HairType? @relation(fields: [hairId], references: [id], onDelete: Restrict)
+
+  feathersId String?      @map("feathers_id") @db.Uuid
+  feathers   FeatherType? @relation(fields: [feathersId], references: [id], onDelete: Restrict)
+
+  // --- Skin (Teri) ---
+  skinColorId String?    @map("skin_color_id") @db.Uuid
+  skinColor   SkinColor? @relation(fields: [skinColorId], references: [id], onDelete: Restrict)
+
+  skinHumidityId String?       @map("skin_humidity_id") @db.Uuid
+  skinHumidity   SkinHumidity? @relation(fields: [skinHumidityId], references: [id], onDelete: Restrict)
+
+  skinSmellId String?    @map("skin_smell_id") @db.Uuid
+  skinSmell   SkinSmell? @relation(fields: [skinSmellId], references: [id], onDelete: Restrict)
+
+  skinTemp   SkinTemp? @relation(fields: [skinTempId], references: [id], onDelete: Restrict)
+  skinTempId String?   @map("skin_temp_id") @db.Uuid
+
+  skinSurfaceId String?      @map("skin_surface_id") @db.Uuid
+  skinSurface   SkinSurface? @relation(fields: [skinSurfaceId], references: [id], onDelete: Restrict)
+
+  skinElasticityId String?         @map("skin_elasticity_id") @db.Uuid
+  skinElasticity   SkinElasticity? @relation(fields: [skinElasticityId], references: [id], onDelete: Restrict)
+
+  skinSensitivityId String?          @map("skin_sensitivity_id") @db.Uuid
+  skinSensitivity   SkinSensitivity? @relation(fields: [skinSensitivityId], references: [id], onDelete: Restrict)
+
+  skinPainId String?   @map("skin_pain_id") @db.Uuid
+  skinPain   SkinPain? @relation(fields: [skinPainId], references: [id], onDelete: Restrict)
+
+  // --- Lymph Nodes (Limfa tugunlari) ---
+  lymphSizeId String?    @map("lymph_size_id") @db.Uuid
+  lymphSize   LymphSize? @relation(fields: [lymphSizeId], references: [id], onDelete: Restrict)
+
+  lymphShapeId String?     @map("lymph_shape_id") @db.Uuid
+  lymphShape   LymphShape? @relation(fields: [lymphShapeId], references: [id], onDelete: Restrict)
+
+  lymphSurfaceId String?       @map("lymph_surface_id") @db.Uuid
+  lymphSurface   LymphSurface? @relation(fields: [lymphSurfaceId], references: [id], onDelete: Restrict)
+
+  lymphConsistencyId String?           @map("lymph_consistency_id") @db.Uuid
+  lymphConsistency   LymphConsistency? @relation(fields: [lymphConsistencyId], references: [id], onDelete: Restrict)
+
+  lymphTempId String?    @map("lymph_temp_id") @db.Uuid
+  lymphTemp   LymphTemp? @relation(fields: [lymphTempId], references: [id], onDelete: Restrict)
+
+  lymphPainId String?    @map("lymph_pain_id") @db.Uuid
+  lymphPain   LymphPain? @relation(fields: [lymphPainId], references: [id], onDelete: Restrict)
+
+  lymphMobilityId String?        @map("lymph_mobility_id") @db.Uuid
+  lymphMobility   LymphMobility? @relation(fields: [lymphMobilityId], references: [id], onDelete: Restrict)
+
+  // --- Rumen Fluid ---
+  rumenInfusoriaCount Float? @map("rumen_infusoria_count")
+
+  rumenFluidStateId String?          @map("rumen_fluid_state_id") @db.Uuid
+  rumenFluidState   RumenFluidState? @relation(fields: [rumenFluidStateId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([animalId])
+  @@index([bodyTypeId])
+  @@index([obesityId])
+  @@index([bodyPositionId])
+  @@index([constitutionId])
+  @@index([temperamentId])
+  @@map("clinical_analyses")
+}
+
+// =============================================================================
+// HABITUS LOOKUP TABLES
+// =============================================================================
+
+model BodyType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("body_types")
+}
+
+model ObesityType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("obesity_types")
+}
+
+model BodyPosition {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("body_positions")
+}
+
+model Constitution {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("constitutions")
+}
+
+model Temperament {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("temperaments")
+}
+
+// =============================================================================
+// SKIN COVER LOOKUP TABLES
+// =============================================================================
+
+model WoolType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("wool_types")
+}
+
+model DownType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("down_types")
+}
+
+model HairType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("hair_types")
+}
+
+model FeatherType {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("feather_types")
+}
+
+// =============================================================================
+// SKIN LOOKUP TABLES
+// =============================================================================
+
+model SkinColor {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_colors")
+}
+
+model SkinHumidity {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_humidities")
+}
+
+model SkinTemp {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_temps")
+}
+
+model SkinElasticity {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_elasticities")
+}
+
+model SkinSmell {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_smells")
+}
+
+model SkinSurface {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_surfaces")
+}
+
+model SkinSensitivity {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_sensitivities")
+}
+
+model SkinPain {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("skin_pains")
+}
+
+// =============================================================================
+// RUMEN FLUID LOOKUP TABLE
+// =============================================================================
+
+model RumenFluidState {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("rumen_fluid_states")
+}
+
+// =============================================================================
+// LYMPH NODE LOOKUP TABLES
+// =============================================================================
+
+model LymphSize {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_sizes")
+}
+
+model LymphShape {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_shapes")
+}
+
+model LymphSurface {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_surfaces")
+}
+
+model LymphConsistency {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_consistencies")
+}
+
+model LymphTemp {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_temps")
+}
+
+model LymphPain {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_pains")
+}
+
+model LymphMobility {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         Json           @db.JsonB
+  numericValue Int            @unique @map("numeric_value")
+  clinicalExams ClinicalExam[]
+
+  @@map("lymph_mobilities")
+}

@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, IsIn, IsInt } from 'class-validator';
+import { IsOptional, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BaseQueryParamsDto } from 'src/shared/dto';
 

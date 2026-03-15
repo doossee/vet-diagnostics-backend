@@ -24,7 +24,9 @@ import {
   ClinicalExamQueryParamsDto,
 } from './dto';
 import { ClinicalExamEntity, PaginatedClinicalExamEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('clinical-exams')
 @Controller('clinical-exams')
 export class ClinicalExamController {

@@ -23,11 +23,10 @@ import {
   UpdateAnimalColorDto,
   AnimalColorQueryParamsDto,
 } from './dto';
-import {
-  AnimalColorEntity,
-  PaginatedAnimalColorEntity,
-} from './entities';
+import { AnimalColorEntity, PaginatedAnimalColorEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('colors')
 @Controller('colors')
 export class AnimalColorController {

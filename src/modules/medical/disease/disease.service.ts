@@ -6,7 +6,7 @@ import {
   DiseaseQueryParamsDto,
 } from './dto';
 import { PaginationService } from 'src/shared/services';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class DiseaseService {
@@ -17,7 +17,7 @@ export class DiseaseService {
 
   async create(data: CreateDiseaseDto) {
     return await this.prisma.disease.create({
-      data,
+      data: data as any,
       include: { diseaseCategory: true },
     });
   }
@@ -27,15 +27,15 @@ export class DiseaseService {
     const where: Prisma.DiseaseWhereInput = {
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
       ...(diseaseCategoryId && { diseaseCategoryId }),
     };
     const orderBy: Prisma.DiseaseOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
     const include: Prisma.DiseaseInclude = { diseaseCategory: true };
     return await this.paginationService.paginate(
@@ -55,7 +55,7 @@ export class DiseaseService {
   async update(id: string, data: UpdateDiseaseDto) {
     return await this.prisma.disease.update({
       where: { id },
-      data,
+      data: data as any,
       include: { diseaseCategory: true },
     });
   }

@@ -24,7 +24,9 @@ import {
   MucosaExamQueryParamsDto,
 } from './dto';
 import { MucosaExamEntity, PaginatedMucosaExamEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('mucosa-exams')
 @Controller('mucosa-exams')
 export class MucosaExamController {

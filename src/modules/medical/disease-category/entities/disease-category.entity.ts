@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { DiseaseCategory } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
-export class DiseaseCategoryEntity implements DiseaseCategory {
+export class DiseaseCategoryEntity {
   @ApiProperty({
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
     format: 'uuid',
@@ -10,13 +9,12 @@ export class DiseaseCategoryEntity implements DiseaseCategory {
   @Expose()
   id: string;
 
-  @ApiProperty({ example: 'Болезни пищеварительной системы' })
+  @ApiProperty({
+    description: 'Localized name',
+    example: { ru: 'Название', uz: 'Nomi' },
+  })
   @Expose()
-  name_ru: string;
-
-  @ApiProperty({ example: 'Hazm qilish tizimi kasalliklari' })
-  @Expose()
-  name_uz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',

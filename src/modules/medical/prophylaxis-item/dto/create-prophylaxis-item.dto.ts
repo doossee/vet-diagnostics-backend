@@ -1,17 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
+import { IsEnum, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NameDto } from 'src/shared/dto';
 import { ProphylaxisType } from 'src/shared/enums';
 
 export class CreateProphylaxisItemDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'Вакцина против бруцеллёза' })
-  readonly name_ru: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'Brucella vaksina' })
-  readonly name_uz: string;
+  @ValidateNested()
+  @Type(() => NameDto)
+  @ApiProperty({ type: NameDto, description: 'Localized name' })
+  readonly name: NameDto;
 
   @IsEnum(ProphylaxisType)
   @ApiProperty({ enum: ProphylaxisType, example: 'VACCINE' })

@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesForm } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
-export class FecesFormEntity implements FecesForm {
+export class FecesFormEntity {
   @ApiProperty({
     description: 'Unique identifier',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -11,18 +10,11 @@ export class FecesFormEntity implements FecesForm {
   id: string;
 
   @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Оформленный',
+    description: 'Localized name',
+    example: { ru: 'Название', uz: 'Nomi' },
   })
   @Expose()
-  name_ru: string;
-
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Shakllangan',
-  })
-  @Expose()
-  name_uz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',
@@ -37,4 +29,3 @@ export class FecesFormEntity implements FecesForm {
   @Expose()
   animalTypeId: string;
 }
-

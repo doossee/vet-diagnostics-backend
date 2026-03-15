@@ -3,7 +3,7 @@ import {
   ProphylaxisType,
   UserRole,
   UserGender,
-} from '@prisma/client';
+} from './src/generated/prisma/client';
 
 console.log('PrismaClient:', PrismaClient);
 console.log('ProphylaxisType:', ProphylaxisType);

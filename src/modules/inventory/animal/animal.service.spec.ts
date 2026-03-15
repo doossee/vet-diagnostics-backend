@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { AnimalService } from './animal.service';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { PaginationService } from 'src/shared/services';
-import { AnimalSex } from 'src/shared/enums';
 
 describe('AnimalService', () => {
   let service: AnimalService;
@@ -34,6 +34,10 @@ describe('AnimalService', () => {
           provide: PaginationService,
           useValue: mockPaginationService,
         },
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -50,8 +54,9 @@ describe('AnimalService', () => {
     it('should create a new animal', async () => {
       const createAnimalDto = {
         arrivalDate: '2024-01-15T00:00:00Z',
+        animalNameCode: 'A-001',
         age: 12,
-        sex: AnimalSex.FEMALE,
+        sexId: 'sex-id',
         farmerId: 'farmer-id',
         animalTypeId: 'type-id',
         animalBreedId: 'breed-id',
@@ -61,8 +66,9 @@ describe('AnimalService', () => {
       const mockAnimal = {
         id: 'animal-id',
         arrivalDate: new Date(createAnimalDto.arrivalDate),
+        animalNameCode: createAnimalDto.animalNameCode,
         age: createAnimalDto.age,
-        sex: createAnimalDto.sex,
+        sexId: createAnimalDto.sexId,
         farmerId: createAnimalDto.farmerId,
         animalTypeId: createAnimalDto.animalTypeId,
         animalBreedId: createAnimalDto.animalBreedId,
@@ -79,13 +85,13 @@ describe('AnimalService', () => {
         data: expect.objectContaining({
           arrivalDate: expect.any(Date),
           age: 12,
-          sex: AnimalSex.FEMALE,
         }),
         include: {
+          sex: true,
+          farmer: true,
+          animalType: true,
           animalBreed: true,
           animalColor: true,
-          animalType: true,
-          farmer: true,
         },
       });
       expect(result).toEqual(mockAnimal);
@@ -103,13 +109,13 @@ describe('AnimalService', () => {
         {
           id: 'animal-1',
           age: 12,
-          sex: AnimalSex.FEMALE,
+          sexId: 'sex-id-1',
           arrivalDate: new Date(),
         },
         {
           id: 'animal-2',
           age: 24,
-          sex: AnimalSex.MALE,
+          sexId: 'sex-id-2',
           arrivalDate: new Date(),
         },
       ];
@@ -131,48 +137,6 @@ describe('AnimalService', () => {
       expect(paginationService.paginate).toHaveBeenCalled();
       expect(result.data).toHaveLength(2);
     });
-
-    it('should filter animals by sex', async () => {
-      const queryParams = {
-        page: 1,
-        perPage: 10,
-        sex: AnimalSex.FEMALE,
-      };
-
-      const mockAnimals = [
-        {
-          id: 'animal-1',
-          age: 12,
-          sex: AnimalSex.FEMALE,
-          arrivalDate: new Date(),
-        },
-      ];
-
-      const mockPaginatedResult = {
-        data: mockAnimals,
-        meta: {
-          page: 1,
-          perPage: 10,
-          total: 1,
-          totalPages: 1,
-        },
-      };
-
-      mockPaginationService.paginate.mockResolvedValue(mockPaginatedResult);
-
-      const result = await service.findAll(queryParams as any);
-
-      expect(paginationService.paginate).toHaveBeenCalledWith(
-        prismaService.animal,
-        expect.objectContaining({
-          where: expect.objectContaining({
-            sex: AnimalSex.FEMALE,
-          }),
-        }),
-        { page: 1, perPage: 10 },
-      );
-      expect(result.data).toHaveLength(1);
-    });
   });
 
   describe('findOne', () => {
@@ -180,7 +144,7 @@ describe('AnimalService', () => {
       const mockAnimal = {
         id: 'animal-id',
         age: 12,
-        sex: AnimalSex.FEMALE,
+        sexId: 'sex-id',
         arrivalDate: new Date(),
       };
 
@@ -191,10 +155,11 @@ describe('AnimalService', () => {
       expect(prismaService.animal.findUniqueOrThrow).toHaveBeenCalledWith({
         where: { id: 'animal-id' },
         include: {
+          sex: true,
+          farmer: true,
+          animalType: true,
           animalBreed: true,
           animalColor: true,
-          animalType: true,
-          farmer: true,
         },
       });
       expect(result).toEqual(mockAnimal);
@@ -205,7 +170,6 @@ describe('AnimalService', () => {
     it('should update an animal', async () => {
       const updateData = {
         age: 24,
-        sex: AnimalSex.MALE,
       };
 
       const mockUpdatedAnimal = {
@@ -222,10 +186,11 @@ describe('AnimalService', () => {
         where: { id: 'animal-id' },
         data: updateData,
         include: {
+          sex: true,
+          farmer: true,
+          animalType: true,
           animalBreed: true,
           animalColor: true,
-          animalType: true,
-          farmer: true,
         },
       });
       expect(result.age).toBe(24);
@@ -237,7 +202,7 @@ describe('AnimalService', () => {
       const mockAnimal = {
         id: 'animal-id',
         age: 12,
-        sex: AnimalSex.FEMALE,
+        sexId: 'sex-id',
       };
 
       mockPrismaService.animal.delete.mockResolvedValue(mockAnimal);

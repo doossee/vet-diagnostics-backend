@@ -23,7 +23,9 @@ import {
   AnimalTypeQueryParamsDto,
 } from './dto';
 import { AnimalTypeEntity, PaginatedAnimalTypeEntity } from './entities';
+import { IsAuthenticated } from 'src/shared/decorators';
 
+@IsAuthenticated()
 @ApiTags('animal-types')
 @Controller('animal-types')
 export class AnimalTypeController {

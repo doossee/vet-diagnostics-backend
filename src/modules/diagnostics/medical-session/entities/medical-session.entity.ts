@@ -1,13 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MedicalSession, SessionStatus } from '@prisma/client';
+import { MedicalSession, SessionStatus } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class MedicalSessionEntity implements MedicalSession {
-  @ApiProperty({ description: 'Unique identifier', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   id: string;
 
-  @ApiProperty({ description: 'Animal ID', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Animal ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   animalId: string;
 
@@ -19,7 +25,10 @@ export class MedicalSessionEntity implements MedicalSession {
   @Expose()
   date: Date;
 
-  @ApiProperty({ description: 'Session status', enum: ['DRAFT', 'READY', 'SUBMITTED'] })
+  @ApiProperty({
+    description: 'Session status',
+    enum: ['DRAFT', 'READY', 'SUBMITTED'],
+  })
   @Expose()
   status: SessionStatus;
 

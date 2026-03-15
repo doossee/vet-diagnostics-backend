@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FecesColor } from '@prisma/client';
 import { Expose } from 'class-transformer';
 
-export class FecesColorEntity implements FecesColor {
+export class FecesColorEntity {
   @ApiProperty({
     description: 'Unique identifier',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -11,18 +10,11 @@ export class FecesColorEntity implements FecesColor {
   id: string;
 
   @ApiProperty({
-    description: 'Name in Russian',
-    example: 'Коричневый',
+    description: 'Localized name',
+    example: { ru: 'Название', uz: 'Nomi' },
   })
   @Expose()
-  name_ru: string;
-
-  @ApiProperty({
-    description: 'Name in Uzbek',
-    example: 'Jigarrang',
-  })
-  @Expose()
-  name_uz: string;
+  name: { ru: string; uz: string };
 
   @ApiProperty({
     description: 'Numeric value for ML mapping',
@@ -37,4 +29,3 @@ export class FecesColorEntity implements FecesColor {
   @Expose()
   animalTypeId: string;
 }
-

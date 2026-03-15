@@ -6,7 +6,7 @@ import {
   UpdateMedicalSessionDto,
   MedicalSessionQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 
@@ -26,8 +26,12 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
       feathers: true,
       skinColor: true,
       skinHumidity: true,
+      skinSmell: true,
       skinTemp: true,
+      skinSurface: true,
       skinElasticity: true,
+      skinSensitivity: true,
+      skinPain: true,
       lymphSize: true,
       lymphShape: true,
       lymphSurface: true,
@@ -35,6 +39,7 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
       lymphTemp: true,
       lymphPain: true,
       lymphMobility: true,
+      rumenFluidState: true,
     },
   },
   bloodExam: true,
@@ -132,8 +137,14 @@ export class MedicalSessionService {
       );
     }
 
-    const { clinicalExam, bloodExam, urineExam, fecesExam, mucosaExams, animal } =
-      session;
+    const {
+      clinicalExam,
+      bloodExam,
+      urineExam,
+      fecesExam,
+      mucosaExams,
+      animal,
+    } = session;
 
     if (!clinicalExam || !bloodExam) {
       throw new BadRequestException(
@@ -169,14 +180,25 @@ export class MedicalSessionService {
       // Clinical — skin
       skinColor: (clinicalExam as any).skinColor?.numericValue ?? null,
       skinHumidity: (clinicalExam as any).skinHumidity?.numericValue ?? null,
+      skinSmell: (clinicalExam as any).skinSmell?.numericValue ?? null,
       skinTemp: (clinicalExam as any).skinTemp?.numericValue ?? null,
-      skinElasticity: (clinicalExam as any).skinElasticity?.numericValue ?? null,
+      skinSurface: (clinicalExam as any).skinSurface?.numericValue ?? null,
+      skinElasticity:
+        (clinicalExam as any).skinElasticity?.numericValue ?? null,
+      skinSensitivity:
+        (clinicalExam as any).skinSensitivity?.numericValue ?? null,
+      skinPain: (clinicalExam as any).skinPain?.numericValue ?? null,
+
+      // Clinical — rumen fluid
+      rumenFluidState:
+        (clinicalExam as any).rumenFluidState?.numericValue ?? null,
 
       // Clinical — lymph
       lymphSize: (clinicalExam as any).lymphSize?.numericValue ?? null,
       lymphShape: (clinicalExam as any).lymphShape?.numericValue ?? null,
       lymphSurface: (clinicalExam as any).lymphSurface?.numericValue ?? null,
-      lymphConsistency: (clinicalExam as any).lymphConsistency?.numericValue ?? null,
+      lymphConsistency:
+        (clinicalExam as any).lymphConsistency?.numericValue ?? null,
       lymphTemp: (clinicalExam as any).lymphTemp?.numericValue ?? null,
       lymphPain: (clinicalExam as any).lymphPain?.numericValue ?? null,
       lymphMobility: (clinicalExam as any).lymphMobility?.numericValue ?? null,
@@ -220,7 +242,8 @@ export class MedicalSessionService {
       urineColor: (urineExam as any)?.urineColor?.numericValue ?? null,
       urineSmell: (urineExam as any)?.urineSmell?.numericValue ?? null,
       urineClarity: (urineExam as any)?.urineClarity?.numericValue ?? null,
-      urineConsistency: (urineExam as any)?.urineConsistency?.numericValue ?? null,
+      urineConsistency:
+        (urineExam as any)?.urineConsistency?.numericValue ?? null,
 
       // Feces — numeric
       fecesAmount: fecesExam?.amount ?? null,
@@ -229,12 +252,24 @@ export class MedicalSessionService {
       // Feces — lookups
       fecesColor: (fecesExam as any)?.fecesColor?.numericValue ?? null,
       fecesSmell: (fecesExam as any)?.fecesSmell?.numericValue ?? null,
-      fecesConsistency: (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
+      fecesConsistency:
+        (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
       fecesForm: (fecesExam as any)?.fecesForm?.numericValue ?? null,
 
-      // Mucosa — from first exam (if any)
-      mucosaType: (mucosaExams?.[0] as any)?.mucosaType?.numericValue ?? null,
-      mucosaAppearance: (mucosaExams?.[0] as any)?.mucosaAppearance?.numericValue ?? null,
+      // Mucosa — extract appearance for each of the 4 types
+      // MucosaType numericValue: 0=oral, 1=nasal, 2=ocular, 3=vaginal
+      mucosaOral:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 0)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaNasal:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 1)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaOcular:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 2)
+          ?.mucosaAppearance?.numericValue ?? null,
+      mucosaVaginal:
+        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 3)
+          ?.mucosaAppearance?.numericValue ?? null,
     };
 
     const numericArray = Object.values(inputVector).map((v) =>
@@ -243,9 +278,27 @@ export class MedicalSessionService {
 
     // Call the AI prediction service
     const uri = this.config.get<string>('PREDICT_API_URI');
-    const response = await axios.post<Record<string, any>>(uri!, {
-      params: numericArray,
-    });
+
+    let response: { data: Record<string, any> };
+    try {
+      response = await axios.post<Record<string, any>>(uri!, {
+        params: numericArray,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          throw new BadRequestException(
+            `AI prediction service returned error: ${error.response.status}`,
+          );
+        }
+        throw new BadRequestException(
+          'AI prediction service is unavailable. Please try again later.',
+        );
+      }
+      throw new BadRequestException(
+        'Failed to get prediction from AI service.',
+      );
+    }
 
     // Store prediction and update session status atomically
     const updatedSession = await this.prisma.medicalSession.update({
@@ -256,7 +309,8 @@ export class MedicalSessionService {
           create: {
             inputVector,
             rawOutput: response.data,
-            modelVersion: this.config.get<string>('PREDICT_MODEL_VERSION') ?? null,
+            modelVersion:
+              this.config.get<string>('PREDICT_MODEL_VERSION') ?? null,
           },
         },
       },

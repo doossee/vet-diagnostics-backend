@@ -1,15 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ClinicalExam } from '@prisma/client';
+import { ClinicalExam } from 'src/generated/prisma/client';
 import { Expose } from 'class-transformer';
 
 export class ClinicalExamEntity implements ClinicalExam {
-  @ApiProperty({ description: 'Unique identifier', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Unique identifier',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   id: string;
 
-  @ApiProperty({ description: 'Animal ID', example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiProperty({
+    description: 'Animal ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @Expose()
   animalId: string;
+
+  @ApiProperty({
+    description: 'Session ID',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
+  })
+  @Expose()
+  sessionId: string | null;
 
   @ApiProperty({ description: 'Pulse', example: 80, required: false })
   @Expose()
@@ -23,7 +37,11 @@ export class ClinicalExamEntity implements ClinicalExam {
   @Expose()
   temperature: number | null;
 
-  @ApiProperty({ description: 'Respiratory Rate', example: 20, required: false })
+  @ApiProperty({
+    description: 'Respiratory Rate',
+    example: 20,
+    required: false,
+  })
   @Expose()
   respiratoryRate: number | null;
 
@@ -40,12 +58,12 @@ export class ClinicalExamEntity implements ClinicalExam {
 
   @Expose() skinColorId: string | null;
   @Expose() skinHumidityId: string | null;
-  @Expose() skinSmell: string | null;
+  @Expose() skinSmellId: string | null;
   @Expose() skinTempId: string | null;
-  @Expose() skinSurface: string | null;
+  @Expose() skinSurfaceId: string | null;
   @Expose() skinElasticityId: string | null;
-  @Expose() skinSensitivity: string | null;
-  @Expose() skinPain: string | null;
+  @Expose() skinSensitivityId: string | null;
+  @Expose() skinPainId: string | null;
 
   @Expose() lymphSizeId: string | null;
   @Expose() lymphShapeId: string | null;
@@ -56,13 +74,19 @@ export class ClinicalExamEntity implements ClinicalExam {
   @Expose() lymphMobilityId: string | null;
 
   @Expose() rumenInfusoriaCount: number | null;
-  @Expose() rumenFluidState: string | null;
+  @Expose() rumenFluidStateId: string | null;
 
-  @ApiProperty({ description: 'Creation date', example: '2023-01-01T00:00:00.000Z' })
+  @ApiProperty({
+    description: 'Creation date',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   @Expose()
   createdAt: Date;
 
-  @ApiProperty({ description: 'Last update date', example: '2023-01-01T00:00:00.000Z' })
+  @ApiProperty({
+    description: 'Last update date',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   @Expose()
   updatedAt: Date;
 }

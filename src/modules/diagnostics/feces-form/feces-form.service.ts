@@ -6,7 +6,7 @@ import {
   UpdateFecesFormDto,
   FecesFormQueryParamsDto,
 } from './dto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class FecesFormService {
@@ -22,7 +22,7 @@ export class FecesFormService {
    */
   async create(data: CreateFecesFormDto) {
     return await this.prisma.fecesForm.create({
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
@@ -39,15 +39,15 @@ export class FecesFormService {
       ...(animalTypeId && { animalTypeId }),
       ...(search && {
         OR: [
-          { name_ru: { contains: search, mode: 'insensitive' } },
-          { name_uz: { contains: search, mode: 'insensitive' } },
+          { name: { path: ['ru'], string_contains: search } },
+          { name: { path: ['uz'], string_contains: search } },
         ],
       }),
     };
 
     const orderBy: Prisma.FecesFormOrderByWithRelationInput = {
       ...(byId && { id: byId }),
-      ...(!byId && { name_ru: 'asc' }),
+      ...(!byId && { id: 'asc' }),
     };
 
     const include: Prisma.FecesFormInclude = {
@@ -84,7 +84,7 @@ export class FecesFormService {
   async update(id: string, data: UpdateFecesFormDto) {
     return await this.prisma.fecesForm.update({
       where: { id },
-      data,
+      data: data as any,
       include: { animalType: true },
     });
   }
