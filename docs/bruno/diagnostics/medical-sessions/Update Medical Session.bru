@@ -1,0 +1,27 @@
+meta {
+  name: Update Medical Session
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/medical-sessions/{{sessionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "notes": "Updated notes after examination"
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

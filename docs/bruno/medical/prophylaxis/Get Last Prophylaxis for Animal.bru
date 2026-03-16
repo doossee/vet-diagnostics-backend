@@ -1,0 +1,31 @@
+meta {
+  name: Get Last Prophylaxis for Animal
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/prophylaxis/animal/{{animalId}}/last
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Last Prophylaxis for Animal
+
+  Returns the most recent prophylaxis record for a specific animal.
+  Requires authentication.
+
+  ## Path Parameters
+  - `animalId` — UUID of the animal
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

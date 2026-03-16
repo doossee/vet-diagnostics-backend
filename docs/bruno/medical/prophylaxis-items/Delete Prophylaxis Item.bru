@@ -1,0 +1,31 @@
+meta {
+  name: Delete Prophylaxis Item
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/prophylaxis-items/{{prophylaxisItemId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Prophylaxis Item
+
+  Deletes a prophylaxis item by ID.
+  Requires authentication.
+
+  ## Path Parameters
+  - `prophylaxisItemId` — UUID of the prophylaxis item to delete
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,48 @@
+meta {
+  name: Update Prophylaxis Item
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/prophylaxis-items/{{prophylaxisItemId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Обновлённая вакцина",
+      "uz": "Yangilangan vaksina"
+    }
+  }
+}
+
+docs {
+  # Update Prophylaxis Item
+
+  Updates an existing prophylaxis item by ID.
+  Requires authentication.
+
+  ## Path Parameters
+  - `prophylaxisItemId` — UUID of the prophylaxis item
+
+  ## Fields
+  - `name.ru` — Updated item name in Russian
+  - `name.uz` — Updated item name in Uzbek
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

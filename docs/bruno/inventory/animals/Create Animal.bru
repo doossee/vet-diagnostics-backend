@@ -1,0 +1,63 @@
+meta {
+  name: Create Animal
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/animals
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "arrivalDate": "2024-01-15",
+    "animalNameCode": "BOV-001",
+    "birthYear": 2021,
+    "birthMonth": 5,
+    "sexId": "{{sexId}}",
+    "farmerId": "{{farmerId}}",
+    "animalTypeId": "{{animalTypeId}}",
+    "animalBreedId": "{{breedId}}",
+    "animalColorId": "{{colorId}}"
+  }
+}
+
+docs {
+  # Create Animal
+
+  Registers a new animal in the inventory.
+
+  **Required fields:**
+  - `arrivalDate` — ISO date string (YYYY-MM-DD) when the animal arrived
+  - `animalNameCode` — unique identifier code for the animal (e.g. BOV-001)
+  - `birthYear` — four-digit birth year
+  - `birthMonth` — birth month (1–12)
+  - `sexId` — UUID of the sex reference value
+  - `farmerId` — UUID of the farmer who owns the animal
+  - `animalTypeId` — UUID of the resolved leaf AnimalType
+  - `animalBreedId` — UUID of the animal breed
+  - `animalColorId` — UUID of the animal coat color
+
+  Use the Resolve Animal Type endpoint to determine the correct `animalTypeId` from
+  parent type, sex, and birth date before creating an animal.
+}
+
+tests {
+  test("Status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Returns id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("animalId", res.body.data.id);
+  });
+}

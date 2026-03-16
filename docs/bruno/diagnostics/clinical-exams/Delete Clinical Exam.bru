@@ -1,0 +1,21 @@
+meta {
+  name: Delete Clinical Exam
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/clinical-exams/{{clinicalExamId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

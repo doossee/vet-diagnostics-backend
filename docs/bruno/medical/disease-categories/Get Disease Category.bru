@@ -1,0 +1,31 @@
+meta {
+  name: Get Disease Category
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/disease-categories/{{diseaseCategoryId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Disease Category
+
+  Returns a single disease category by ID.
+  Requires authentication.
+
+  ## Path Parameters
+  - `diseaseCategoryId` — UUID of the disease category
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

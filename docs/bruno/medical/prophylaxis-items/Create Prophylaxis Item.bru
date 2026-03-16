@@ -1,0 +1,51 @@
+meta {
+  name: Create Prophylaxis Item
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/prophylaxis-items
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Вакцина против бруцеллёза",
+      "uz": "Brucella vaksina"
+    },
+    "type": "VACCINE"
+  }
+}
+
+docs {
+  # Create Prophylaxis Item
+
+  Creates a new prophylaxis item (vaccine, antiparasitic, or other drug).
+  Requires authentication.
+
+  ## Fields
+  - `name.ru` — Item name in Russian
+  - `name.uz` — Item name in Uzbek
+  - `type` — Item type: `VACCINE`, `ANTIPARASITIC`, or `OTHER`
+}
+
+tests {
+  test("Status is 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Returns prophylaxis item id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("prophylaxisItemId", res.body.data.id);
+  });
+}

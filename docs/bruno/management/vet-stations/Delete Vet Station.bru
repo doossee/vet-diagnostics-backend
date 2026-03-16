@@ -1,0 +1,33 @@
+meta {
+  name: Delete Vet Station
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/vet-stations/{{vetStationId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Vet Station
+
+  Deletes an existing veterinary station by its ID. Requires admin access.
+
+  ## Path Parameters
+  - `vetStationId` — The ID of the vet station to delete
+
+  ## Response
+  Returns a confirmation message wrapped in `{ data: ..., message: "..." }`.
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

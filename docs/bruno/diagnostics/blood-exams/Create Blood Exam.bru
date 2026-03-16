@@ -1,0 +1,59 @@
+meta {
+  name: Create Blood Exam
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/blood-exams
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "sessionId": "{{sessionId}}",
+    "erythrocyteCount": 6.5,
+    "leukocyteCount": 8.2,
+    "thrombocyteCount": 350,
+    "hemoglobin": 120,
+    "coe": 38,
+    "totalProtein": 72,
+    "albumin": 38,
+    "glucose": 3.5,
+    "totalCalcium": 2.5,
+    "organicPhosphorus": 1.8,
+    "carotene": 0.8,
+    "urea": 5.2,
+    "creatinine": 88,
+    "totalBilirubin": 8.5,
+    "totalCholesterol": 3.2
+  }
+}
+
+docs {
+  # Create Blood Exam
+
+  Key hematology and biochemistry values. All numeric.
+  Units depend on parameter:
+  - erythrocytes: 10^12/L
+  - hemoglobin: g/L
+  - leukocytes: 10^9/L
+  - thrombocytes: 10^9/L
+  - glucose, calcium, phosphorus: mmol/L
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save bloodExamId", function() {
+    bru.setVar("bloodExamId", res.body.data.id);
+  });
+}

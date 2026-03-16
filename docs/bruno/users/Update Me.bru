@@ -1,0 +1,41 @@
+meta {
+  name: Update Me
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/users/me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "New address"
+  }
+}
+
+docs {
+  # Update Me
+
+  Update the profile of the currently authenticated user. Only the fields provided in the request body will be updated.
+
+  Requires a valid accessToken as a Bearer token.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

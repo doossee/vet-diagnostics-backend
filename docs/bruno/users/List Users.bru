@@ -1,0 +1,47 @@
+meta {
+  name: List Users
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+params:query {
+  page: 1
+  limit: 10
+}
+
+docs {
+  # List Users
+
+  Retrieve a paginated list of all users. Admin-only endpoint.
+
+  Requires a valid accessToken with ADMIN or SUPER_ADMIN role.
+
+  ## Query Parameters
+  - `page` — page number (default: 1)
+  - `limit` — number of results per page (default: 10)
+  - `search` — optional search string to filter users by name or username
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Response data is an array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+
+  test("Response has meta", function() {
+    expect(res.body).to.have.property("meta");
+  });
+}

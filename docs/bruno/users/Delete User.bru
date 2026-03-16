@@ -1,0 +1,34 @@
+meta {
+  name: Delete User
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/users/{{userId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete User
+
+  Permanently delete a specific user by their UUID. Admin-only endpoint.
+
+  Requires a valid accessToken with ADMIN or SUPER_ADMIN role.
+
+  ## Path Parameter
+  - `userId` — UUID of the user to delete (saved by the Create User request)
+
+  This action is irreversible.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Update Clinical Exam
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/clinical-exams/{{clinicalExamId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "pulse": 75,
+    "temperature": 38.7
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

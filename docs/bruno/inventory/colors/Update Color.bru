@@ -1,0 +1,46 @@
+meta {
+  name: Update Color
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/colors/{{colorId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Обновлённый цвет",
+      "uz": "Yangilangan rang"
+    }
+  }
+}
+
+docs {
+  # Update Color
+
+  Partially updates an existing coat color. All fields are optional — only provided fields are updated.
+
+  **Path parameters:**
+  - `colorId` — UUID of the color to update
+
+  **Updatable fields:**
+  - `name` — bilingual name object with `ru` and `uz` keys
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

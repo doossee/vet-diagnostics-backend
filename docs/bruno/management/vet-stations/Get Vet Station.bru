@@ -1,0 +1,33 @@
+meta {
+  name: Get Vet Station
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/vet-stations/{{vetStationId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Vet Station
+
+  Returns a single veterinary station by its ID. Requires admin access.
+
+  ## Path Parameters
+  - `vetStationId` — The ID of the vet station to retrieve
+
+  ## Response
+  Returns the vet station object wrapped in `{ data: ..., message: "..." }`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Get Breed
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/breeds/{{breedId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Breed
+
+  Returns a single breed by its ID.
+
+  **Path parameters:**
+  - `breedId` — UUID of the breed
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

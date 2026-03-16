@@ -1,0 +1,59 @@
+meta {
+  name: Create User
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "vet_user",
+    "password": "password123",
+    "firstName": "Alisher",
+    "lastName": "Umarov",
+    "phone": "+998901234567",
+    "districtId": "{{districtId}}",
+    "role": "VETERINARIAN"
+  }
+}
+
+docs {
+  # Create User
+
+  Create a new user account. Admin-only endpoint.
+
+  Requires a valid accessToken with ADMIN or SUPER_ADMIN role.
+
+  ## Request Body
+  - `username` — unique login name
+  - `password` — initial password
+  - `firstName` — user's first name
+  - `lastName` — user's last name
+  - `phone` — contact phone number
+  - `districtId` — UUID of the district the user belongs to
+  - `role` — one of SUPER_ADMIN, ADMIN, VETERINARIAN, FARMER
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Response has data.id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("userId", res.body.data.id);
+  });
+}

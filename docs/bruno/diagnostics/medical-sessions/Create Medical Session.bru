@@ -1,0 +1,33 @@
+meta {
+  name: Create Medical Session
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/medical-sessions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "date": "2024-03-15",
+    "notes": "Routine checkup"
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save sessionId", function() {
+    bru.setVar("sessionId", res.body.data.id);
+  });
+}

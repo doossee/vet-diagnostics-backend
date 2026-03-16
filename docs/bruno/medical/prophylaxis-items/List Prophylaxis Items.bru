@@ -1,0 +1,32 @@
+meta {
+  name: List Prophylaxis Items
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/prophylaxis-items?page=1&perPage=20
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Prophylaxis Items
+
+  Returns a paginated list of prophylaxis items (vaccines/drugs).
+  Requires authentication.
+
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 20)
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

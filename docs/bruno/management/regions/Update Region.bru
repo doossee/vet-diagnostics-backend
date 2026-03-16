@@ -1,0 +1,47 @@
+meta {
+  name: Update Region
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/regions/{{regionId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Ташкентская область", "uz": "Toshkent viloyati" }
+  }
+}
+
+docs {
+  # Update Region
+
+  Updates an existing region by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — Region UUID
+
+  ## Request Body
+  - `name.ru` — Region name in Russian
+  - `name.uz` — Region name in Uzbek
+
+  ## Response
+  Returns the updated `RegionEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

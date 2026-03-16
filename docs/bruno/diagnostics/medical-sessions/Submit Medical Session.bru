@@ -1,0 +1,29 @@
+meta {
+  name: Submit Medical Session
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/medical-sessions/{{sessionId}}/submit
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Submit Medical Session
+
+  Requires both clinicalExam AND bloodExam to be created first.
+  Sends 88-feature vector to ML model at PREDICT_API_URI.
+  Returns an AIPrediction with disease probabilities.
+}
+
+tests {
+  test("Status 200 or 201", function() {
+    expect([200, 201]).to.include(res.status);
+  });
+}

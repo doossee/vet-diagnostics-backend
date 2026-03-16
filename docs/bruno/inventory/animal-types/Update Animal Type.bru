@@ -1,0 +1,48 @@
+meta {
+  name: Update Animal Type
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/animal-types/{{animalTypeId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Обновлённый тип",
+      "uz": "Yangilangan tur"
+    }
+  }
+}
+
+docs {
+  # Update Animal Type
+
+  Partially updates an existing animal type. All fields are optional — only provided fields are updated.
+
+  **Path parameters:**
+  - `animalTypeId` — UUID of the animal type to update
+
+  **Updatable fields:**
+  - `name` — bilingual name object with `ru` and `uz` keys
+  - `parentId` — parent animal type ID
+  - `modelKey` — ML model key
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,49 @@
+meta {
+  name: Update Vet Station
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/vet-stations/{{vetStationId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Ветеринарная станция Юнусабад", "uz": "Yunusobod veterinariya stansiyasi" }
+  }
+}
+
+docs {
+  # Update Vet Station
+
+  Updates an existing veterinary station by its ID. Requires admin access.
+
+  ## Path Parameters
+  - `vetStationId` — The ID of the vet station to update
+
+  ## Request Body
+  All fields are optional.
+  - `name.ru` — Updated vet station name in Russian
+  - `name.uz` — Updated vet station name in Uzbek
+  - `districtId` — Updated district association
+
+  ## Response
+  Returns the updated vet station object wrapped in `{ data: ..., message: "..." }`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

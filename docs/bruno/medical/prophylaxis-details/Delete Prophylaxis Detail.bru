@@ -1,0 +1,31 @@
+meta {
+  name: Delete Prophylaxis Detail
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/prophylaxis-details/{{prophylaxisDetailId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Prophylaxis Detail
+
+  Deletes a prophylaxis detail (strain/sub-type) by ID.
+  Requires authentication.
+
+  ## Path Parameters
+  - `prophylaxisDetailId` — UUID of the prophylaxis detail to delete
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

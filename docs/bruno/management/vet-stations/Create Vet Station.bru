@@ -1,0 +1,50 @@
+meta {
+  name: Create Vet Station
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/vet-stations
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Ветеринарная станция №1", "uz": "Veterinariya stansiyasi №1" },
+    "districtId": "{{districtId}}"
+  }
+}
+
+docs {
+  # Create Vet Station
+
+  Creates a new veterinary station and associates it with a district. Requires admin access.
+
+  ## Request Body
+  - `name.ru` — Vet station name in Russian
+  - `name.uz` — Vet station name in Uzbek
+  - `districtId` — ID of the district this vet station belongs to
+
+  ## Response
+  Returns the created `VetStationEntity`.
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("vetStationId", res.body.data.id);
+  });
+}

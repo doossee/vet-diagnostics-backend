@@ -1,0 +1,33 @@
+meta {
+  name: Delete Breed
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/breeds/{{breedId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Breed
+
+  Deletes a breed by its ID.
+
+  **Path parameters:**
+  - `breedId` — UUID of the breed to delete
+
+  **Note:** Deleting a breed that is referenced by existing animals may result in a constraint error
+  (Prisma P2003).
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

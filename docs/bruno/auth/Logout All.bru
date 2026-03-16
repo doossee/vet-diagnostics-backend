@@ -1,0 +1,27 @@
+meta {
+  name: Logout All
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/auth/logout-all
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Logout All
+
+  Invalidate all active sessions for the currently authenticated user by clearing the stored refresh token hash. Requires a valid access token.
+}
+
+tests {
+  test("Status 200 or 201", function() {
+    expect([200, 201]).to.include(res.status);
+  });
+}
