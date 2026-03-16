@@ -1,0 +1,44 @@
+meta {
+  name: List Animal Types
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/animal-types?page=1&perPage=20
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Animal Types
+
+  Returns a paginated list of animal types.
+  Only the cattle hierarchy is seeded: Agricultural Animals → Cattle (Qoramol) → [Buqa, G'unojin, Sigir, Buzoq].
+
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 10)
+  - `search` — Search in bilingual name
+
+  ## Response
+  ```json
+  {
+    "data": [{ "id": "uuid", "name": { "ru": "...", "uz": "..." }, "parentId": null, "modelKey": null }],
+    "meta": { "total": 6, "lastPage": 1, "currentPage": 1, "perPage": 20 }
+  }
+  ```
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Data is array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+}

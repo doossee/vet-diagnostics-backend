@@ -1,0 +1,46 @@
+meta {
+  name: Create Mucosa Exam
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/mucosa-exams
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "sessionId": "{{sessionId}}",
+    "mucosaTypeId": "{{mucosaTypeId}}",
+    "mucosaAppearanceId": "{{mucosaAppearanceId}}"
+  }
+}
+
+docs {
+  # Create Mucosa Exam
+
+  mucosaType encodes the membrane location:
+  - 0: oral
+  - 1: nasal
+  - 2: ocular
+  - 3: reproductive
+
+  MucosaAppearance options are seeded per animal type.
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save mucosaExamId", function() {
+    bru.setVar("mucosaExamId", res.body.data.id);
+  });
+}

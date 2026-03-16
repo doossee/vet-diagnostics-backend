@@ -1,0 +1,27 @@
+meta {
+  name: Update Alert
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/anomaly-detection/alerts/{{alertId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "status": "RESOLVED"
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Refresh
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/refresh
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{refreshToken}}
+}
+
+docs {
+  # Refresh Tokens
+
+  Exchange a valid refresh token for a new access/refresh token pair. Pass the refresh token in the Authorization header.
+
+  **Public endpoint** — uses refresh token header instead of bearer auth.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Response has accessToken", function() {
+    expect(res.body.data).to.have.property("accessToken");
+  });
+
+  test("Response has refreshToken", function() {
+    expect(res.body.data).to.have.property("refreshToken");
+  });
+
+  test("Save new tokens to vars", function() {
+    bru.setVar("accessToken", res.body.data.accessToken);
+    bru.setVar("refreshToken", res.body.data.refreshToken);
+  });
+}

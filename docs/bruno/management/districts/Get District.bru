@@ -1,0 +1,36 @@
+meta {
+  name: Get District
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/districts/{{districtId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get District
+
+  Returns a single district by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — District UUID
+
+  ## Response
+  Returns the `DistrictEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+}

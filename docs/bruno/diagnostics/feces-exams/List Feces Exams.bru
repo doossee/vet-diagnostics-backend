@@ -1,0 +1,21 @@
+meta {
+  name: List Feces Exams
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/feces-exams?page=1&perPage=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

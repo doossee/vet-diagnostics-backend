@@ -1,0 +1,36 @@
+meta {
+  name: Get Region
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/regions/{{regionId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Region
+
+  Returns a single region by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — Region UUID
+
+  ## Response
+  Returns the `RegionEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+}

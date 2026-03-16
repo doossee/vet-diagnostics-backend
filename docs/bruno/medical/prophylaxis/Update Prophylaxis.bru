@@ -1,0 +1,39 @@
+meta {
+  name: Update Prophylaxis
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/prophylaxis/{{prophylaxisId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "notes": "Updated vaccination notes",
+    "dose": 3.0
+  }
+}
+
+docs {
+  # Update Prophylaxis
+
+  Updates an existing prophylaxis record by ID.
+  Only provided fields are updated.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

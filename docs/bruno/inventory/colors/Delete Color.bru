@@ -1,0 +1,33 @@
+meta {
+  name: Delete Color
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/colors/{{colorId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Color
+
+  Deletes a coat color by its ID.
+
+  ## Path Parameters
+  - `colorId` — UUID of the color to delete
+
+  **Note:** Deleting a color referenced by existing animals may result in a constraint error
+  (Prisma P2003).
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

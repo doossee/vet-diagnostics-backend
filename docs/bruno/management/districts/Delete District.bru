@@ -1,0 +1,33 @@
+meta {
+  name: Delete District
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/districts/{{districtId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete District
+
+  Deletes a district by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — District UUID
+
+  ## Response
+  Returns the deleted `DistrictEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

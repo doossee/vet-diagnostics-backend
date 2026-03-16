@@ -1,0 +1,33 @@
+meta {
+  name: Delete Region
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/regions/{{regionId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Region
+
+  Deletes a region by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — Region UUID
+
+  ## Response
+  Returns the deleted `RegionEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

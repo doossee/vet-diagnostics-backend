@@ -1,0 +1,53 @@
+meta {
+  name: Predict
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/anomaly-detection/predict
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalTypeId": "{{animalTypeId}}",
+    "animalId": "{{animalId}}",
+    "sessionId": "{{sessionId}}",
+    "pulse": 72,
+    "respiratoryRate": 20,
+    "temperature": 38.5,
+    "erythrocyteCount": 6.5,
+    "leukocyteCount": 8.2,
+    "hemoglobin": 120,
+    "glucose": 3.5,
+    "totalProtein": 72,
+    "totalCalcium": 2.5
+  }
+}
+
+docs {
+  # Predict
+
+  Sends a numeric feature vector (up to 88 features) to the external ML model
+  configured at PREDICT_API_URI. Returns disease predictions and detected anomalies.
+
+  animalTypeId must be one of the 4 cattle subtypes: buqa / gunojin / sigir / buzoq.
+  Additional features from clinical, blood, urine, feces, and mucosa exams can be included.
+}
+
+tests {
+  test("Status 200 or 201", function() {
+    expect([200, 201]).to.include(res.status);
+  });
+
+  test("Data has predictions array", function() {
+    expect(res.body.data).to.have.property("predictions");
+    expect(res.body.data.predictions).to.be.an("array");
+  });
+}

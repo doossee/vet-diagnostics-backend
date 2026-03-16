@@ -1,0 +1,38 @@
+meta {
+  name: Update Disease Category
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/disease-categories/{{diseaseCategoryId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Болезни ЖКТ", "uz": "Oshqozon-ichak kasalliklari" }
+  }
+}
+
+docs {
+  # Update Disease Category
+
+  Updates an existing disease category by ID.
+  Only provided fields are updated.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

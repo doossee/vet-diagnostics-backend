@@ -1,0 +1,30 @@
+meta {
+  name: Get Animal
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/animals/{{animalId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Animal
+
+  Returns a single animal record by its ID, including related type, breed, color, and owner details.
+
+  ## Path Parameters
+  - `animalId` — UUID of the animal
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

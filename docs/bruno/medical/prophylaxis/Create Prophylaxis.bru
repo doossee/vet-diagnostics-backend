@@ -1,0 +1,47 @@
+meta {
+  name: Create Prophylaxis
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/prophylaxis
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "prophylaxisItemId": "{{prophylaxisItemId}}",
+    "prophylaxisDetailId": "{{prophylaxisDetailId}}",
+    "date": "2024-03-15",
+    "dose": 2.5,
+    "notes": "Annual vaccination"
+  }
+}
+
+docs {
+  # Create Prophylaxis
+
+  Creates a new prophylaxis record for an animal.
+  Links to a prophylaxis item and optional detail (strain).
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("prophylaxisId", res.body.data.id);
+  });
+}

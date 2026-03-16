@@ -1,0 +1,21 @@
+meta {
+  name: Get Clinical Exam
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/clinical-exams/{{clinicalExamId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

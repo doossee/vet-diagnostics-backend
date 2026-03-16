@@ -1,0 +1,21 @@
+meta {
+  name: Get Last Feces Exam for Animal
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/feces-exams/animal/{{animalId}}/last
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

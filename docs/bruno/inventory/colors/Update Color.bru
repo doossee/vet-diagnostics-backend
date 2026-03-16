@@ -1,0 +1,40 @@
+meta {
+  name: Update Color
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/colors/{{colorId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": { "ru": "Чёрный", "uz": "Qora" }
+  }
+}
+
+docs {
+  # Update Color
+
+  Partially updates an existing coat color. All fields are optional — only provided fields
+  are updated.
+
+  ## Path Parameters
+  - `colorId` — UUID of the color to update
+
+  ## Updatable Fields
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,43 @@
+meta {
+  name: Create Disease
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/diseases
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Стоматит", "uz": "Stomatit" },
+    "diseaseCategoryId": "{{diseaseCategoryId}}"
+  }
+}
+
+docs {
+  # Create Disease
+
+  Creates a new disease linked to a disease category.
+  Both Russian and Uzbek names are required (bilingual).
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("diseaseId", res.body.data.id);
+  });
+}

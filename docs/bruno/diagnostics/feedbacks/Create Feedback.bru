@@ -1,0 +1,44 @@
+meta {
+  name: Create Feedback
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/feedbacks
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "predictionId": "{{predictionId}}",
+    "veterinarianId": "{{userId}}",
+    "isCorrect": false,
+    "correctedDiseaseId": "{{diseaseId}}",
+    "usedForTraining": false
+  }
+}
+
+docs {
+  # Create Feedback
+
+  Vet feedback on AI prediction accuracy.
+  `correctedDiseaseId` is only required when `isCorrect` is false.
+  Used to feed the model retraining loop — set `usedForTraining: true` once
+  the feedback has been incorporated into model training.
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save feedbackId", function() {
+    bru.setVar("feedbackId", res.body.data.id);
+  });
+}
