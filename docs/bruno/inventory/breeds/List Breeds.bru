@@ -19,14 +19,14 @@ docs {
 
   Returns a paginated list of all animal breeds.
 
-  **Query parameters:**
-  - `page` — page number (default: 1)
-  - `perPage` — items per page (default: 20)
-  - `search` — optional search string matched against bilingual name fields
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 10)
+  - `search` — Search in bilingual name
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
   test("Data is array", function() {

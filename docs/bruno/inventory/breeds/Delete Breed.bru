@@ -19,15 +19,15 @@ docs {
 
   Deletes a breed by its ID.
 
-  **Path parameters:**
+  ## Path Parameters
   - `breedId` — UUID of the breed to delete
 
-  **Note:** Deleting a breed that is referenced by existing animals may result in a constraint error
+  **Note:** Deleting a breed referenced by existing animals may result in a constraint error
   (Prisma P2003).
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

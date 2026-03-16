@@ -18,14 +18,10 @@ docs {
   # Get Disease Category
 
   Returns a single disease category by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `diseaseCategoryId` — UUID of the disease category
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

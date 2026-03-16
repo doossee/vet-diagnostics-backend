@@ -20,8 +20,8 @@ headers {
 
 body:json {
   {
-    "notes": "Updated notes",
-    "nextDate": "2025-06-01"
+    "notes": "Updated vaccination notes",
+    "dose": 3.0
   }
 }
 
@@ -29,18 +29,11 @@ docs {
   # Update Prophylaxis
 
   Updates an existing prophylaxis record by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `prophylaxisId` — UUID of the prophylaxis record
-
-  ## Fields
-  - `notes` — Updated notes about the administration
-  - `nextDate` — Updated scheduled date for the next dose (YYYY-MM-DD)
+  Only provided fields are updated.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

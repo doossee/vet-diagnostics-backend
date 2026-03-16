@@ -19,12 +19,12 @@ docs {
 
   Returns a single animal record by its ID, including related type, breed, color, and owner details.
 
-  **Path parameters:**
+  ## Path Parameters
   - `animalId` — UUID of the animal
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

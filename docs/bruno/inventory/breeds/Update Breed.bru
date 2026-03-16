@@ -14,16 +14,9 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-headers {
-  Content-Type: application/json
-}
-
 body:json {
   {
-    "name": {
-      "ru": "Голштинская",
-      "uz": "Golshtin"
-    }
+    "name": { "ru": "Голштинская", "uz": "Golshtin" }
   }
 }
 
@@ -32,15 +25,15 @@ docs {
 
   Partially updates an existing breed. All fields are optional — only provided fields are updated.
 
-  **Path parameters:**
+  ## Path Parameters
   - `breedId` — UUID of the breed to update
 
-  **Updatable fields:**
-  - `name` — bilingual name object with `ru` and `uz` keys
+  ## Updatable Fields
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

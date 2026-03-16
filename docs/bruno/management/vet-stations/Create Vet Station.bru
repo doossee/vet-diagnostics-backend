@@ -28,12 +28,12 @@ body:json {
 docs {
   # Create Vet Station
 
-  Creates a new veterinary station and associates it with a district. Requires admin access.
+  Creates a new veterinary station. Requires admin access.
 
   ## Request Body
   - `name.ru` — Vet station name in Russian
   - `name.uz` — Vet station name in Uzbek
-  - `districtId` — ID of the district this vet station belongs to
+  - `districtId` — UUID of the parent district
 
   ## Response
   Returns the created `VetStationEntity`.

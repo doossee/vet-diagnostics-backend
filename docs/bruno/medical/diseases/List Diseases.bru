@@ -18,15 +18,10 @@ docs {
   # List Diseases
 
   Returns a paginated list of diseases.
-  Requires authentication.
-
-  ## Query Parameters
-  - `page` — Page number (default: 1)
-  - `perPage` — Items per page (default: 10)
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
   test("Data is array", function() {

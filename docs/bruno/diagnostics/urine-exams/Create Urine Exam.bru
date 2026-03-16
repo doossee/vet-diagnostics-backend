@@ -1,0 +1,51 @@
+meta {
+  name: Create Urine Exam
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/urine-exams
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "sessionId": "{{sessionId}}",
+    "urineColorId": "{{urineColorId}}",
+    "urineSmellId": "{{urineSmellId}}",
+    "urineClarityId": "{{urineClarityId}}",
+    "urineConsistencyId": "{{urineConsistencyId}}",
+    "ph": 7.5,
+    "acetone": false,
+    "protein": false,
+    "bilirubin": false,
+    "urobilinogen": false,
+    "sugar": false,
+    "amount": 8.5
+  }
+}
+
+docs {
+  # Create Urine Exam
+
+  Urine color/smell/clarity/consistency IDs reference lookup values seeded per animal type.
+  Cattle has 7 color options. Boolean fields (acetone, protein, bilirubin, urobilinogen, sugar)
+  indicate presence/absence of the substance.
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save urineExamId", function() {
+    bru.setVar("urineExamId", res.body.data.id);
+  });
+}

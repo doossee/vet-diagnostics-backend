@@ -28,18 +28,11 @@ docs {
   # Update Disease Category
 
   Updates an existing disease category by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `diseaseCategoryId` — UUID of the disease category
-
-  ## Fields
-  - `name.ru` — Updated category name in Russian
-  - `name.uz` — Updated category name in Uzbek
+  Only provided fields are updated.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

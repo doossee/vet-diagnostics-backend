@@ -20,10 +20,7 @@ headers {
 
 body:json {
   {
-    "name": {
-      "ru": "S19",
-      "uz": "S19"
-    },
+    "name": { "ru": "S19", "uz": "S19" },
     "prophylaxisItemId": "{{prophylaxisItemId}}"
   }
 }
@@ -31,20 +28,15 @@ body:json {
 docs {
   # Create Prophylaxis Detail
 
-  Creates a new prophylaxis detail (strain/sub-type of a prophylaxis item).
-  Requires authentication.
-
-  ## Fields
-  - `name.ru` — Detail name in Russian
-  - `name.uz` — Detail name in Uzbek
-  - `prophylaxisItemId` — UUID of the parent prophylaxis item
+  Creates a new prophylaxis detail (vaccine strain reference data).
+  Both Russian and Uzbek names are required (bilingual).
 }
 
 tests {
-  test("Status is 201", function() {
+  test("Status 201", function() {
     expect(res.status).to.equal(201);
   });
-  test("Returns prophylaxis detail id", function() {
+  test("Has id", function() {
     expect(res.body.data).to.have.property("id");
     bru.setVar("prophylaxisDetailId", res.body.data.id);
   });

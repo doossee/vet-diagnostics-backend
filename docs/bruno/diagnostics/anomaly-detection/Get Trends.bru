@@ -1,0 +1,28 @@
+meta {
+  name: Get Trends
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/anomaly-detection/trends?animalId={{animalId}}&parameterName=hemoglobin
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Trends
+
+  Returns historical trend data for a specific parameter across sessions for a given animal.
+  Supported parameterName examples: hemoglobin, glucose, pulse, temperature, leukocyteCount, etc.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

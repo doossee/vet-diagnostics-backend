@@ -20,29 +20,19 @@ headers {
 
 body:json {
   {
-    "name": {
-      "ru": "P52",
-      "uz": "P52"
-    }
+    "name": { "ru": "S19 (обновлён)", "uz": "S19 (yangilandi)" }
   }
 }
 
 docs {
   # Update Prophylaxis Detail
 
-  Updates an existing prophylaxis detail (strain/sub-type) by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `prophylaxisDetailId` — UUID of the prophylaxis detail
-
-  ## Fields
-  - `name.ru` — Updated detail name in Russian
-  - `name.uz` — Updated detail name in Uzbek
+  Updates an existing prophylaxis detail by ID.
+  Only provided fields are updated.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

@@ -17,17 +17,17 @@ auth:bearer {
 docs {
   # Delete Vet Station
 
-  Deletes an existing veterinary station by its ID. Requires admin access.
+  Deletes a veterinary station by ID. Requires admin access.
 
   ## Path Parameters
-  - `vetStationId` — The ID of the vet station to delete
+  - `id` — Vet station UUID
 
   ## Response
-  Returns a confirmation message wrapped in `{ data: ..., message: "..." }`.
+  Returns the deleted `VetStationEntity`.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

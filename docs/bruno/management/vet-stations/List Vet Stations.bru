@@ -21,16 +21,19 @@ docs {
 
   ## Query Parameters
   - `page` — Page number (default: 1)
-  - `perPage` — Number of items per page (default: 10)
-  - `search` — Optional search string filtered against vet station names
+  - `perPage` — Items per page (default: 10)
+  - `search` — Optional search string
 
   ## Response
-  Returns `{ data: VetStation[], meta: { total, lastPage, currentPage, perPage, prev, next } }`.
+  Returns paginated `VetStationEntity[]` with meta.
 }
 
 tests {
   test("Status 200", function() {
     expect(res.status).to.equal(200);
+  });
+  test("Data is array", function() {
+    expect(res.body.data).to.be.an("array");
   });
   test("Has meta", function() {
     expect(res.body).to.have.property("meta");

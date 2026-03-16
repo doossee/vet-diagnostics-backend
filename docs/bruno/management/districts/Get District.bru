@@ -17,17 +17,20 @@ auth:bearer {
 docs {
   # Get District
 
-  Returns a single district by its ID. Requires admin access.
+  Returns a single district by ID. Requires admin access.
 
   ## Path Parameters
-  - `districtId` — The ID of the district to retrieve
+  - `id` — District UUID
 
   ## Response
-  Returns the district object wrapped in `{ data: ..., message: "..." }`.
+  Returns the `DistrictEntity`.
 }
 
 tests {
   test("Status 200", function() {
     expect(res.status).to.equal(200);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
   });
 }

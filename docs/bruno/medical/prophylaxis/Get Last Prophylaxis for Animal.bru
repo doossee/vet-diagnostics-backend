@@ -18,14 +18,10 @@ docs {
   # Get Last Prophylaxis for Animal
 
   Returns the most recent prophylaxis record for a specific animal.
-  Requires authentication.
-
-  ## Path Parameters
-  - `animalId` — UUID of the animal
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

@@ -14,25 +14,22 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-headers {
-  Content-Type: application/json
-}
-
 body:json {
   {
-    "animalNameCode": "BOV-001-UPDATED"
+    "animalNameCode": "COW-001-UPDATED"
   }
 }
 
 docs {
   # Update Animal
 
-  Partially updates an existing animal record. All fields are optional — only provided fields are updated.
+  Partially updates an existing animal record. All fields are optional — only provided fields
+  are updated.
 
-  **Path parameters:**
+  ## Path Parameters
   - `animalId` — UUID of the animal to update
 
-  **Updatable fields:**
+  ## Updatable Fields
   - `arrivalDate` — ISO date string (YYYY-MM-DD)
   - `animalNameCode` — unique identifier code for the animal
   - `birthYear` — four-digit birth year
@@ -45,7 +42,7 @@ docs {
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

@@ -17,17 +17,20 @@ auth:bearer {
 docs {
   # Get Vet Station
 
-  Returns a single veterinary station by its ID. Requires admin access.
+  Returns a single veterinary station by ID. Requires admin access.
 
   ## Path Parameters
-  - `vetStationId` — The ID of the vet station to retrieve
+  - `id` — Vet station UUID
 
   ## Response
-  Returns the vet station object wrapped in `{ data: ..., message: "..." }`.
+  Returns the `VetStationEntity`.
 }
 
 tests {
   test("Status 200", function() {
     expect(res.status).to.equal(200);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
   });
 }

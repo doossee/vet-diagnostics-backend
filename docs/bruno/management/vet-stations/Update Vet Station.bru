@@ -27,19 +27,17 @@ body:json {
 docs {
   # Update Vet Station
 
-  Updates an existing veterinary station by its ID. Requires admin access.
+  Updates an existing veterinary station by ID. Requires admin access.
 
   ## Path Parameters
-  - `vetStationId` — The ID of the vet station to update
+  - `id` — Vet station UUID
 
   ## Request Body
-  All fields are optional.
-  - `name.ru` — Updated vet station name in Russian
-  - `name.uz` — Updated vet station name in Uzbek
-  - `districtId` — Updated district association
+  - `name.ru` — Vet station name in Russian
+  - `name.uz` — Vet station name in Uzbek
 
   ## Response
-  Returns the updated vet station object wrapped in `{ data: ..., message: "..." }`.
+  Returns the updated `VetStationEntity`.
 }
 
 tests {

@@ -17,16 +17,11 @@ auth:bearer {
 docs {
   # List Disease Categories
 
-  Returns a paginated list of disease categories.
-  Requires authentication.
-
-  ## Query Parameters
-  - `page` — Page number (default: 1)
-  - `perPage` — Items per page (default: 10)
+  Returns a paginated list of all disease categories.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
   test("Data is array", function() {

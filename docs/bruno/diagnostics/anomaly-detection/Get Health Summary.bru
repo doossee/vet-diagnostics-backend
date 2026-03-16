@@ -1,0 +1,32 @@
+meta {
+  name: Get Health Summary
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/anomaly-detection/animals/{{animalId}}/health-summary
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Health Summary
+
+  Returns alert counts grouped by severity and an overall health status for the animal.
+  Possible healthStatus values: HEALTHY / ATTENTION / WARNING / CRITICAL
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Data has healthStatus", function() {
+    expect(res.body.data).to.have.property("healthStatus");
+  });
+}

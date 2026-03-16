@@ -20,10 +20,7 @@ headers {
 
 body:json {
   {
-    "name": {
-      "ru": "Обновлённая вакцина",
-      "uz": "Yangilangan vaksina"
-    }
+    "name": { "ru": "Вакцина от бруцеллёза S19", "uz": "Brucella vaksina S19" }
   }
 }
 
@@ -31,18 +28,11 @@ docs {
   # Update Prophylaxis Item
 
   Updates an existing prophylaxis item by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `prophylaxisItemId` — UUID of the prophylaxis item
-
-  ## Fields
-  - `name.ru` — Updated item name in Russian
-  - `name.uz` — Updated item name in Uzbek
+  Only provided fields are updated.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

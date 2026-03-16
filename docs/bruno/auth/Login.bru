@@ -42,6 +42,8 @@ tests {
     expect(res.body.data).to.have.property("refreshToken");
   });
 
-  bru.setVar("accessToken", res.body.data.accessToken);
-  bru.setVar("refreshToken", res.body.data.refreshToken);
+  test("Save tokens to vars", function() {
+    bru.setVar("accessToken", res.body.data.accessToken);
+    bru.setVar("refreshToken", res.body.data.refreshToken);
+  });
 }

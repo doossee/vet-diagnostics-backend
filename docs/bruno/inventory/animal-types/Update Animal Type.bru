@@ -14,35 +14,29 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-headers {
-  Content-Type: application/json
-}
-
 body:json {
   {
-    "name": {
-      "ru": "Обновлённый тип",
-      "uz": "Yangilangan tur"
-    }
+    "name": { "ru": "Обновлённый тип", "uz": "Yangilangan tur" }
   }
 }
 
 docs {
   # Update Animal Type
 
-  Partially updates an existing animal type. All fields are optional — only provided fields are updated.
+  Partially updates an existing animal type. All fields are optional — only provided fields
+  are updated.
 
-  **Path parameters:**
+  ## Path Parameters
   - `animalTypeId` — UUID of the animal type to update
 
-  **Updatable fields:**
-  - `name` — bilingual name object with `ru` and `uz` keys
-  - `parentId` — parent animal type ID
-  - `modelKey` — ML model key
+  ## Updatable Fields
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
+  - `parentId` — parent animal type UUID
+  - `modelKey` — ML model key string
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

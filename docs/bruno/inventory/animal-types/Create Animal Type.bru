@@ -14,10 +14,6 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-headers {
-  Content-Type: application/json
-}
-
 body:json {
   {
     "name": { "ru": "Новый тип", "uz": "Yangi tur" },
@@ -30,29 +26,28 @@ docs {
 
   Creates a new animal type node in the hierarchy.
 
-  The animal type tree is structured as a parent-child hierarchy. Currently only cattle
-  subtypes are AI-model-ready. The four leaf types that feed into the ML pipeline are:
-  - **Buqa** (Bull) — adult male
-  - **G'unojin** (Heifer) — young female
-  - **Sigir** (Cow) — adult female
-  - **Buzoq** (Calf) — young animal
+  Note: Currently only the four cattle leaf subtypes are AI-model-ready (they have a `modelKey`
+  and `featureValue` assigned and feed into the ML prediction pipeline):
+  - **Buqa** — adult bull (male, >= 3 years)
+  - **G'unojin** — heifer (female, < 3 years)
+  - **Sigir** — cow (female, >= 3 years)
+  - **Buzoq** — calf (< 1 year, either sex)
 
-  Setting `parentId` to `null` creates a root-level type. Set `parentId` to an existing
-  type's ID to create a child node.
+  New types created here will not be usable by the ML prediction pipeline until a `modelKey`
+  and `featureValue` are assigned manually.
 
-  **Required fields:**
-  - `name` — bilingual name object with `ru` and `uz` keys
-
-  **Optional fields:**
-  - `parentId` — ID of the parent animal type (null for top-level)
+  ## Request Body
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
+  - `parentId` — UUID of parent animal type, or `null` for root-level types
 }
 
 tests {
-  test("Status is 201", function() {
+  test("Status 201", function() {
     expect(res.status).to.equal(201);
   });
-  test("Returns id", function() {
-    expect(res.body.data).to.have.property("id");
-    bru.setVar("animalTypeId", res.body.data.id);
+  test("Save animalTypeId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("animalTypeId", id);
   });
 }

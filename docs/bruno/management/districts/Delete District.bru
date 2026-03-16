@@ -17,13 +17,13 @@ auth:bearer {
 docs {
   # Delete District
 
-  Deletes an existing district by its ID. Requires admin access.
+  Deletes a district by ID. Requires admin access.
 
   ## Path Parameters
-  - `districtId` — The ID of the district to delete
+  - `id` — District UUID
 
   ## Response
-  Returns a confirmation message wrapped in `{ data: ..., message: "..." }`.
+  Returns the deleted `DistrictEntity`.
 }
 
 tests {

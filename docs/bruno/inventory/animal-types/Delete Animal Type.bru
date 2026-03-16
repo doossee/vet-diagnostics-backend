@@ -19,15 +19,15 @@ docs {
 
   Deletes an animal type by its ID.
 
-  **Path parameters:**
+  ## Path Parameters
   - `animalTypeId` — UUID of the animal type to delete
 
-  **Note:** Deleting a parent type that has child subtypes or animals referencing it may result in a
-  constraint error (Prisma P2003).
+  **Note:** Deleting a parent type that has child subtypes or animals referencing it may result
+  in a constraint error (Prisma P2003). Remove or reassign children first.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

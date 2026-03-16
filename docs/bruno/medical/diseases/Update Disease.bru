@@ -28,18 +28,11 @@ docs {
   # Update Disease
 
   Updates an existing disease by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `diseaseId` — UUID of the disease
-
-  ## Fields
-  - `name.ru` — Updated disease name in Russian
-  - `name.uz` — Updated disease name in Uzbek
+  Only provided fields are updated.
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

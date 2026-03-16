@@ -21,12 +21,11 @@ headers {
 body:json {
   {
     "animalId": "{{animalId}}",
-    "itemId": "{{prophylaxisItemId}}",
-    "detailId": "{{prophylaxisDetailId}}",
-    "date": "2024-03-01",
-    "dose": "5ml",
-    "notes": "First vaccination",
-    "nextDate": "2025-03-01"
+    "prophylaxisItemId": "{{prophylaxisItemId}}",
+    "prophylaxisDetailId": "{{prophylaxisDetailId}}",
+    "date": "2024-03-15",
+    "dose": 2.5,
+    "notes": "Annual vaccination"
   }
 }
 
@@ -34,23 +33,14 @@ docs {
   # Create Prophylaxis
 
   Creates a new prophylaxis record for an animal.
-  Requires authentication.
-
-  ## Fields
-  - `animalId` — UUID of the animal receiving the prophylaxis
-  - `itemId` — UUID of the prophylaxis item (vaccine/drug)
-  - `detailId` — UUID of the prophylaxis detail (strain/sub-type)
-  - `date` — Date the prophylaxis was administered (YYYY-MM-DD)
-  - `dose` — Dosage administered (e.g. "5ml")
-  - `notes` — Optional notes about the administration
-  - `nextDate` — Scheduled date for the next dose (YYYY-MM-DD)
+  Links to a prophylaxis item and optional detail (strain).
 }
 
 tests {
-  test("Status is 201", function() {
+  test("Status 201", function() {
     expect(res.status).to.equal(201);
   });
-  test("Returns prophylaxis id", function() {
+  test("Has id", function() {
     expect(res.body.data).to.have.property("id");
     bru.setVar("prophylaxisId", res.body.data.id);
   });

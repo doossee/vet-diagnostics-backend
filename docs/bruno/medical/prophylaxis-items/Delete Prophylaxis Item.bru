@@ -18,14 +18,10 @@ docs {
   # Delete Prophylaxis Item
 
   Deletes a prophylaxis item by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `prophylaxisItemId` — UUID of the prophylaxis item to delete
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

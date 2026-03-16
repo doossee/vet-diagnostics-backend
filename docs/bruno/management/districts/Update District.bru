@@ -27,19 +27,17 @@ body:json {
 docs {
   # Update District
 
-  Updates an existing district by its ID. Requires admin access.
+  Updates an existing district by ID. Requires admin access.
 
   ## Path Parameters
-  - `districtId` — The ID of the district to update
+  - `id` — District UUID
 
   ## Request Body
-  All fields are optional.
-  - `name.ru` — Updated district name in Russian
-  - `name.uz` — Updated district name in Uzbek
-  - `regionId` — Updated region association
+  - `name.ru` — District name in Russian
+  - `name.uz` — District name in Uzbek
 
   ## Response
-  Returns the updated district object wrapped in `{ data: ..., message: "..." }`.
+  Returns the updated `DistrictEntity`.
 }
 
 tests {

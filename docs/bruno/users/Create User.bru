@@ -54,6 +54,9 @@ tests {
 
   test("Response has data.id", function() {
     expect(res.body.data).to.have.property("id");
+  });
+
+  test("Save userId to vars", function() {
     bru.setVar("userId", res.body.data.id);
   });
 }

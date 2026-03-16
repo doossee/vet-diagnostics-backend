@@ -18,14 +18,10 @@ docs {
   # Get Prophylaxis Item
 
   Returns a single prophylaxis item by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `prophylaxisItemId` — UUID of the prophylaxis item
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

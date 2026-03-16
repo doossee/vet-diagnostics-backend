@@ -20,10 +20,7 @@ headers {
 
 body:json {
   {
-    "name": {
-      "ru": "Вакцина против бруцеллёза",
-      "uz": "Brucella vaksina"
-    },
+    "name": { "ru": "Вакцина против бруцеллёза", "uz": "Brucella vaksina" },
     "type": "VACCINE"
   }
 }
@@ -31,20 +28,15 @@ body:json {
 docs {
   # Create Prophylaxis Item
 
-  Creates a new prophylaxis item (vaccine, antiparasitic, or other drug).
-  Requires authentication.
-
-  ## Fields
-  - `name.ru` — Item name in Russian
-  - `name.uz` — Item name in Uzbek
-  - `type` — Item type: `VACCINE`, `ANTIPARASITIC`, or `OTHER`
+  Creates a new prophylaxis item (vaccine or drug reference data).
+  Both Russian and Uzbek names are required (bilingual).
 }
 
 tests {
-  test("Status is 201", function() {
+  test("Status 201", function() {
     expect(res.status).to.equal(201);
   });
-  test("Returns prophylaxis item id", function() {
+  test("Has id", function() {
     expect(res.body.data).to.have.property("id");
     bru.setVar("prophylaxisItemId", res.body.data.id);
   });

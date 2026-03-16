@@ -19,7 +19,7 @@ docs {
 
   Deletes an animal record by its ID.
 
-  **Path parameters:**
+  ## Path Parameters
   - `animalId` — UUID of the animal to delete
 
   **Note:** Deleting an animal that has linked diagnostic or medical sessions may result in a
@@ -27,7 +27,7 @@ docs {
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

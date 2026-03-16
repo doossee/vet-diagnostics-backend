@@ -18,14 +18,10 @@ docs {
   # Delete Disease Category
 
   Deletes a disease category by ID.
-  Requires authentication.
-
-  ## Path Parameters
-  - `diseaseCategoryId` — UUID of the disease category to delete
 }
 
 tests {
-  test("Status is 200", function() {
+  test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
 }

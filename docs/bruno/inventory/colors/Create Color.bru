@@ -14,16 +14,9 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-headers {
-  Content-Type: application/json
-}
-
 body:json {
   {
-    "name": {
-      "ru": "Белый",
-      "uz": "Oq"
-    }
+    "name": { "ru": "Белый", "uz": "Oq" }
   }
 }
 
@@ -32,16 +25,17 @@ docs {
 
   Creates a new animal coat color entry with a bilingual name.
 
-  **Required fields:**
-  - `name` — bilingual name object with `ru` and `uz` keys
+  ## Request Body
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
 }
 
 tests {
-  test("Status is 201", function() {
+  test("Status 201", function() {
     expect(res.status).to.equal(201);
   });
-  test("Returns id", function() {
-    expect(res.body.data).to.have.property("id");
-    bru.setVar("colorId", res.body.data.id);
+  test("Save colorId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("colorId", id);
   });
 }
