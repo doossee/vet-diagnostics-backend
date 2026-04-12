@@ -7,4 +7,9 @@ export class MucosaExamQueryParamsDto extends BaseQueryParamsDto {
   @IsUUID()
   @ApiPropertyOptional()
   readonly animalId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @ApiPropertyOptional()
+  readonly sessionId?: string;
 }

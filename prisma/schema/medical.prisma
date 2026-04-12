@@ -50,7 +50,8 @@ model Prophylaxis {
   detailId String?            @map("detail_id") @db.Uuid
   detail   ProphylaxisDetail? @relation(fields: [detailId], references: [id], onDelete: Restrict)
 
-  date DateTime @map("date")
+  date  DateTime @map("date")
+  notes String?  @db.Text
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)

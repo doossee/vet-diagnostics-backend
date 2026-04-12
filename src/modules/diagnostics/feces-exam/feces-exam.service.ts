@@ -139,4 +139,33 @@ export class FecesExamService {
       where: { id },
     });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        const toNum = (v) => (v !== '' && v != null ? Number(v) : undefined);
+        await this.prisma.fecesExam.create({
+          data: {
+            animalId: row['animalId'] || undefined,
+            sessionId: row['sessionId'] || undefined,
+            fecesColorId: row['fecesColorId'] || undefined,
+            fecesSmellId: row['fecesSmellId'] || undefined,
+            fecesConsistencyId: row['fecesConsistencyId'] || undefined,
+            fecesFormId: row['fecesFormId'] || undefined,
+            amount: toNum(row['amount']),
+            undigestedFood: toNum(row['undigestedFood']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

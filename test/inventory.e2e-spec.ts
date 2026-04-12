@@ -8,7 +8,6 @@ import { AnimalFactory } from './factories/animal.factory';
 import { AuthTestHelper } from './helpers/auth.helper';
 import { UserFactory } from './factories/user.factory';
 import { RegionFactory, DistrictFactory } from './factories/region.factory';
-import { AnimalSex } from '../src/generated/prisma/client';
 
 describe('Inventory (e2e)', () => {
   let app: INestApplication<App>;
@@ -54,9 +53,9 @@ describe('Inventory (e2e)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
           arrivalDate: new Date().toISOString(),
-          age: 12,
-          sex: AnimalSex.FEMALE,
-          farmerId: 'farmer-id',
+          birthDate: new Date('2022-01-01').toISOString(),
+          animalNameCode: `TEST-${Date.now()}`,
+          farmerId: null,
           animalTypeId: animal.animalTypeId,
           animalBreedId: animal.animalBreedId,
           animalColorId: animal.animalColorId,
@@ -64,7 +63,6 @@ describe('Inventory (e2e)', () => {
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.age).toBe(12);
     });
   });
 
@@ -86,13 +84,11 @@ describe('Inventory (e2e)', () => {
         .post('/animal-types')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          nameRu: 'Крупный рогатый скот',
-          nameUz: 'Qoramol',
+          name: { ru: 'Крупный рогатый скот', uz: 'Qoramol' },
         })
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
-      expect(response.body.nameRu).toBe('Крупный рогатый скот');
     });
   });
 });

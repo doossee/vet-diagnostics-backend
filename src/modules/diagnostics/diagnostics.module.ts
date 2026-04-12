@@ -16,6 +16,33 @@ import { MucosaAppearanceModule } from './mucosa-appearance/mucosa-appearance.mo
 import { MedicalSessionModule } from './medical-session/medical-session.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { AnomalyDetectionModule } from './anomaly-detection/anomaly-detection.module';
+import { BodyPositionModule } from './body-position/body-position.module';
+import { BodyTypeModule } from './body-type/body-type.module';
+import { ConstitutionModule } from './constitution/constitution.module';
+import { DownTypeModule } from './down-type/down-type.module';
+import { FeatherTypeModule } from './feather-type/feather-type.module';
+import { HairTypeModule } from './hair-type/hair-type.module';
+import { LymphConsistencyModule } from './lymph-consistency/lymph-consistency.module';
+import { LymphMobilityModule } from './lymph-mobility/lymph-mobility.module';
+import { LymphPainModule } from './lymph-pain/lymph-pain.module';
+import { LymphShapeModule } from './lymph-shape/lymph-shape.module';
+import { LymphSizeModule } from './lymph-size/lymph-size.module';
+import { LymphSurfaceModule } from './lymph-surface/lymph-surface.module';
+import { LymphTempModule } from './lymph-temp/lymph-temp.module';
+import { MucosaTypeModule } from './mucosa-type/mucosa-type.module';
+import { ObesityTypeModule } from './obesity-type/obesity-type.module';
+import { SkinColorModule } from './skin-color/skin-color.module';
+import { SkinElasticityModule } from './skin-elasticity/skin-elasticity.module';
+import { SkinHumidityModule } from './skin-humidity/skin-humidity.module';
+import { SkinPainModule } from './skin-pain/skin-pain.module';
+import { SkinSensitivityModule } from './skin-sensitivity/skin-sensitivity.module';
+import { SkinSmellModule } from './skin-smell/skin-smell.module';
+import { SkinSurfaceModule } from './skin-surface/skin-surface.module';
+import { SkinTempModule } from './skin-temp/skin-temp.module';
+import { TemperamentModule } from './temperament/temperament.module';
+import { WoolTypeModule } from './wool-type/wool-type.module';
+import { RumenFluidStateModule } from './rumen-fluid-state/rumen-fluid-state.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -36,6 +63,33 @@ import { AnomalyDetectionModule } from './anomaly-detection/anomaly-detection.mo
     MedicalSessionModule,
     FeedbackModule,
     AnomalyDetectionModule,
+    BodyPositionModule,
+    BodyTypeModule,
+    ConstitutionModule,
+    DownTypeModule,
+    FeatherTypeModule,
+    HairTypeModule,
+    LymphConsistencyModule,
+    LymphMobilityModule,
+    LymphPainModule,
+    LymphShapeModule,
+    LymphSizeModule,
+    LymphSurfaceModule,
+    LymphTempModule,
+    MucosaTypeModule,
+    ObesityTypeModule,
+    SkinColorModule,
+    SkinElasticityModule,
+    SkinHumidityModule,
+    SkinPainModule,
+    SkinSensitivityModule,
+    SkinSmellModule,
+    SkinSurfaceModule,
+    SkinTempModule,
+    TemperamentModule,
+    WoolTypeModule,
+    RumenFluidStateModule,
+    StatisticsModule,
   ],
 })
 export class DiagnosticsModule {}

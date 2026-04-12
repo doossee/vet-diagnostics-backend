@@ -139,4 +139,43 @@ export class UrineExamService {
       where: { id },
     });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        const toNum = (v) => (v !== '' && v != null ? Number(v) : undefined);
+        await this.prisma.urineExam.create({
+          data: {
+            animalId: row['animalId'] || undefined,
+            sessionId: row['sessionId'] || undefined,
+            urineColorId: row['urineColorId'] || undefined,
+            urineSmellId: row['urineSmellId'] || undefined,
+            urineClarityId: row['urineClarityId'] || undefined,
+            urineConsistencyId: row['urineConsistencyId'] || undefined,
+            amount: toNum(row['amount']),
+            ph: toNum(row['ph']),
+            acetone: toNum(row['acetone']),
+            protein: toNum(row['protein']),
+            bilirubin: toNum(row['bilirubin']),
+            urobilinogen: toNum(row['urobilinogen']),
+            sugar: toNum(row['sugar']),
+            leukocytes: toNum(row['leukocytes']),
+            epithelium: toNum(row['epithelium']),
+            microbialBodies: toNum(row['microbialBodies']),
+            erythrocytes: toNum(row['erythrocytes']),
+            saltCrystals: toNum(row['saltCrystals']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

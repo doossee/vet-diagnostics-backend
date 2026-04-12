@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 const animalInclude: Prisma.AnimalInclude = {
   sex: true,
-  farmer: true,
+  // farmer: true,
   animalType: true,
   animalBreed: true,
   animalColor: true,
@@ -239,6 +239,10 @@ export class AnimalService {
       mucosaAppearance: mucosaExam?.mucosaAppearance?.numericValue ?? null,
     };
 
+    const isNone = Object.values(payload).filter((d) => d === null).length > 0;
+
+    if (isNone) return {};
+
     const response = await axios.post<Record<number, number>>(uri!, {
       params: Object.values(payload).map((v) =>
         v === null ? null : Number(v),
@@ -249,10 +253,18 @@ export class AnimalService {
   }
 
   async update(id: string, data: UpdateAnimalDto) {
+    const { birthMonth, birthYear, ...rest } = data;
+    let birthDate: Date | null = null;
+    birthDate =
+      birthMonth && birthYear
+        ? new Date(data.birthYear!, data.birthMonth! - 1, 1)
+        : null;
+
     return await this.prisma.animal.update({
       where: { id },
       data: {
-        ...data,
+        ...rest,
+        ...(birthDate && { birthDate }),
         ...(data.arrivalDate && { arrivalDate: new Date(data.arrivalDate) }),
       },
       include: animalInclude,
@@ -262,4 +274,30 @@ export class AnimalService {
   async delete(id: string) {
     return await this.prisma.animal.delete({ where: { id } });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.create({
+          arrivalDate: String(row['arrivalDate']),
+          animalNameCode: String(row['animalNameCode']),
+          birthYear: Number(row['birthYear']),
+          birthMonth: Number(row['birthMonth']),
+          animalTypeId: String(row['animalTypeId']),
+          animalBreedId: String(row['animalBreedId']),
+          animalColorId: String(row['animalColorId']),
+          farmerId: String(row['farmerId']),
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

@@ -94,4 +94,12 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
     example: UserRole.VETERINARIAN,
   })
   role?: UserRole | undefined;
+
+  @IsUUID()
+  @IsOptional()
+  @ApiProperty({
+    description: 'Veterinarian ID for create farmer profile (required)',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  veterinarianId?: string | undefined;
 }

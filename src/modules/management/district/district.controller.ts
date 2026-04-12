@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -30,7 +39,10 @@ import { IsAdminUser } from 'src/shared/decorators';
 @ApiTags('districts')
 @Controller('districts')
 export class DistrictController {
-  constructor(private readonly districtService: DistrictService) {}
+  constructor(
+    private readonly districtService: DistrictService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({
     summary: 'Create district',
@@ -68,6 +80,36 @@ export class DistrictController {
     type: DistrictEntity,
     description: 'District retrieved successfully',
   })
+  @ApiOperation({ summary: 'Download Excel import template for districts' })
+  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header('Content-Disposition', 'attachment; filename="районы-шаблон.xlsx"')
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'name_ru', header: 'Название (рус)', example: 'Юнусабад' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Yunusobod' },
+        { key: 'regionId', header: 'ID региона', example: 'uuid-here', width: 38 },
+      ],
+      'Районы',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import districts from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+      { key: 'regionId', header: 'ID региона' },
+    ]);
+    return await this.districtService.importFromExcel(rows);
+  }
+
   @ApiNotFoundResponse({ description: 'District not found' })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -105,4 +147,5 @@ export class DistrictController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.districtService.delete(id);
   }
+
 }

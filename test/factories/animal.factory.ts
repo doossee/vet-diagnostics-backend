@@ -1,23 +1,15 @@
-import {
-  Animal,
-  AnimalSex,
-  AnimalType,
-  Breed,
-  Color,
-} from '../src/generated/prisma/client';
+import { Animal, AnimalType } from 'src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 
 export class AnimalFactory {
   private prisma = getPrismaTestClient();
 
   async create(overrides?: Partial<Animal>): Promise<Animal> {
-    // Create dependencies if not provided
     let animalTypeId = overrides?.animalTypeId;
     if (!animalTypeId) {
       const animalType = await this.prisma.animalType.create({
         data: {
-          nameRu: 'Крупный рогатый скот',
-          nameUz: 'Qoramol',
+          name: { ru: 'Крупный рогатый скот', uz: 'Qoramol' },
         },
       });
       animalTypeId = animalType.id;
@@ -27,8 +19,7 @@ export class AnimalFactory {
     if (!animalBreedId) {
       const breed = await this.prisma.breed.create({
         data: {
-          nameRu: 'Голштинская',
-          nameUz: 'Holstein',
+          name: { ru: 'Голштинская', uz: 'Holstein' },
         },
       });
       animalBreedId = breed.id;
@@ -38,8 +29,7 @@ export class AnimalFactory {
     if (!animalColorId) {
       const color = await this.prisma.color.create({
         data: {
-          nameRu: 'Белый',
-          nameUz: 'Oq',
+          name: { ru: 'Белый', uz: 'Oq' },
         },
       });
       animalColorId = color.id;
@@ -48,9 +38,10 @@ export class AnimalFactory {
     return this.prisma.animal.create({
       data: {
         arrivalDate: overrides?.arrivalDate || new Date(),
-        age: overrides?.age || 12,
-        sex: overrides?.sex || AnimalSex.FEMALE,
-        farmerId: overrides?.farmerId || 'test-farmer-id',
+        birthDate: overrides?.birthDate || new Date('2022-01-01'),
+        animalNameCode:
+          overrides?.animalNameCode || `ANIMAL-${Date.now()}-${Math.random()}`,
+        farmerId: overrides?.farmerId || null,
         animalTypeId,
         animalBreedId,
         animalColorId,
@@ -76,8 +67,10 @@ export class AnimalTypeFactory {
   async create(overrides?: Partial<AnimalType>): Promise<AnimalType> {
     return this.prisma.animalType.create({
       data: {
-        nameRu: overrides?.nameRu || `Тип ${Date.now()}`,
-        nameUz: overrides?.nameUz || `Type ${Date.now()}`,
+        name: {
+          ru: (overrides as any)?.nameRu || `Тип ${Date.now()}`,
+          uz: (overrides as any)?.nameUz || `Type ${Date.now()}`,
+        },
         parentId: overrides?.parentId || null,
       },
     });

@@ -39,6 +39,7 @@ model User {
 
   veterinarianProfile VetProfile?
   farmerProfile       FarmerProfile?
+  feedbacks           Feedback[]
 
   @@index([username])
   @@index([role])

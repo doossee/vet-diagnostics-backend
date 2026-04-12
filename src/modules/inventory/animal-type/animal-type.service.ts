@@ -91,4 +91,32 @@ export class AnimalTypeService {
       }) ?? null
     );
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.animalType.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            modelKey: row['modelKey'] ? String(row['modelKey']) : undefined,
+            parentId: row['parentId'] ? String(row['parentId']) : undefined,
+            minAgeMonths: row['minAgeMonths'] ? Number(row['minAgeMonths']) : undefined,
+            maxAgeMonths: row['maxAgeMonths'] ? Number(row['maxAgeMonths']) : undefined,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

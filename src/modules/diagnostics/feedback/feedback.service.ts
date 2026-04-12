@@ -11,6 +11,14 @@ import { Prisma } from 'src/generated/prisma/client';
 const feedbackInclude: Prisma.FeedbackInclude = {
   prediction: true,
   veterinarian: true,
+  admin: {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      role: true,
+    },
+  },
   suggestedDisease: true,
 };
 
@@ -22,18 +30,28 @@ export class FeedbackService {
   ) {}
 
   async create(data: CreateFeedbackDto) {
+    const createData: Prisma.FeedbackUncheckedCreateInput = {
+      predictionId: data.predictionId,
+      veterinarianId: data.veterinarianId ?? null,
+      adminId: data.adminId ?? null,
+      rating: data.rating,
+      comment: data.comment,
+      suggestedDiseaseId: data.suggestedDiseaseId,
+    };
     return await this.prisma.feedback.create({
-      data,
+      data: createData,
       include: feedbackInclude,
     });
   }
 
   async findAll(query: FeedbackQueryParamsDto) {
-    const { page, perPage, byId, predictionId, veterinarianId } = query;
+    const { page, perPage, byId, predictionId, veterinarianId, adminId } =
+      query;
 
     const where: Prisma.FeedbackWhereInput = {
       ...(predictionId && { predictionId }),
       ...(veterinarianId && { veterinarianId }),
+      ...(adminId && { adminId }),
     };
 
     const orderBy: Prisma.FeedbackOrderByWithRelationInput = {

@@ -98,4 +98,58 @@ export class ClinicalExamService {
       where: { id },
     });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        const toNum = (v) => (v !== '' && v != null ? Number(v) : undefined);
+        const toId = (v) => (v && String(v).length > 10 ? String(v) : undefined);
+        await this.prisma.clinicalExam.create({
+          data: {
+            animalId: String(row['animalId']),
+            sessionId: toId(row['sessionId']),
+            pulse: toNum(row['pulse']),
+            temperature: toNum(row['temperature']),
+            respiratoryRate: toNum(row['respiratoryRate']),
+            rumination: toNum(row['rumination']),
+            rumenInfusoriaCount: toNum(row['rumenInfusoriaCount']),
+            bodyTypeId: toId(row['bodyTypeId']),
+            obesityId: toId(row['obesityId']),
+            bodyPositionId: toId(row['bodyPositionId']),
+            constitutionId: toId(row['constitutionId']),
+            temperamentId: toId(row['temperamentId']),
+            woolId: toId(row['woolId']),
+            downId: toId(row['downId']),
+            hairId: toId(row['hairId']),
+            feathersId: toId(row['feathersId']),
+            skinColorId: toId(row['skinColorId']),
+            skinHumidityId: toId(row['skinHumidityId']),
+            skinSmellId: toId(row['skinSmellId']),
+            skinTempId: toId(row['skinTempId']),
+            skinSurfaceId: toId(row['skinSurfaceId']),
+            skinElasticityId: toId(row['skinElasticityId']),
+            skinSensitivityId: toId(row['skinSensitivityId']),
+            skinPainId: toId(row['skinPainId']),
+            lymphSizeId: toId(row['lymphSizeId']),
+            lymphShapeId: toId(row['lymphShapeId']),
+            lymphSurfaceId: toId(row['lymphSurfaceId']),
+            lymphConsistencyId: toId(row['lymphConsistencyId']),
+            lymphTempId: toId(row['lymphTempId']),
+            lymphPainId: toId(row['lymphPainId']),
+            lymphMobilityId: toId(row['lymphMobilityId']),
+            rumenFluidStateId: toId(row['rumenFluidStateId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

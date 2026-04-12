@@ -10,21 +10,25 @@ get {
   auth: none
 }
 
-docs {
-  # Health Check
-
-  Verify that the API server is running and healthy. This endpoint is public and requires no authentication.
-
-  ## Response
-  - `data.status` — "ok" when all services are operational
+vars:pre-request {
+  baseUrl: http://localhost:5000
 }
 
 tests {
   test("Status 200", function() {
     expect(res.status).to.equal(200);
   });
-
+  
   test("data.status is ok", function() {
     expect(res.body.data.status).to.equal("ok");
   });
+}
+
+docs {
+  # Health Check
+  
+  Verify that the API server is running and healthy. This endpoint is public and requires no authentication.
+  
+  ## Response
+  - `data.status` — "ok" when all services are operational
 }

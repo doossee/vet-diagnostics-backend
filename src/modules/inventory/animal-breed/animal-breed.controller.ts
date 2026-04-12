@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -29,7 +38,10 @@ import { IsAuthenticated } from 'src/shared/decorators';
 @ApiTags('breeds')
 @Controller('breeds')
 export class AnimalBreedController {
-  constructor(private readonly breedService: AnimalBreedService) {}
+  constructor(
+    private readonly breedService: AnimalBreedService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({ summary: 'Create breed' })
   @ApiCreatedResponse({ type: AnimalBreedEntity })
@@ -43,6 +55,34 @@ export class AnimalBreedController {
   @Get()
   async findAll(@Query() query: AnimalBreedQueryParamsDto) {
     return await this.breedService.findAll(query);
+  }
+
+  @ApiOperation({ summary: 'Download Excel import template for animal breeds' })
+  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header('Content-Disposition', 'attachment; filename="породы-животных-шаблон.xlsx"')
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'name_ru', header: 'Название (рус)', example: 'Голштинская' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Golshtin' },
+      ],
+      'Породы животных',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import animal breeds from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+    ]);
+    return await this.breedService.importFromExcel(rows);
   }
 
   @ApiOperation({ summary: 'Get breed by ID' })
@@ -69,4 +109,5 @@ export class AnimalBreedController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.breedService.delete(id);
   }
+
 }

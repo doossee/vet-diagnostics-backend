@@ -29,10 +29,11 @@ export class MucosaExamService {
   }
 
   async findAll(query: MucosaExamQueryParamsDto) {
-    const { page, perPage, byId, animalId } = query;
+    const { page, perPage, byId, animalId, sessionId } = query;
 
     const where: Prisma.MucosaExamWhereInput = {
       ...(animalId && { animalId }),
+      ...(sessionId && { sessionId }),
     };
 
     const orderBy: Prisma.MucosaExamOrderByWithRelationInput = {
@@ -75,4 +76,28 @@ export class MucosaExamService {
       where: { id },
     });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.mucosaExam.create({
+          data: {
+            animalId: row['animalId'] || undefined,
+            sessionId: row['sessionId'] || undefined,
+            mucosaTypeId: row['mucosaTypeId'] || undefined,
+            mucosaAppearanceId: row['mucosaAppearanceId'] || undefined,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
+  }
+
 }

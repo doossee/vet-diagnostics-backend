@@ -72,4 +72,24 @@ export class DiseaseCategoryService {
   async delete(id: string) {
     return await this.prisma.diseaseCategory.delete({ where: { id } });
   }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.diseaseCategory.create({
+          data: {
+            name: { ru: String(row['name_ru'] ?? ''), uz: String(row['name_uz'] ?? '') } as unknown as Prisma.InputJsonValue,
+            parentId: row['parentId'] ? String(row['parentId']) : undefined,
+          },
+        });
+        imported++;
+      } catch (e) { errors.push(String(e.message)); }
+    }
+    return { imported, errors };
+  }
+
 }

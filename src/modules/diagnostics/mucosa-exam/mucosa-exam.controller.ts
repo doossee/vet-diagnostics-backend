@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -30,7 +39,10 @@ import { IsAuthenticated } from 'src/shared/decorators';
 @ApiTags('mucosa-exams')
 @Controller('mucosa-exams')
 export class MucosaExamController {
-  constructor(private readonly mucosaExamService: MucosaExamService) {}
+  constructor(
+    private readonly mucosaExamService: MucosaExamService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({
     summary: 'Create mucosa exam',
@@ -81,6 +93,36 @@ export class MucosaExamController {
     type: MucosaExamEntity,
     description: 'Mucosa exam retrieved successfully',
   })
+  @ApiOperation({ summary: 'Download Excel import template for mucosa exam' })
+  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header('Content-Disposition', 'attachment; filename="исследование-слизистых-шаблон.xlsx"')
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
+        { key: 'mucosaTypeId', header: 'ID типа слизистой', example: 'uuid-here', width: 38 },
+        { key: 'mucosaAppearanceId', header: 'ID вида слизистой', example: 'uuid-here', width: 38 },
+      ],
+      'Исследование слизистых',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import mucosa exams from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'animalId', header: 'ID животного' },
+      { key: 'mucosaTypeId', header: 'ID типа слизистой' },
+      { key: 'mucosaAppearanceId', header: 'ID вида слизистой' },
+    ]);
+    return await this.mucosaExamService.importFromExcel(rows);
+  }
+
   @ApiNotFoundResponse({ description: 'Mucosa exam not found' })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -118,4 +160,5 @@ export class MucosaExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.mucosaExamService.delete(id);
   }
+
 }

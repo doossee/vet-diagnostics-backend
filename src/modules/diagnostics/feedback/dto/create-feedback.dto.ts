@@ -1,14 +1,34 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+  ValidateIf,
+} from 'class-validator';
 
 export class CreateFeedbackDto {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
   predictionId: string;
 
-  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @ApiPropertyOptional({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Required if adminId is not provided',
+  })
+  @ValidateIf((o) => !o.adminId)
   @IsUUID()
-  veterinarianId: string;
+  veterinarianId?: string;
+
+  @ApiPropertyOptional({
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'Required if veterinarianId is not provided',
+  })
+  @ValidateIf((o) => !o.veterinarianId)
+  @IsUUID()
+  adminId?: string;
 
   @ApiProperty({ example: 3, description: 'Prediction accuracy rating (1-5)' })
   @IsInt()

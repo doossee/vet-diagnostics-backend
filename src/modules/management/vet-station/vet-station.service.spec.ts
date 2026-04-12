@@ -38,8 +38,7 @@ describe('VetStationService', () => {
   describe('create', () => {
     it('should create a vet station', async () => {
       const dto = {
-        nameRu: 'Станция №1',
-        nameUz: 'Station #1',
+        name: { ru: 'Станция №1', uz: 'Station #1' },
         address: 'Address',
         districtId: 'district-id',
       };
@@ -52,7 +51,7 @@ describe('VetStationService', () => {
 
       mockPrismaService.vetStation.create.mockResolvedValue(mockStation);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto as any);
 
       expect(result).toEqual(mockStation);
     });
@@ -60,7 +59,7 @@ describe('VetStationService', () => {
 
   describe('findOne', () => {
     it('should return a vet station', async () => {
-      const mockStation = { id: 'uuid', nameRu: 'Станция №1' };
+      const mockStation = { id: 'uuid', name: { ru: 'Станция №1', uz: 'Station #1' } };
       mockPrismaService.vetStation.findUniqueOrThrow.mockResolvedValue(
         mockStation,
       );
@@ -73,12 +72,12 @@ describe('VetStationService', () => {
 
   describe('update', () => {
     it('should update a vet station', async () => {
-      const dto = { nameRu: 'Updated' };
+      const dto = { name: { ru: 'Updated', uz: 'Updated' } };
       const mockStation = { id: 'uuid', ...dto };
 
       mockPrismaService.vetStation.update.mockResolvedValue(mockStation);
 
-      const result = await service.update('uuid', dto);
+      const result = await service.update('uuid', dto as any);
 
       expect(result).toEqual(mockStation);
     });

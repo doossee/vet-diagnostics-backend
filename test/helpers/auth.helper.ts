@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { User, UserRole } from '../src/generated/prisma/client';
+import { User, UserRole } from 'src/generated/prisma/client';
 
 export class AuthTestHelper {
   private jwtService: JwtService;

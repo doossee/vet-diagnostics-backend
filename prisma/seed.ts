@@ -1,8 +1,14 @@
+import 'dotenv/config';
 import { PrismaClient, ProphylaxisType, UserRole, UserGender } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL is not set. Create/update .env and try again.');
+}
+
+const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 /** Build a bilingual JSONB name value */
@@ -221,6 +227,60 @@ async function main() {
     });
   }
 
+  const skinSmells = [
+    { ru: 'Без запаха', uz: 'Hidsiz', nv: 0 },
+    { ru: 'Нормальный запах', uz: 'Normal hid', nv: 1 },
+    { ru: 'Ацетоновый запах', uz: 'Atsetonli hid', nv: 2 },
+    { ru: 'Гнилостный запах', uz: 'Sepgan hid', nv: 3 },
+  ];
+  for (const item of skinSmells) {
+    await prisma.skinSmell.upsert({
+      where: { numericValue: item.nv },
+      update: {},
+      create: { name: n(item.ru, item.uz), numericValue: item.nv },
+    });
+  }
+
+  const skinSurfaces = [
+    { ru: 'Гладкая', uz: 'Silliq', nv: 0 },
+    { ru: 'Шершавая', uz: 'Qo\'ng\'ir', nv: 1 },
+    { ru: 'Влажная', uz: 'Nam', nv: 2 },
+    { ru: 'Чешуйчатая', uz: 'Qavatlar bilan', nv: 3 },
+  ];
+  for (const item of skinSurfaces) {
+    await prisma.skinSurface.upsert({
+      where: { numericValue: item.nv },
+      update: {},
+      create: { name: n(item.ru, item.uz), numericValue: item.nv },
+    });
+  }
+
+  const skinSensitivities = [
+    { ru: 'Нормальная', uz: 'Normal', nv: 0 },
+    { ru: 'Повышенная', uz: 'Ko\'tarilgan', nv: 1 },
+    { ru: 'Пониженная', uz: 'Pasaygan', nv: 2 },
+  ];
+  for (const item of skinSensitivities) {
+    await prisma.skinSensitivity.upsert({
+      where: { numericValue: item.nv },
+      update: {},
+      create: { name: n(item.ru, item.uz), numericValue: item.nv },
+    });
+  }
+
+  const skinPains = [
+    { ru: 'Безболезненная', uz: "Og'riqsiz", nv: 0 },
+    { ru: 'Болезненная', uz: "Og'riqli", nv: 1 },
+    { ru: 'Сильно болезненная', uz: "Juda og'riqli", nv: 2 },
+  ];
+  for (const item of skinPains) {
+    await prisma.skinPain.upsert({
+      where: { numericValue: item.nv },
+      update: {},
+      create: { name: n(item.ru, item.uz), numericValue: item.nv },
+    });
+  }
+
   const lymphSizes = [
     { ru: 'Катталмаган', uz: 'Kattarmagan', nv: 0 },
     { ru: 'Катталган', uz: 'Kattargan', nv: 1 },
@@ -308,6 +368,21 @@ async function main() {
     });
   }
 
+  const rumenFluidStates = [
+    { ru: 'Нормальное', uz: 'Normal', nv: 0 },
+    { ru: 'Вздутие', uz: 'Bulanganlik', nv: 1 },
+    { ru: 'Закупорка', uz: 'Tiqilib qolgan', nv: 2 },
+    { ru: 'Гранулярное', uz: 'Zarnali', nv: 3 },
+    { ru: 'Слизистое', uz: 'Limfali', nv: 4 },
+  ];
+  for (const item of rumenFluidStates) {
+    await prisma.rumenFluidState.upsert({
+      where: { numericValue: item.nv },
+      update: {},
+      create: { name: n(item.ru, item.uz), numericValue: item.nv },
+    });
+  }
+
   const mucosaTypes = [
     { ru: 'Оғиз', uz: "Og'iz", nv: 0 },
     { ru: 'Бурун', uz: 'Burun', nv: 1 },
@@ -367,22 +442,32 @@ async function main() {
   // --- 2. Users ---
   const district = await prisma.district.findFirst();
   if (district) {
-    await prisma.user.upsert({
-      where: { phone: '+998679050005' },
-      update: {},
-      create: {
-        phone: '+998679050005',
-        username: 'admin',
-        password: await bcrypt.hash('123qazwsx', 10),
-        firstName: 'John',
-        lastName: 'Doe',
-        address: 'Дагбитская улица, 168а',
-        districtId: district.id,
-        role: UserRole.SUPER_ADMIN,
-        gender: UserGender.MALE,
+    const adminPhone = '+998679050005';
+    const adminUsername = 'admin';
+    const existingAdmin = await prisma.user.findFirst({
+      where: {
+        OR: [{ username: adminUsername }, { phone: adminPhone }],
       },
     });
-    console.log('Admin user seeded.');
+
+    if (!existingAdmin) {
+      await prisma.user.create({
+        data: {
+          phone: adminPhone,
+          username: adminUsername,
+          password: await bcrypt.hash('123qazwsx', 10),
+          firstName: 'John',
+          lastName: 'Doe',
+          address: 'Дагбитская улица, 168а',
+          districtId: district.id,
+          role: UserRole.ADMIN,
+          gender: UserGender.MALE,
+        },
+      });
+      console.log('Admin user seeded.');
+    } else {
+      console.log('Admin user already exists. Skipping create.');
+    }
   }
 
   // --- 3. Animal Types Hierarchy ---
@@ -410,7 +495,7 @@ async function main() {
             {
               ru: 'Буқа (Бык)',
               uz: 'Buqa',
-              modelKey: 'buqa',
+              modelKey: 'bull',
               sexId: maleSex?.id ?? null,
               minAgeMonths: 36,
               maxAgeMonths: null,
@@ -418,7 +503,7 @@ async function main() {
             {
               ru: 'Гунажин (Тёлка)',
               uz: "G'unojin",
-              modelKey: 'gunojin',
+              modelKey: 'heifer',
               sexId: femaleSex?.id ?? null,
               minAgeMonths: 12,
               maxAgeMonths: 35,
@@ -426,7 +511,7 @@ async function main() {
             {
               ru: 'Сигир (Корова)',
               uz: 'Sigir',
-              modelKey: 'sigir',
+              modelKey: 'cow',
               sexId: femaleSex?.id ?? null,
               minAgeMonths: 24,
               maxAgeMonths: null,
@@ -434,7 +519,7 @@ async function main() {
             {
               ru: 'Бузоқ (Телёнок)',
               uz: 'Buzoq',
-              modelKey: 'buzoq',
+              modelKey: 'calf',
               sexId: null,
               minAgeMonths: 0,
               maxAgeMonths: 11,
@@ -476,6 +561,13 @@ async function main() {
     let type = await prisma.animalType.findFirst({
       where: { name: { path: ['ru'], equals: typeData.ru } },
     });
+
+    // Fallback for records that already exist under the same unique modelKey.
+    if (!type && typeData.modelKey) {
+      type = await prisma.animalType.findUnique({
+        where: { modelKey: typeData.modelKey },
+      });
+    }
 
     if (!type) {
       type = await prisma.animalType.create({
