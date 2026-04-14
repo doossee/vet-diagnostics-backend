@@ -16,14 +16,17 @@ export function IsAuthenticated() {
 
 export function IsAdminUser() {
   return applyDecorators(
-    UseGuards(JwtAuthGuard, new RolesGuard([UserRole.ADMIN])),
+    UseGuards(
+      JwtAuthGuard,
+      new RolesGuard([UserRole.ADMIN, UserRole.SUPER_ADMIN]),
+    ),
     ApiUnauthorizedResponse({
       description:
         'Access denied: User is not authenticated. Please log in to access this resource.',
     }),
     ApiForbiddenResponse({
       description:
-        'Access denied: Insufficient permissions. Admin privileges are required to perform this action.',
+        'Access denied: Insufficient permissions. Admin or Super Admin privileges are required to perform this action.',
     }),
   );
 }
