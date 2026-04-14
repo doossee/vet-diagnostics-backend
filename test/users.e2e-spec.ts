@@ -88,8 +88,11 @@ describe('Users (e2e)', () => {
       expect(response.body.firstName).toBe('Vet');
       expect(response.body.lastName).toBe('Doctor');
       expect(response.body.role).toBe(UserRole.VETERINARIAN);
-      // Note: @Exclude() on password requires ClassSerializerInterceptor
-      // which is not globally enabled, so password is present in responses.
+      // ClassSerializerInterceptor is now globally enabled, so @Exclude()
+      // fields (password, refreshTokenHash, tokenExpiresAt) are excluded.
+      expect(response.body).not.toHaveProperty('password');
+      expect(response.body).not.toHaveProperty('refreshTokenHash');
+      expect(response.body).not.toHaveProperty('tokenExpiresAt');
     });
 
     it('should create a new ADMIN user (201)', async () => {
@@ -337,6 +340,37 @@ describe('Users (e2e)', () => {
         })
         .expect(400);
     });
+
+    it('should return 401 without auth token', async () => {
+      await request(app.getHttpServer())
+        .post('/users')
+        .send({
+          username: 'no_auth_user',
+          password: 'password123',
+          firstName: 'Test',
+          email: 'test@example.com',
+          districtId: '00000000-0000-0000-0000-000000000000',
+          role: UserRole.VETERINARIAN,
+        })
+        .expect(401);
+    });
+
+    it('should return 403 as VETERINARIAN (admin-only endpoint)', async () => {
+      const { accessToken } = await loginAs(UserRole.VETERINARIAN);
+
+      await request(app.getHttpServer())
+        .post('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          username: 'vet_create_attempt',
+          password: 'password123',
+          firstName: 'Test',
+          email: 'test@example.com',
+          districtId: '00000000-0000-0000-0000-000000000000',
+          role: UserRole.VETERINARIAN,
+        })
+        .expect(403);
+    });
   });
 
   // ===========================================================================
@@ -428,7 +462,20 @@ describe('Users (e2e)', () => {
       }
     });
 
-    it('should return user list with all fields (ClassSerializerInterceptor not active)', async () => {
+    it('should return 401 without auth token', async () => {
+      await request(app.getHttpServer()).get('/users').expect(401);
+    });
+
+    it('should return 403 as VETERINARIAN (admin-only endpoint)', async () => {
+      const { accessToken } = await loginAs(UserRole.VETERINARIAN);
+
+      await request(app.getHttpServer())
+        .get('/users')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(403);
+    });
+
+    it('should exclude sensitive fields from user list (ClassSerializerInterceptor active)', async () => {
       const { accessToken } = await loginAs(UserRole.ADMIN);
 
       const response = await request(app.getHttpServer())
@@ -436,9 +483,14 @@ describe('Users (e2e)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      // ClassSerializerInterceptor is not globally enabled, so @Exclude()
-      // fields (password, refreshTokenHash) are present in the raw response.
+      // ClassSerializerInterceptor is globally enabled, so @Exclude()
+      // fields (password, refreshTokenHash, tokenExpiresAt) are excluded.
       expect(response.body.data.length).toBeGreaterThanOrEqual(1);
+      for (const user of response.body.data) {
+        expect(user).not.toHaveProperty('password');
+        expect(user).not.toHaveProperty('refreshTokenHash');
+        expect(user).not.toHaveProperty('tokenExpiresAt');
+      }
     });
   });
 
@@ -1019,6 +1071,19 @@ describe('Users (e2e)', () => {
     });
 
     it('unauthenticated requests should return 401 for all protected endpoints', async () => {
+      await request(app.getHttpServer())
+        .post('/users')
+        .send({
+          username: 'unauth_user',
+          password: 'password123',
+          firstName: 'Test',
+          email: 'test@example.com',
+          districtId: '00000000-0000-0000-0000-000000000000',
+        })
+        .expect(401);
+
+      await request(app.getHttpServer()).get('/users').expect(401);
+
       await request(app.getHttpServer()).get('/users/me').expect(401);
 
       await request(app.getHttpServer())

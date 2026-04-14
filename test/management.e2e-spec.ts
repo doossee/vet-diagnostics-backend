@@ -81,15 +81,12 @@ describe('Management (e2e)', () => {
         expect(response.body.name).toEqual({ ru: 'Ташкент', uz: 'Toshkent' });
       });
 
-      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
-        // The CreateRegionDto uses @ValidateNested on `name` but does not
-        // mark it with @IsNotEmpty(), so an empty body passes validation
-        // and Prisma throws at insert time (500).
+      it('should return 400 when name is missing (@IsNotEmpty on name field)', async () => {
         await request(app.getHttpServer())
           .post('/regions')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({})
-          .expect(500);
+          .expect(400);
       });
 
       it('should return 400 for validation error (empty ru field)', async () => {
@@ -303,12 +300,12 @@ describe('Management (e2e)', () => {
         expect(response.body).toHaveProperty('region');
       });
 
-      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
+      it('should return 400 when name is missing (@IsNotEmpty on name field)', async () => {
         await request(app.getHttpServer())
           .post('/districts')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({ regionId: testRegionId })
-          .expect(500);
+          .expect(400);
       });
 
       it('should return 400 for validation error (missing regionId)', async () => {
@@ -537,7 +534,7 @@ describe('Management (e2e)', () => {
         expect(response.body).toHaveProperty('district');
       });
 
-      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
+      it('should return 400 when name is missing (@IsNotEmpty on name field)', async () => {
         await request(app.getHttpServer())
           .post('/vet-stations')
           .set('Authorization', `Bearer ${accessToken}`)
@@ -545,7 +542,7 @@ describe('Management (e2e)', () => {
             address: 'ул. Навои, 15',
             districtId: testDistrictId,
           })
-          .expect(500);
+          .expect(400);
       });
 
       it('should return 400 for validation error (missing address)', async () => {
