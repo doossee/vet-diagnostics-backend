@@ -100,12 +100,45 @@ export class MedicalSessionService {
   }
 
   async findAll(query: MedicalSessionQueryParamsDto) {
-    const { page, perPage, byId, animalId, veterinarianId, status } = query;
+    const {
+      page,
+      perPage,
+      byId,
+      animalId,
+      veterinarianId,
+      status,
+      search,
+      hasClinicalExam,
+      hasBloodExam,
+      hasUrineExam,
+      hasFecesExam,
+      hasMucosaExam,
+    } = query;
 
     const where: Prisma.MedicalSessionWhereInput = {
       ...(animalId && { animalId }),
       ...(veterinarianId && { veterinarianId }),
       ...(status && { status }),
+      ...(search && {
+        animal: {
+          animalNameCode: { contains: search, mode: 'insensitive' },
+        },
+      }),
+      ...(hasClinicalExam !== undefined && {
+        clinicalExam: hasClinicalExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasBloodExam !== undefined && {
+        bloodExam: hasBloodExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasUrineExam !== undefined && {
+        urineExam: hasUrineExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasFecesExam !== undefined && {
+        fecesExam: hasFecesExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasMucosaExam !== undefined && {
+        mucosaExams: hasMucosaExam ? { some: {} } : { none: {} },
+      }),
     };
 
     const orderBy: Prisma.MedicalSessionOrderByWithRelationInput = {
@@ -302,8 +335,8 @@ export class MedicalSessionService {
         { params: { animal: animal.animalType?.modelKey } },
       );
     } catch (error) {
+      console.log(error);
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data?.detail);
         if (error.response) {
           throw new BadRequestException(
             `AI prediction service returned error: ${error.response.status}`,

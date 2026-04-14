@@ -77,7 +77,7 @@ export class UsersService {
           include: {
             district: true,
             veterinarianProfile: true,
-            // farmerProfile: true,
+            farmerProfile: true,
           },
         });
       });
@@ -89,6 +89,10 @@ export class UsersService {
           throw new BadRequestException('A user with this data already exists');
         }
         if (error.code === 'P2003') {
+          const field = (error.meta?.field_name as string) ?? '';
+          if (field.includes('veterinarian')) {
+            throw new BadRequestException('Invalid veterinarian ID');
+          }
           throw new BadRequestException('Invalid district ID');
         }
       }

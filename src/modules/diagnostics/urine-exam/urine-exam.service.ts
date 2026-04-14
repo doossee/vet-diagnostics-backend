@@ -24,6 +24,7 @@ export class UrineExamService {
     return await this.prisma.urineExam.create({
       data,
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -55,6 +56,7 @@ export class UrineExamService {
     };
 
     const include: Prisma.UrineExamInclude = {
+      session: true,
       animal: true,
       urineColor: true,
       urineSmell: true,
@@ -79,6 +81,7 @@ export class UrineExamService {
     return await this.prisma.urineExam.findUniqueOrThrow({
       where: { id },
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -100,6 +103,7 @@ export class UrineExamService {
       where: { id },
       data,
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -119,6 +123,7 @@ export class UrineExamService {
       where: { animalId },
       orderBy: { createdAt: 'desc' },
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,

@@ -8,6 +8,7 @@ import {
   IsUUID,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { Prisma } from 'src/generated/prisma/client';
 import { UserRole } from 'src/shared/enums';
@@ -95,10 +96,11 @@ export class CreateUserDto implements Prisma.UserUncheckedCreateInput {
   })
   role?: UserRole | undefined;
 
+  @ValidateIf((o) => o.role === UserRole.FARMER)
   @IsUUID()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Veterinarian ID for create farmer profile (required)',
+  @IsNotEmpty({ message: 'veterinarianId is required when role is FARMER' })
+  @ApiPropertyOptional({
+    description: 'Veterinarian ID — required when role is FARMER',
     example: '550e8400-e29b-41d4-a716-446655440000',
   })
   veterinarianId?: string | undefined;

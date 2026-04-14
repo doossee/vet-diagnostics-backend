@@ -9,6 +9,7 @@ import {
 import { Prisma } from 'src/generated/prisma/client';
 
 const clinicalExamInclude: Prisma.ClinicalExamInclude = {
+  session: true,
   animal: true,
   bodyType: true,
   obesity: true,

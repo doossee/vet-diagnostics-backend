@@ -24,6 +24,7 @@ export class FecesExamService {
     return await this.prisma.fecesExam.create({
       data,
       include: {
+        session: true,
         animal: true,
         fecesColor: true,
         fecesSmell: true,
@@ -55,6 +56,7 @@ export class FecesExamService {
     };
 
     const include: Prisma.FecesExamInclude = {
+      session: true,
       animal: true,
       fecesColor: true,
       fecesSmell: true,
@@ -79,6 +81,7 @@ export class FecesExamService {
     return await this.prisma.fecesExam.findUniqueOrThrow({
       where: { id },
       include: {
+        session: true,
         animal: true,
         fecesColor: true,
         fecesSmell: true,
@@ -100,6 +103,7 @@ export class FecesExamService {
       where: { id },
       data,
       include: {
+        session: true,
         animal: true,
         fecesColor: true,
         fecesSmell: true,
@@ -119,6 +123,7 @@ export class FecesExamService {
       where: { animalId },
       orderBy: { createdAt: 'desc' },
       include: {
+        session: true,
         animal: true,
         fecesColor: true,
         fecesSmell: true,

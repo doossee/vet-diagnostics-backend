@@ -9,6 +9,7 @@ import {
 import { Prisma } from 'src/generated/prisma/client';
 
 const mucosaExamInclude: Prisma.MucosaExamInclude = {
+  session: true,
   animal: true,
   mucosaType: true,
   mucosaAppearance: true,

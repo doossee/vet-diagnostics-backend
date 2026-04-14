@@ -23,7 +23,7 @@ export class BloodExamService {
   async create(data: CreateBloodExamDto) {
     return await this.prisma.bloodExam.create({
       data,
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -49,6 +49,7 @@ export class BloodExamService {
     };
 
     const include: Prisma.BloodExamInclude = {
+      session: true,
       animal: true,
     };
 
@@ -68,7 +69,7 @@ export class BloodExamService {
   async findOne(id: string) {
     return await this.prisma.bloodExam.findUniqueOrThrow({
       where: { id },
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -83,7 +84,7 @@ export class BloodExamService {
     return await this.prisma.bloodExam.update({
       where: { id },
       data,
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -96,7 +97,7 @@ export class BloodExamService {
     return await this.prisma.bloodExam.findFirst({
       where: { animalId },
       orderBy: { createdAt: 'desc' },
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
