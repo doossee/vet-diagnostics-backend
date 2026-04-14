@@ -53,6 +53,8 @@ export const cleanupDatabase = async () => {
 
   // --- Diseases & categories ---
   await prisma.disease.deleteMany();
+  // Break self-referential FK (DiseaseCategory.parentId) before deleting
+  await prisma.diseaseCategory.updateMany({ data: { parentId: null } });
   await prisma.diseaseCategory.deleteMany();
 
   // --- Clinical exam lookup tables (habitus) ---
@@ -109,6 +111,8 @@ export const cleanupDatabase = async () => {
   // --- Inventory lookup tables ---
   await prisma.breed.deleteMany();
   await prisma.color.deleteMany();
+  // Break self-referential FK (AnimalType.parentId) before deleting
+  await prisma.animalType.updateMany({ data: { parentId: null } });
   await prisma.animalType.deleteMany();
   await prisma.animalSex.deleteMany();
 
