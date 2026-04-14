@@ -183,7 +183,12 @@ const PARAMETER_SOURCE_MAP: Record<string, { table: string; column: string }> =
     fecesUndigestedFood: { table: 'fecesExam', column: 'undigestedFood' },
   };
 
-const SEVERITY_ORDER: AlertSeverity[] = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+const SEVERITY_ORDER: AlertSeverity[] = [
+  AlertSeverity.LOW,
+  AlertSeverity.MEDIUM,
+  AlertSeverity.HIGH,
+  AlertSeverity.CRITICAL,
+];
 
 @Injectable()
 export class AnomalyDetectionService {

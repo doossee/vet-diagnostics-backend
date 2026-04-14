@@ -68,7 +68,10 @@ export class ExcelService {
     // Map column number → field key
     const headerMap: Record<number, string> = {};
     headerRow.eachCell((cell, colNumber) => {
-      const headerVal = String(cell.value ?? '').trim();
+      const raw = cell.value;
+      const headerVal = (
+        typeof raw === 'string' || typeof raw === 'number' ? String(raw) : ''
+      ).trim();
       const key = headerToKey[headerVal];
       if (key) {
         headerMap[colNumber] = key;

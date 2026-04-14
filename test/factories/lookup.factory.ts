@@ -31,7 +31,8 @@ export class LookupFactory {
       data.numericValue = numericValue;
     }
 
-    return (this.prisma as any)[modelName].create({ data });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return await (this.prisma as any)[modelName].create({ data });
   }
 
   /**
@@ -46,6 +47,7 @@ export class LookupFactory {
       [key: string]: unknown;
     },
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.create(modelName, {
       ...overrides,
       animalTypeId,

@@ -77,7 +77,7 @@ describe('Diagnostics Exams (e2e)', () => {
       .send({ username, password })
       .expect(201);
 
-    return res.body.accessToken;
+    return (res.body as { accessToken: string }).accessToken;
   }
 
   // ---------------------------------------------------------------------------
@@ -654,7 +654,10 @@ describe('Diagnostics Exams (e2e)', () => {
     // -------------------------------------------------------------------------
     describe('GET /urine-exams/animal/:animalId/last', () => {
       it('should return the last urine exam for an animal (200)', async () => {
-        const first = await urineExamFactory.create({ animalId: testAnimalId, ph: 5.0 });
+        const first = await urineExamFactory.create({
+          animalId: testAnimalId,
+          ph: 5.0,
+        });
         const second = await urineExamFactory.create({
           animalId: testAnimalId,
           ph: 8.0,
@@ -1061,7 +1064,9 @@ describe('Diagnostics Exams (e2e)', () => {
     // -------------------------------------------------------------------------
     describe('GET /mucosa-exams/animal/:animalId/last', () => {
       it('should return the last mucosa exam for an animal (200)', async () => {
-        const first = await mucosaExamFactory.create({ animalId: testAnimalId });
+        const first = await mucosaExamFactory.create({
+          animalId: testAnimalId,
+        });
         const second = await mucosaExamFactory.create({
           animalId: testAnimalId,
         });

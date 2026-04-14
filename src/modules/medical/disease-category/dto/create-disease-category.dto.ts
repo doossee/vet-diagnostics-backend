@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { NameDto } from 'src/shared/dto';
 

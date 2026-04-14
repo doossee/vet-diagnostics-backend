@@ -137,9 +137,9 @@ export class ReferenceRangeService {
   }
 
   private calculateSeverity(deviationPercent: number): AlertSeverity {
-    if (deviationPercent <= 20) return 'LOW';
-    if (deviationPercent <= 50) return 'MEDIUM';
-    if (deviationPercent <= 100) return 'HIGH';
-    return 'CRITICAL';
+    if (deviationPercent <= 20) return AlertSeverity.LOW;
+    if (deviationPercent <= 50) return AlertSeverity.MEDIUM;
+    if (deviationPercent <= 100) return AlertSeverity.HIGH;
+    return AlertSeverity.CRITICAL;
   }
 }

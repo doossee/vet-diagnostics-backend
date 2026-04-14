@@ -118,6 +118,7 @@ describe('MedicalSessionService', () => {
   });
 
   describe('submit', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const buildFullSession = (overrides?: any) => ({
       id: 'session-1',
       status: 'DRAFT',

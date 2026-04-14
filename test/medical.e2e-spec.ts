@@ -77,7 +77,7 @@ describe('Medical (e2e)', () => {
       .send({ username, password })
       .expect(201);
 
-    return res.body.accessToken;
+    return (res.body as { accessToken: string }).accessToken;
   }
 
   // ===========================================================================

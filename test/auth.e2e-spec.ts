@@ -60,7 +60,11 @@ describe('Auth (e2e)', () => {
       .send({ username, password })
       .expect(201);
 
-    return res.body;
+    return res.body as {
+      accessToken: string;
+      refreshToken: string;
+      userId: string;
+    };
   }
 
   // ===========================================================================

@@ -5,7 +5,7 @@ import { setupApp } from './utils/setup-app';
 import { cleanupDatabase, disconnectDatabase } from './utils/database';
 import { UserFactory } from './factories/user.factory';
 import { RegionFactory, DistrictFactory } from './factories/region.factory';
-import { AnimalFactory, AnimalTypeFactory } from './factories/animal.factory';
+import { AnimalTypeFactory } from './factories/animal.factory';
 import { UserRole } from '../src/shared/enums';
 
 describe('Inventory (e2e)', () => {
@@ -13,7 +13,6 @@ describe('Inventory (e2e)', () => {
   let userFactory: UserFactory;
   let regionFactory: RegionFactory;
   let districtFactory: DistrictFactory;
-  let animalFactory: AnimalFactory;
   let animalTypeFactory: AnimalTypeFactory;
   let accessToken: string;
 
@@ -24,7 +23,6 @@ describe('Inventory (e2e)', () => {
     userFactory = new UserFactory();
     regionFactory = new RegionFactory();
     districtFactory = new DistrictFactory();
-    animalFactory = new AnimalFactory();
     animalTypeFactory = new AnimalTypeFactory();
   });
 
@@ -60,7 +58,7 @@ describe('Inventory (e2e)', () => {
       .send({ username, password })
       .expect(201);
 
-    return res.body.accessToken;
+    return (res.body as { accessToken: string }).accessToken;
   }
 
   // ===========================================================================

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { PaginationService } from 'src/shared/services';
-import { UserRole, UserGender } from 'src/shared/enums';
+import { UserRole } from 'src/shared/enums';
 import { BadRequestException } from '@nestjs/common';
 
 describe('UsersService', () => {
@@ -18,7 +18,9 @@ describe('UsersService', () => {
       update: jest.fn(),
       delete: jest.fn(),
     },
-    $transaction: jest.fn((fn) =>
+
+    /* eslint-disable @typescript-eslint/no-unsafe-return */
+    $transaction: jest.fn((fn: any) =>
       fn({
         user: {
           create: jest.fn().mockResolvedValue({
@@ -35,6 +37,7 @@ describe('UsersService', () => {
         farmerProfile: { create: jest.fn() },
       }),
     ),
+    /* eslint-enable @typescript-eslint/no-unsafe-return */
   };
 
   const mockPaginationService = {
@@ -259,7 +262,10 @@ describe('UsersService', () => {
       // Mock bcrypt.compare to return true
       jest.spyOn(require('bcryptjs'), 'compare').mockResolvedValue(true);
 
-      const result = await service.changePassword('user-id', changePasswordDto);
+      const _result = await service.changePassword(
+        'user-id',
+        changePasswordDto,
+      );
 
       expect(prismaService.user.update).toHaveBeenCalledWith({
         where: { id: 'user-id' },
