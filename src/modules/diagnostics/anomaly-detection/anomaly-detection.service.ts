@@ -9,7 +9,8 @@ import {
   AnomalyQueryDto,
   UpdateAlertDto,
 } from './dto';
-import { Prisma, AlertSeverity } from 'src/generated/prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
+import { AlertSeverity } from 'src/shared/enums';
 import axios from 'axios';
 
 /**

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from 'src/generated/prisma/client';
-import { UserGender, UserRole } from 'src/generated/prisma/client';
+import { UserGender, UserRole } from 'src/shared/enums';
 import { Exclude } from 'class-transformer';
 
 export class UserEntity implements User {

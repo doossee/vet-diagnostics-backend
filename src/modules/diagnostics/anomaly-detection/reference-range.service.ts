@@ -6,7 +6,8 @@ import {
   UpdateReferenceRangeDto,
   ReferenceRangeQueryDto,
 } from './dto';
-import { Prisma, AlertSeverity } from 'src/generated/prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
+import { AlertSeverity } from 'src/shared/enums';
 
 export interface DetectedAnomaly {
   parameter: string;

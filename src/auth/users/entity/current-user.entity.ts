@@ -1,4 +1,4 @@
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from 'src/shared/enums';
 
 /**
  * Current authenticated user entity
