@@ -160,7 +160,7 @@ describe('Auth (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/refresh')
         .set('Authorization', `Bearer ${refreshToken}`)
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
@@ -174,7 +174,7 @@ describe('Auth (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/refresh')
         .set('Authorization', `Bearer ${originalRefresh}`)
-        .expect(200);
+        .expect(201);
 
       expect(response.body.refreshToken).not.toBe(originalRefresh);
     });
@@ -197,7 +197,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/refresh')
         .set('Authorization', `Bearer ${originalRefresh}`)
-        .expect(200);
+        .expect(201);
 
       // Second attempt with the same (now stale) token should fail
       await request(app.getHttpServer())
@@ -217,16 +217,16 @@ describe('Auth (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/logout')
         .set('Authorization', `Bearer ${refreshToken}`)
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toEqual({ message: 'Successfully logged out' });
     });
 
     it('should return success even without an Authorization header', async () => {
-      // The controller returns 200 with a success message regardless
+      // The controller returns 201 (NestJS @Post default) with a success message regardless
       const response = await request(app.getHttpServer())
         .post('/auth/logout')
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toEqual({ message: 'Successfully logged out' });
     });
@@ -238,7 +238,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/logout')
         .set('Authorization', `Bearer ${refreshToken}`)
-        .expect(200);
+        .expect(201);
 
       // Attempting to refresh with the same token should fail
       await request(app.getHttpServer())
@@ -258,7 +258,7 @@ describe('Auth (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/logout-all')
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toEqual({
         message: 'Successfully logged out from all devices',
@@ -283,7 +283,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/logout-all')
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
+        .expect(201);
 
       // The refresh token should now be invalid
       await request(app.getHttpServer())
