@@ -1,14 +1,4 @@
 import 'dotenv/config';
-import { execSync } from 'child_process';
-
-// Ensure Prisma client is generated before importing
-try {
-  require.resolve('../src/generated/prisma/client');
-} catch {
-  console.log('Prisma client not found. Generating...');
-  execSync('npx prisma generate --schema prisma/schema/schema.prisma', { stdio: 'inherit' });
-}
-
 import { PrismaClient, ProphylaxisType, UserRole, UserGender } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
