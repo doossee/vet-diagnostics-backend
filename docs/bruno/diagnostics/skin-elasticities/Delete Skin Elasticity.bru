@@ -1,0 +1,21 @@
+meta {
+  name: Delete Skin Elasticity
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/skin-elasticities/{{skinElasticityId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Update Urine Smell
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/urine-smells/{{urineSmellId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Аммиачный",
+      "uz": "Ammiak"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Create Urine Color
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/urine-colors
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Жёлтый",
+      "uz": "Sariq"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save urineColorId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("urineColorId", id);
+  });
+}

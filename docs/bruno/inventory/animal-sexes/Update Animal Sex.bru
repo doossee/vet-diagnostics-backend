@@ -1,0 +1,31 @@
+meta {
+  name: Update Animal Sex
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/animal-sexes/{{animalSexId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Самка",
+      "uz": "Urg'ochi"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

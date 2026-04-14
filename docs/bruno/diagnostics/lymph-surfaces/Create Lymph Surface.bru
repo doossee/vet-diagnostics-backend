@@ -1,0 +1,36 @@
+meta {
+  name: Create Lymph Surface
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/lymph-surfaces
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Гладкая",
+      "uz": "Silliq"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save lymphSurfaceId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("lymphSurfaceId", id);
+  });
+}

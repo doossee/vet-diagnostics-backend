@@ -1,0 +1,31 @@
+meta {
+  name: Update Wool Type
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/wool-types/{{woolTypeId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Редкая",
+      "uz": "Siyrak"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}
