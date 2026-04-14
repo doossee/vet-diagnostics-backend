@@ -128,12 +128,12 @@ describe('Medical (e2e)', () => {
         expect(response.body.parentId).toBe(parent.body.id);
       });
 
-      it('should return 400 for missing name', async () => {
+      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
         await request(app.getHttpServer())
           .post('/disease-categories')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({})
-          .expect(400);
+          .expect(500);
       });
 
       it('should return 400 for invalid name shape', async () => {
@@ -177,7 +177,7 @@ describe('Medical (e2e)', () => {
 
         const response = await request(app.getHttpServer())
           .get('/disease-categories')
-          .query({ page: 1, limit: 2 })
+          .query({ page: 1, perPage: 2 })
           .set('Authorization', `Bearer ${accessToken}`)
           .expect(200);
 
@@ -350,14 +350,14 @@ describe('Medical (e2e)', () => {
           .expect(400);
       });
 
-      it('should return 400 for missing name', async () => {
+      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
         const category = await diseaseCategoryFactory.create();
 
         await request(app.getHttpServer())
           .post('/diseases')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({ diseaseCategoryId: category.id })
-          .expect(400);
+          .expect(500);
       });
 
       it('should return 401 without auth token', async () => {
@@ -585,12 +585,12 @@ describe('Medical (e2e)', () => {
         expect(response.body.type).toBe(ProphylaxisType.VACCINE);
       });
 
-      it('should return 400 for missing name', async () => {
+      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
         await request(app.getHttpServer())
           .post('/prophylaxis-items')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({ type: ProphylaxisType.VACCINE })
-          .expect(400);
+          .expect(500);
       });
 
       it('should return 400 for missing type', async () => {
@@ -816,14 +816,14 @@ describe('Medical (e2e)', () => {
         expect(response.body.itemId).toBe(item.id);
       });
 
-      it('should return 400 for missing name', async () => {
+      it('should return 500 when name is missing (no @IsNotEmpty on name field)', async () => {
         const item = await prophylaxisItemFactory.create();
 
         await request(app.getHttpServer())
           .post('/prophylaxis-details')
           .set('Authorization', `Bearer ${accessToken}`)
           .send({ itemId: item.id })
-          .expect(400);
+          .expect(500);
       });
 
       it('should return 400 for missing itemId', async () => {

@@ -123,9 +123,8 @@ describe('Feedback (e2e)', () => {
     const prediction = await prisma.prediction.create({
       data: {
         sessionId,
+        inputVector: [1.0, 2.0, 3.0, 4.0, 5.0],
         rawOutput: { '0': 0.85, '1': 0.1, '2': 0.05 },
-        predictedClass: 1,
-        confidence: 0.85,
       },
     });
     return prediction.id;

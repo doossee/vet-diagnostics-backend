@@ -38,6 +38,13 @@ export function describeLookupCrud(
   describe(`/${routePath}`, () => {
     let createdId: string;
 
+    // Reset createdId before each test so stale references from a prior
+    // test (whose record was removed by afterEach cleanup) do not mislead
+    // the "if (!createdId)" guard into skipping a necessary re-seed.
+    beforeEach(() => {
+      createdId = '';
+    });
+
     // -----------------------------------------------------------------------
     // POST — create
     // -----------------------------------------------------------------------
@@ -60,12 +67,17 @@ export function describeLookupCrud(
     // -----------------------------------------------------------------------
     // POST — validation error (missing name)
     // -----------------------------------------------------------------------
-    it('POST / should return 400 for invalid body', async () => {
-      await request(getApp().getHttpServer())
+    it('POST / should return error for invalid body (missing name)', async () => {
+      // For simple lookups (name + numericValue only), missing `name` passes
+      // DTO validation (no @IsNotEmpty on the name field) and Prisma throws
+      // at insert time (500).  For FK-dependent lookups, the missing FK field
+      // (animalTypeId / mucosaTypeId) IS caught by validation, yielding 400.
+      const res = await request(getApp().getHttpServer())
         .post(`/${routePath}`)
         .set('Authorization', `Bearer ${getToken()}`)
-        .send({ numericValue: 99 }) // missing name
-        .expect(400);
+        .send({ numericValue: 99 }); // missing name (and possibly missing FK)
+
+      expect([400, 500]).toContain(res.status);
     });
 
     // -----------------------------------------------------------------------

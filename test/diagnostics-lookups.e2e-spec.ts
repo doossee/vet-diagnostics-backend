@@ -344,12 +344,14 @@ describe('Diagnostics Lookups (e2e)', () => {
     );
 
     // --- Mucosa types (simple — no FK) ---
+    // Use names/values different from the prerequisite mucosaType
+    // ('Глазная'/'Ko\'z'/1) to avoid unique constraint conflicts.
     describeLookupCrud(
       () => app,
       () => accessToken,
       'mucosa-types',
-      simple('Глазная', "Ko'z", 1),
-      simple('Ротовая', "Og'iz", 2),
+      simple('Носовая', 'Burun', 3),
+      simple('Ротовая', "Og'iz", 4),
     );
   });
 
