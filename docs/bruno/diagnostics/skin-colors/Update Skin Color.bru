@@ -1,0 +1,31 @@
+meta {
+  name: Update Skin Color
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/skin-colors/{{skinColorId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Красный",
+      "uz": "Qizil"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

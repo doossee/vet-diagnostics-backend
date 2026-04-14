@@ -1,0 +1,31 @@
+meta {
+  name: Update Feces Color
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/feces-colors/{{fecesColorId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Зелёный",
+      "uz": "Yashil"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Create Skin Color
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/skin-colors
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Бледно-розовый",
+      "uz": "Och pushti"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save skinColorId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("skinColorId", id);
+  });
+}

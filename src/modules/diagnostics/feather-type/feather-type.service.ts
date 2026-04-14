@@ -87,5 +87,4 @@ export class FeatherTypeService {
     }
     return { imported, errors };
   }
-
 }

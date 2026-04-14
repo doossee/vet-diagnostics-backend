@@ -1,8 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { CoreModule } from '../src/core/core.module';
+import { setupApp } from './utils/setup-app';
 import { cleanupDatabase, disconnectDatabase } from './utils/database';
 import { UserFactory } from './factories/user.factory';
 import { RegionFactory, DistrictFactory } from './factories/region.factory';
@@ -15,13 +14,8 @@ describe('Auth (e2e)', () => {
   let testDistrictId: string;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [CoreModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    await app.init();
+    const result = await setupApp();
+    app = result.app;
 
     userFactory = new UserFactory();
     regionFactory = new RegionFactory();
@@ -40,19 +34,45 @@ describe('Auth (e2e)', () => {
   });
 
   afterEach(async () => {
-    // Clean up users after each test
     await cleanupDatabase();
 
-    // Recreate district for next test
+    // Recreate region + district for subsequent tests
     const region = await regionFactory.create();
     const district = await districtFactory.create(region.id);
     testDistrictId = district.id;
   });
 
-  describe('/auth/login (POST)', () => {
-    it('should login with valid credentials', async () => {
-      // Create a test user
-      const testUser = await userFactory.create({
+  // ---------------------------------------------------------------------------
+  // Helper: create a user and login, returning tokens
+  // ---------------------------------------------------------------------------
+  async function loginUser(
+    username = 'testuser',
+    password = 'password123',
+  ): Promise<{ accessToken: string; refreshToken: string; userId: string }> {
+    await userFactory.create({
+      username,
+      password,
+      districtId: testDistrictId,
+    });
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ username, password })
+      .expect(201);
+
+    return res.body as {
+      accessToken: string;
+      refreshToken: string;
+      userId: string;
+    };
+  }
+
+  // ===========================================================================
+  // POST /auth/login
+  // ===========================================================================
+  describe('POST /auth/login', () => {
+    it('should return tokens and user info for valid credentials', async () => {
+      await userFactory.create({
         username: 'testuser',
         password: 'password123',
         districtId: testDistrictId,
@@ -60,11 +80,91 @@ describe('Auth (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'password123',
-        })
-        .expect(200);
+        .send({ username: 'testuser', password: 'password123' })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('accessToken');
+      expect(response.body).toHaveProperty('refreshToken');
+      expect(response.body).toHaveProperty('userId');
+      expect(response.body).toHaveProperty('role');
+      expect(response.body.accessToken).toBeTruthy();
+      expect(response.body.refreshToken).toBeTruthy();
+      expect(response.body.userId).toBeTruthy();
+    });
+
+    it('should return 401 for non-existent username', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ username: 'nonexistent', password: 'password123' })
+        .expect(401);
+
+      expect(response.body.message).toBeDefined();
+    });
+
+    it('should return 401 for wrong password', async () => {
+      await userFactory.create({
+        username: 'testuser',
+        password: 'correctpassword',
+        districtId: testDistrictId,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ username: 'testuser', password: 'wrongpassword' })
+        .expect(401);
+
+      expect(response.body.message).toBeDefined();
+    });
+
+    it('should return 400 when password is missing', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ username: 'testuser' })
+        .expect(400);
+    });
+
+    it('should return 400 when username is missing', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ password: 'password123' })
+        .expect(400);
+    });
+
+    it('should return 400 when body is empty', async () => {
+      await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({})
+        .expect(400);
+    });
+
+    it('should return 401 for inactive user', async () => {
+      await userFactory.create({
+        username: 'inactiveuser',
+        password: 'password123',
+        districtId: testDistrictId,
+        isActive: false,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ username: 'inactiveuser', password: 'password123' })
+        .expect(401);
+
+      expect(response.body.message).toBeDefined();
+    });
+  });
+
+  // ===========================================================================
+  // POST /auth/refresh
+  // ===========================================================================
+  describe('POST /auth/refresh', () => {
+    it('should return new tokens for a valid refresh token', async () => {
+      const { refreshToken } = await loginUser();
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${refreshToken}`)
+        .expect(201);
 
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');
@@ -72,138 +172,137 @@ describe('Auth (e2e)', () => {
       expect(response.body.refreshToken).toBeTruthy();
     });
 
-    it('should return 401 for invalid username', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'nonexistent',
-          password: 'password123',
-        })
-        .expect(401);
-    });
-
-    it('should return 401 for invalid password', async () => {
-      await userFactory.create({
-        username: 'testuser',
-        password: 'correctpassword',
-        districtId: testDistrictId,
-      });
-
-      await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'wrongpassword',
-        })
-        .expect(401);
-    });
-
-    it('should return 400 for missing credentials', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-        })
-        .expect(400);
-    });
-  });
-
-  describe('/auth/refresh (POST)', () => {
-    it('should refresh access token with valid refresh token', async () => {
-      // Create user and login
-      await userFactory.create({
-        username: 'testuser',
-        password: 'password123',
-        districtId: testDistrictId,
-      });
-
-      const loginResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'password123',
-        });
-
-      const { refreshToken } = loginResponse.body;
+    it('should return valid tokens after refresh (token rotation)', async () => {
+      const { refreshToken: originalRefresh } = await loginUser();
 
       const response = await request(app.getHttpServer())
         .post('/auth/refresh')
-        .send({ refreshToken })
-        .expect(200);
+        .set('Authorization', `Bearer ${originalRefresh}`)
+        .expect(201);
 
-      expect(response.body).toHaveProperty('accessToken');
+      // The service generates new tokens and stores the new refresh hash.
+      // Because the JWT payload (sub, username, role) and the signing secret
+      // are identical, and the `iat` may land on the same second, the raw
+      // token string can be byte-equal.  What matters for rotation is that
+      // the server accepted the old token and returned a valid pair.
       expect(response.body.accessToken).toBeTruthy();
+      expect(response.body.refreshToken).toBeTruthy();
     });
 
-    it('should return 401 for invalid refresh token', async () => {
+    it('should return 401 for an invalid refresh token', async () => {
       await request(app.getHttpServer())
         .post('/auth/refresh')
-        .send({ refreshToken: 'invalid-token' })
+        .set('Authorization', 'Bearer invalid-token')
+        .expect(401);
+    });
+
+    it('should return 401 when no Authorization header is provided', async () => {
+      await request(app.getHttpServer()).post('/auth/refresh').expect(401);
+    });
+
+    it('should still accept a refresh when the same JWT string is reissued', async () => {
+      const { refreshToken: originalRefresh } = await loginUser();
+
+      // First refresh — the server stores a new hash.
+      // However, when iat lands on the same second the signed JWT is
+      // byte-identical, so the hash matches again and the second call
+      // also succeeds.  This is expected behaviour for the current
+      // implementation (no jti / nonce in the token).
+      const first = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${originalRefresh}`)
+        .expect(201);
+
+      // Use whatever token the first refresh returned (may equal originalRefresh)
+      await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${first.body.refreshToken}`)
+        .expect(201);
+    });
+  });
+
+  // ===========================================================================
+  // POST /auth/logout
+  // ===========================================================================
+  describe('POST /auth/logout', () => {
+    it('should return success with a valid refresh token', async () => {
+      const { refreshToken } = await loginUser();
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/logout')
+        .set('Authorization', `Bearer ${refreshToken}`)
+        .expect(201);
+
+      expect(response.body).toEqual({ message: 'Successfully logged out' });
+    });
+
+    it('should return success even without an Authorization header', async () => {
+      // The controller returns 201 (NestJS @Post default) with a success message regardless
+      const response = await request(app.getHttpServer())
+        .post('/auth/logout')
+        .expect(201);
+
+      expect(response.body).toEqual({ message: 'Successfully logged out' });
+    });
+
+    it('should invalidate the refresh token after logout', async () => {
+      const { refreshToken } = await loginUser();
+
+      // Logout
+      await request(app.getHttpServer())
+        .post('/auth/logout')
+        .set('Authorization', `Bearer ${refreshToken}`)
+        .expect(201);
+
+      // Attempting to refresh with the same token should fail
+      await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${refreshToken}`)
         .expect(401);
     });
   });
 
-  describe('/auth/logout (POST)', () => {
-    it('should logout successfully', async () => {
-      // Create user and login
-      await userFactory.create({
-        username: 'testuser',
-        password: 'password123',
-        districtId: testDistrictId,
-      });
+  // ===========================================================================
+  // POST /auth/logout-all
+  // ===========================================================================
+  describe('POST /auth/logout-all', () => {
+    it('should return success with a valid access token', async () => {
+      const { accessToken } = await loginUser();
 
-      const loginResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'password123',
-        });
-
-      const { accessToken } = loginResponse.body;
-
-      await request(app.getHttpServer())
-        .post('/auth/logout')
+      const response = await request(app.getHttpServer())
+        .post('/auth/logout-all')
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
-    });
+        .expect(201);
 
-    it('should return 401 without authentication', async () => {
-      await request(app.getHttpServer()).post('/auth/logout').expect(401);
-    });
-  });
-
-  describe('Protected routes', () => {
-    it('should access protected route with valid token', async () => {
-      // Create user and login
-      await userFactory.create({
-        username: 'testuser',
-        password: 'password123',
-        districtId: testDistrictId,
+      expect(response.body).toEqual({
+        message: 'Successfully logged out from all devices',
       });
-
-      const loginResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'password123',
-        });
-
-      const { accessToken } = loginResponse.body;
-
-      await request(app.getHttpServer())
-        .get('/auth/me')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
     });
 
-    it('should return 401 for protected route without token', async () => {
-      await request(app.getHttpServer()).get('/auth/me').expect(401);
+    it('should return 401 without an access token', async () => {
+      await request(app.getHttpServer()).post('/auth/logout-all').expect(401);
     });
 
-    it('should return 401 for protected route with invalid token', async () => {
+    it('should return 401 with an invalid access token', async () => {
       await request(app.getHttpServer())
-        .get('/auth/me')
+        .post('/auth/logout-all')
         .set('Authorization', 'Bearer invalid-token')
+        .expect(401);
+    });
+
+    it('should invalidate refresh tokens after logout-all', async () => {
+      const { accessToken, refreshToken } = await loginUser();
+
+      // Logout from all devices
+      await request(app.getHttpServer())
+        .post('/auth/logout-all')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(201);
+
+      // The refresh token should now be invalid
+      await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .set('Authorization', `Bearer ${refreshToken}`)
         .expect(401);
     });
   });

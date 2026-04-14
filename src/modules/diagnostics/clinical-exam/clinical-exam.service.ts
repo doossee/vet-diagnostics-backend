@@ -108,7 +108,8 @@ export class ClinicalExamService {
     for (const row of rows) {
       try {
         const toNum = (v) => (v !== '' && v != null ? Number(v) : undefined);
-        const toId = (v) => (v && String(v).length > 10 ? String(v) : undefined);
+        const toId = (v) =>
+          v && String(v).length > 10 ? String(v) : undefined;
         await this.prisma.clinicalExam.create({
           data: {
             animalId: String(row['animalId']),
@@ -152,5 +153,4 @@ export class ClinicalExamService {
     }
     return { imported, errors };
   }
-
 }

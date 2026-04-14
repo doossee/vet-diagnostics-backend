@@ -100,7 +100,7 @@ describe('AnimalService', () => {
         }),
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,
@@ -196,7 +196,7 @@ describe('AnimalService', () => {
         where: { id: 'animal-id' },
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,
@@ -228,7 +228,7 @@ describe('AnimalService', () => {
         data: updateData,
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,

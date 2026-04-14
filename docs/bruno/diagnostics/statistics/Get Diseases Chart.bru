@@ -1,0 +1,21 @@
+meta {
+  name: Get Diseases Chart
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/statistics/diseases/chart?startDate=2026-01-01&endDate=2026-12-31
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

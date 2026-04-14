@@ -80,16 +80,24 @@ export class DownTypeController {
     description: 'Record retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
   @Header('Content-Disposition', 'attachment; filename="тип-пуха-шаблон.xlsx"')
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-    { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
-    { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
-    { key: 'numericValue', header: 'Числовое значение', example: 1, width: 18 },
-  ],
+        { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
+        {
+          key: 'numericValue',
+          header: 'Числовое значение',
+          example: 1,
+          width: 18,
+        },
+      ],
       'Типы пуха',
     );
     return new StreamableFile(buffer);
@@ -151,5 +159,4 @@ export class DownTypeController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.service.delete(id);
   }
-
 }

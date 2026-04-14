@@ -59,7 +59,10 @@ describe('VetStationService', () => {
 
   describe('findOne', () => {
     it('should return a vet station', async () => {
-      const mockStation = { id: 'uuid', name: { ru: 'Станция №1', uz: 'Station #1' } };
+      const mockStation = {
+        id: 'uuid',
+        name: { ru: 'Станция №1', uz: 'Station #1' },
+      };
       mockPrismaService.vetStation.findUniqueOrThrow.mockResolvedValue(
         mockStation,
       );

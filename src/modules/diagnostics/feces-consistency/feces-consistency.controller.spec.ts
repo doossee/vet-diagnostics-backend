@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FecesConsistencyController } from './feces-consistency.controller';
 import { FecesConsistencyService } from './feces-consistency.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('FecesConsistencyController', () => {
   let controller: FecesConsistencyController;
   let service: FecesConsistencyService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('FecesConsistencyController', () => {
         {
           provide: FecesConsistencyService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

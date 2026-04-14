@@ -1,0 +1,31 @@
+meta {
+  name: Update Urine Color
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/urine-colors/{{urineColorId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Тёмный",
+      "uz": "Qo'ng'ir"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

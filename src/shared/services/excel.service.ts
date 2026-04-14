@@ -50,7 +50,7 @@ export class ExcelService {
     columns: ExcelColumn[],
   ): Promise<Record<string, any>[]> {
     const workbook = new ExcelJS.Workbook();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     await workbook.xlsx.load(file.buffer as any);
 
     const sheet = workbook.worksheets[0];
@@ -61,12 +61,17 @@ export class ExcelService {
 
     // Build header-text → key mapping
     const headerToKey: Record<string, string> = {};
-    columns.forEach((c) => { headerToKey[c.header] = c.key; });
+    columns.forEach((c) => {
+      headerToKey[c.header] = c.key;
+    });
 
     // Map column number → field key
     const headerMap: Record<number, string> = {};
     headerRow.eachCell((cell, colNumber) => {
-      const headerVal = String(cell.value ?? '').trim();
+      const raw = cell.value;
+      const headerVal = (
+        typeof raw === 'string' || typeof raw === 'number' ? String(raw) : ''
+      ).trim();
       const key = headerToKey[headerVal];
       if (key) {
         headerMap[colNumber] = key;
@@ -83,7 +88,11 @@ export class ExcelService {
         }
       });
       // Skip completely empty rows
-      if (Object.values(rowData).some((v) => v !== null && v !== undefined && v !== '')) {
+      if (
+        Object.values(rowData).some(
+          (v) => v !== null && v !== undefined && v !== '',
+        )
+      ) {
         rows.push(rowData);
       }
     });

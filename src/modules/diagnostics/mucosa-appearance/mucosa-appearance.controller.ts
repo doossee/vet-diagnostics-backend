@@ -81,17 +81,38 @@ export class MucosaAppearanceController {
     description: 'Mucosa appearance retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="вид-слизистой-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="вид-слизистой-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
         { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
         { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
-        { key: 'numericValue', header: 'Числовое значение', example: 1, width: 18 },
-        { key: 'mucosaTypeId', header: 'ID типа слизистой', example: 'uuid-here', width: 38 },
-        { key: 'animalTypeId', header: 'ID типа животного', example: 'uuid-here', width: 38 },
+        {
+          key: 'numericValue',
+          header: 'Числовое значение',
+          example: 1,
+          width: 18,
+        },
+        {
+          key: 'mucosaTypeId',
+          header: 'ID типа слизистой',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'animalTypeId',
+          header: 'ID типа животного',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Вид слизистой',
     );
@@ -156,5 +177,4 @@ export class MucosaAppearanceController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.mucosaAppearanceService.delete(id);
   }
-
 }

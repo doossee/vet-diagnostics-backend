@@ -87,5 +87,4 @@ export class ConstitutionService {
     }
     return { imported, errors };
   }
-
 }

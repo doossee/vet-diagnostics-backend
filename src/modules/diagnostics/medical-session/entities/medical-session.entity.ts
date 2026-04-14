@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MedicalSession, SessionStatus } from 'src/generated/prisma/client';
+import { MedicalSession } from 'src/generated/prisma/client';
+import { SessionStatus } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class MedicalSessionEntity implements MedicalSession {

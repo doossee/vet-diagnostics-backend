@@ -16,7 +16,9 @@ export class ProphylaxisItemService {
   ) {}
 
   async create(data: CreateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.create({ data: { ...data, name: data.name as unknown as Prisma.InputJsonValue } });
+    return await this.prisma.prophylaxisItem.create({
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async findAll(query: ProphylaxisItemQueryParamsDto) {
@@ -67,14 +69,18 @@ export class ProphylaxisItemService {
       try {
         await this.prisma.prophylaxisItem.create({
           data: {
-            name: { ru: String(row['name_ru'] ?? ''), uz: String(row['name_uz'] ?? '') } as unknown as Prisma.InputJsonValue,
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
             type: row['type'],
           },
         });
         imported++;
-      } catch (e) { errors.push(String(e.message)); }
+      } catch (e) {
+        errors.push(String(e.message));
+      }
     }
     return { imported, errors };
   }
-
 }

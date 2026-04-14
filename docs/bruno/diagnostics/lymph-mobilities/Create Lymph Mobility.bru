@@ -1,0 +1,36 @@
+meta {
+  name: Create Lymph Mobility
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/lymph-mobilities
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Подвижный",
+      "uz": "Harakatchan"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save lymphMobilityId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("lymphMobilityId", id);
+  });
+}

@@ -87,5 +87,4 @@ export class WoolTypeService {
     }
     return { imported, errors };
   }
-
 }

@@ -1,0 +1,36 @@
+meta {
+  name: Create Wool Type
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/wool-types
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Густая",
+      "uz": "Qalin"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save woolTypeId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("woolTypeId", id);
+  });
+}

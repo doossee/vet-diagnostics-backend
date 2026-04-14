@@ -58,8 +58,14 @@ export class AnimalBreedController {
   }
 
   @ApiOperation({ summary: 'Download Excel import template for animal breeds' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="породы-животных-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="породы-животных-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
@@ -74,7 +80,12 @@ export class AnimalBreedController {
 
   @ApiOperation({ summary: 'Import animal breeds from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -109,5 +120,4 @@ export class AnimalBreedController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.breedService.delete(id);
   }
-
 }

@@ -172,5 +172,4 @@ export class FecesExamService {
     }
     return { imported, errors };
   }
-
 }

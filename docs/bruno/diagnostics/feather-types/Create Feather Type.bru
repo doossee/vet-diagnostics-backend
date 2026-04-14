@@ -1,0 +1,36 @@
+meta {
+  name: Create Feather Type
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/feather-types
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Плотное",
+      "uz": "Zich"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save featherTypeId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("featherTypeId", id);
+  });
+}

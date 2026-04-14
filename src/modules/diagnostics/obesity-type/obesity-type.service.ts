@@ -87,5 +87,4 @@ export class ObesityTypeService {
     }
     return { imported, errors };
   }
-
 }

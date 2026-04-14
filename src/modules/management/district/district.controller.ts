@@ -81,7 +81,10 @@ export class DistrictController {
     description: 'District retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for districts' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
   @Header('Content-Disposition', 'attachment; filename="районы-шаблон.xlsx"')
   @Get('template')
   async downloadTemplate() {
@@ -89,7 +92,12 @@ export class DistrictController {
       [
         { key: 'name_ru', header: 'Название (рус)', example: 'Юнусабад' },
         { key: 'name_uz', header: 'Название (уз)', example: 'Yunusobod' },
-        { key: 'regionId', header: 'ID региона', example: 'uuid-here', width: 38 },
+        {
+          key: 'regionId',
+          header: 'ID региона',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Районы',
     );
@@ -98,7 +106,12 @@ export class DistrictController {
 
   @ApiOperation({ summary: 'Import districts from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -147,5 +160,4 @@ export class DistrictController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.districtService.delete(id);
   }
-
 }

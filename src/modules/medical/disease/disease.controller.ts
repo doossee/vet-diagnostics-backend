@@ -58,7 +58,10 @@ export class DiseaseController {
   }
 
   @ApiOperation({ summary: 'Download Excel import template for diseases' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
   @Header('Content-Disposition', 'attachment; filename="болезни-шаблон.xlsx"')
   @Get('template')
   async downloadTemplate() {
@@ -66,7 +69,12 @@ export class DiseaseController {
       [
         { key: 'name_ru', header: 'Название (рус)', example: 'Ящур' },
         { key: 'name_uz', header: 'Название (уз)', example: 'Tarvaqay' },
-        { key: 'diseaseCategoryId', header: 'ID категории болезни', example: 'uuid-here', width: 38 },
+        {
+          key: 'diseaseCategoryId',
+          header: 'ID категории болезни',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Болезни',
     );
@@ -75,7 +83,12 @@ export class DiseaseController {
 
   @ApiOperation({ summary: 'Import diseases from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -111,5 +124,4 @@ export class DiseaseController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.diseaseService.delete(id);
   }
-
 }

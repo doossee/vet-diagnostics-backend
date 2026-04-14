@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  AnomalyAlert,
-  AlertSeverity,
-  AlertStatus,
-} from 'src/generated/prisma/client';
+import { AnomalyAlert } from 'src/generated/prisma/client';
+import { AlertSeverity, AlertStatus } from 'src/shared/enums';
 import { Expose } from 'class-transformer';
 
 export class AnomalyAlertEntity implements AnomalyAlert {

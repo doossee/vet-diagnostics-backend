@@ -1,0 +1,21 @@
+meta {
+  name: Get Body Position
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/body-positions/{{bodyPositionId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

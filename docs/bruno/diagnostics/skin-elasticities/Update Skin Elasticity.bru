@@ -1,0 +1,31 @@
+meta {
+  name: Update Skin Elasticity
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/skin-elasticities/{{skinElasticityId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Сниженная",
+      "uz": "Pasaygan"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

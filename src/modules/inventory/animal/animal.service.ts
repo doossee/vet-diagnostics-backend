@@ -299,5 +299,4 @@ export class AnimalService {
     }
     return { imported, errors };
   }
-
 }

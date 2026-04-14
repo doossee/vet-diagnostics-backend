@@ -9,7 +9,8 @@ import {
   AnomalyQueryDto,
   UpdateAlertDto,
 } from './dto';
-import { Prisma, AlertSeverity } from 'src/generated/prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
+import { AlertSeverity } from 'src/shared/enums';
 import axios from 'axios';
 
 /**
@@ -182,7 +183,12 @@ const PARAMETER_SOURCE_MAP: Record<string, { table: string; column: string }> =
     fecesUndigestedFood: { table: 'fecesExam', column: 'undigestedFood' },
   };
 
-const SEVERITY_ORDER: AlertSeverity[] = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+const SEVERITY_ORDER: AlertSeverity[] = [
+  AlertSeverity.LOW,
+  AlertSeverity.MEDIUM,
+  AlertSeverity.HIGH,
+  AlertSeverity.CRITICAL,
+];
 
 @Injectable()
 export class AnomalyDetectionService {

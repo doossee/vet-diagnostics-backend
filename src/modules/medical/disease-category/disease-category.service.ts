@@ -82,14 +82,18 @@ export class DiseaseCategoryService {
       try {
         await this.prisma.diseaseCategory.create({
           data: {
-            name: { ru: String(row['name_ru'] ?? ''), uz: String(row['name_uz'] ?? '') } as unknown as Prisma.InputJsonValue,
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
             parentId: row['parentId'] ? String(row['parentId']) : undefined,
           },
         });
         imported++;
-      } catch (e) { errors.push(String(e.message)); }
+      } catch (e) {
+        errors.push(String(e.message));
+      }
     }
     return { imported, errors };
   }
-
 }

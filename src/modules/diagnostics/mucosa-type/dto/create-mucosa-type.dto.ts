@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, ValidateNested } from 'class-validator';
+import { IsInt, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { NameDto } from 'src/shared/dto';
 
 export class CreateMucosaTypeDto {
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => NameDto)
   @ApiProperty({ type: NameDto, description: 'Localized name' })

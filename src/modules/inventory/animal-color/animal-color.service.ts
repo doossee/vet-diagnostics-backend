@@ -87,5 +87,4 @@ export class AnimalColorService {
     }
     return { imported, errors };
   }
-
 }

@@ -1,0 +1,31 @@
+meta {
+  name: Update Lymph Pain
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/lymph-pains/{{lymphPainId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Болезненный",
+      "uz": "Og'riqli"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

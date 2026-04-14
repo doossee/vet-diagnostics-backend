@@ -87,5 +87,4 @@ export class SkinColorService {
     }
     return { imported, errors };
   }
-
 }

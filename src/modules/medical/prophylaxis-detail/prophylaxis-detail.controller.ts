@@ -60,16 +60,29 @@ export class ProphylaxisDetailController {
     return await this.prophylaxisDetailService.findAll(query);
   }
 
-  @ApiOperation({ summary: 'Download Excel import template for prophylaxis details' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="детали-профилактики-шаблон.xlsx"')
+  @ApiOperation({
+    summary: 'Download Excel import template for prophylaxis details',
+  })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="детали-профилактики-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
         { key: 'name_ru', header: 'Название (рус)', example: 'Доза 2мл' },
         { key: 'name_uz', header: 'Название (уз)', example: '2ml doza' },
-        { key: 'itemId', header: 'ID препарата', example: 'uuid-here', width: 38 },
+        {
+          key: 'itemId',
+          header: 'ID препарата',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Детали профилактики',
     );
@@ -78,7 +91,12 @@ export class ProphylaxisDetailController {
 
   @ApiOperation({ summary: 'Import prophylaxis details from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -114,5 +132,4 @@ export class ProphylaxisDetailController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.prophylaxisDetailService.delete(id);
   }
-
 }

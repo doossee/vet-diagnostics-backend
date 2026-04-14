@@ -25,7 +25,8 @@ export class AnimalTypeEntity {
   modelKey: string | null;
 
   @ApiPropertyOptional({
-    description: 'Sex constraint ID — only animals of this sex belong to this type',
+    description:
+      'Sex constraint ID — only animals of this sex belong to this type',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
   })
   @Expose()
@@ -39,7 +40,8 @@ export class AnimalTypeEntity {
   minAgeMonths: number | null;
 
   @ApiPropertyOptional({
-    description: 'Maximum animal age in total months (inclusive, null = no upper bound)',
+    description:
+      'Maximum animal age in total months (inclusive, null = no upper bound)',
     example: 35,
   })
   @Expose()

@@ -94,15 +94,36 @@ export class MucosaExamController {
     description: 'Mucosa exam retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for mucosa exam' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="исследование-слизистых-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="исследование-слизистых-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
-        { key: 'mucosaTypeId', header: 'ID типа слизистой', example: 'uuid-here', width: 38 },
-        { key: 'mucosaAppearanceId', header: 'ID вида слизистой', example: 'uuid-here', width: 38 },
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'mucosaTypeId',
+          header: 'ID типа слизистой',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'mucosaAppearanceId',
+          header: 'ID вида слизистой',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Исследование слизистых',
     );
@@ -111,7 +132,12 @@ export class MucosaExamController {
 
   @ApiOperation({ summary: 'Import mucosa exams from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -160,5 +186,4 @@ export class MucosaExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.mucosaExamService.delete(id);
   }
-
 }

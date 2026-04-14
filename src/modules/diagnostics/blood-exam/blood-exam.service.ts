@@ -120,7 +120,8 @@ export class BloodExamService {
     let imported = 0;
     for (const row of rows) {
       try {
-        const toNum = (v: any) => (v !== '' && v != null ? Number(v) : undefined);
+        const toNum = (v: any) =>
+          v !== '' && v != null ? Number(v) : undefined;
         await this.prisma.bloodExam.create({
           data: {
             animalId: row['animalId'] || undefined,

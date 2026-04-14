@@ -94,26 +94,65 @@ export class UrineExamController {
     description: 'Urine exam retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for urine exam' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="анализ-мочи-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="анализ-мочи-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
-        { key: 'urineColorId', header: 'ID цвета мочи', example: 'uuid-here', width: 38 },
-        { key: 'urineSmellId', header: 'ID запаха мочи', example: 'uuid-here', width: 38 },
-        { key: 'urineClarityId', header: 'ID прозрачности мочи', example: 'uuid-here', width: 38 },
-        { key: 'urineConsistencyId', header: 'ID консистенции мочи', example: 'uuid-here', width: 38 },
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'urineColorId',
+          header: 'ID цвета мочи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'urineSmellId',
+          header: 'ID запаха мочи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'urineClarityId',
+          header: 'ID прозрачности мочи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'urineConsistencyId',
+          header: 'ID консистенции мочи',
+          example: 'uuid-here',
+          width: 38,
+        },
         { key: 'ph', header: 'pH (среда)', example: 6.5 },
         { key: 'acetone', header: 'Ацетон (ммоль/л)', example: 0.1 },
         { key: 'protein', header: 'Белок (г/л)', example: 0.0 },
         { key: 'bilirubin', header: 'Билирубин (мкмоль/л)', example: 0.0 },
-        { key: 'urobilinogen', header: 'Уробилиноген (мкмоль/л)', example: 3.5 },
+        {
+          key: 'urobilinogen',
+          header: 'Уробилиноген (мкмоль/л)',
+          example: 3.5,
+        },
         { key: 'sugar', header: 'Сахар (ммоль/л)', example: 0.0 },
         { key: 'leukocytes', header: 'Лейкоциты (кол-во)', example: 2 },
         { key: 'epithelium', header: 'Эпителий (кол-во)', example: 1 },
-        { key: 'microbialBodies', header: 'Микробные тела (кол-во)', example: 0 },
+        {
+          key: 'microbialBodies',
+          header: 'Микробные тела (кол-во)',
+          example: 0,
+        },
         { key: 'erythrocytes', header: 'Эритроциты (кол-во)', example: 0 },
         { key: 'saltCrystals', header: 'Соли/кристаллы', example: 0 },
         { key: 'amount', header: 'Объём (л/сутки)', example: 5.0 },
@@ -125,7 +164,12 @@ export class UrineExamController {
 
   @ApiOperation({ summary: 'Import urine exams from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -188,5 +232,4 @@ export class UrineExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.urineExamService.delete(id);
   }
-
 }

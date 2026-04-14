@@ -80,16 +80,27 @@ export class LymphShapeController {
     description: 'Record retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="форма-лимфоузлов-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="форма-лимфоузлов-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-    { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
-    { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
-    { key: 'numericValue', header: 'Числовое значение', example: 1, width: 18 },
-  ],
+        { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
+        {
+          key: 'numericValue',
+          header: 'Числовое значение',
+          example: 1,
+          width: 18,
+        },
+      ],
       'Форма лимфоузлов',
     );
     return new StreamableFile(buffer);
@@ -151,5 +162,4 @@ export class LymphShapeController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.service.delete(id);
   }
-
 }
