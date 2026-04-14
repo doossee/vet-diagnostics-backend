@@ -22,7 +22,7 @@ export class FecesSmellService {
    */
   async create(data: CreateFecesSmellDto) {
     return await this.prisma.fecesSmell.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesSmellService {
   async update(id: string, data: UpdateFecesSmellDto) {
     return await this.prisma.fecesSmell.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -99,5 +99,30 @@ export class FecesSmellService {
     return await this.prisma.fecesSmell.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.fecesSmell.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            numericValue: Number(row['numericValue']),
+            animalTypeId: String(row['animalTypeId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

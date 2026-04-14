@@ -22,7 +22,7 @@ export class FecesConsistencyService {
    */
   async create(data: CreateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesConsistencyService {
   async update(id: string, data: UpdateFecesConsistencyDto) {
     return await this.prisma.fecesConsistency.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -99,5 +99,30 @@ export class FecesConsistencyService {
     return await this.prisma.fecesConsistency.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.fecesConsistency.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            numericValue: Number(row['numericValue']),
+            animalTypeId: String(row['animalTypeId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

@@ -1,0 +1,31 @@
+meta {
+  name: Update Skin Surface
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/skin-surfaces/{{skinSurfaceId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Шероховатая",
+      "uz": "G'adir-budur"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

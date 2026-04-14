@@ -1,0 +1,42 @@
+meta {
+  name: Update User
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/users/{{userId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "firstName": "Updated Name"
+  }
+}
+
+docs {
+  # Update User
+
+  Update a specific user's profile by their UUID. Admin-only endpoint. Only the fields provided in the request body will be updated.
+
+  Requires a valid accessToken with ADMIN or SUPER_ADMIN role.
+
+  ## Path Parameter
+  - `userId` — UUID of the user to update (saved by the Create User request)
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

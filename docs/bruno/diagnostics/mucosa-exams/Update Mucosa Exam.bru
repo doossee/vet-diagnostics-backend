@@ -1,0 +1,27 @@
+meta {
+  name: Update Mucosa Exam
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/mucosa-exams/{{mucosaExamId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "mucosaAppearanceId": "{{mucosaAppearanceId}}"
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

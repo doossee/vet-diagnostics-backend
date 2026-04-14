@@ -1,0 +1,48 @@
+meta {
+  name: Update Animal
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/animals/{{animalId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalNameCode": "COW-001-UPDATED"
+  }
+}
+
+docs {
+  # Update Animal
+
+  Partially updates an existing animal record. All fields are optional — only provided fields
+  are updated.
+
+  ## Path Parameters
+  - `animalId` — UUID of the animal to update
+
+  ## Updatable Fields
+  - `arrivalDate` — ISO date string (YYYY-MM-DD)
+  - `animalNameCode` — unique identifier code for the animal
+  - `birthYear` — four-digit birth year
+  - `birthMonth` — birth month (1–12)
+  - `sexId` — UUID of the sex reference value
+  - `farmerId` — UUID of the farmer
+  - `animalTypeId` — UUID of the resolved leaf AnimalType
+  - `animalBreedId` — UUID of the animal breed
+  - `animalColorId` — UUID of the animal coat color
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

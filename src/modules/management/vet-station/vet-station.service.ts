@@ -17,7 +17,7 @@ export class VetStationService {
 
   async create(data: CreateVetStationDto) {
     return await this.prisma.vetStation.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { district: { include: { region: true } } },
     });
   }
@@ -62,7 +62,7 @@ export class VetStationService {
   async update(id: string, data: UpdateVetStationDto) {
     return await this.prisma.vetStation.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { district: { include: { region: true } } },
     });
   }
@@ -71,5 +71,30 @@ export class VetStationService {
     return await this.prisma.vetStation.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.vetStation.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            address: String(row['address']),
+            districtId: String(row['districtId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

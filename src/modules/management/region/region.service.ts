@@ -18,7 +18,7 @@ export class RegionService {
    */
   async create(data: CreateRegionDto) {
     return await this.prisma.region.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
@@ -78,7 +78,7 @@ export class RegionService {
   async update(id: number, data: UpdateRegionDto) {
     return await this.prisma.region.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
@@ -92,5 +92,28 @@ export class RegionService {
     return await this.prisma.region.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.region.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

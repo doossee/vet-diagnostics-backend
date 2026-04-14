@@ -1,4 +1,4 @@
-import { User, UserRole, UserGender } from '../src/generated/prisma/client';
+import { User, UserRole, UserGender } from 'src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 import * as bcrypt from 'bcryptjs';
 

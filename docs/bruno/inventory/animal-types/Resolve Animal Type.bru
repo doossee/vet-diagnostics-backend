@@ -1,0 +1,48 @@
+meta {
+  name: Resolve Animal Type
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/animal-types/resolve?parentId={{animalTypeId}}&sexNumericValue=1&birthYear=2022&birthMonth=6
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Resolve Animal Type
+
+  Resolves the correct leaf AnimalType from the given parent type ID, sex numeric value, and
+  birth date. Used to auto-select buqa / g'unojin / sigir / buzoq without the caller needing
+  to know the exact leaf UUID.
+
+  The system uses the animal's age (calculated from `birthYear` + `birthMonth`) and the sex
+  numeric value to determine which child subtype applies. For example, within Cattle (Qoramol):
+  - Young animal (< 1 year) → Buzoq
+  - Adult male (>= 3 years) → Buqa
+  - Young female (< 3 years) → G'unojin
+  - Adult female (>= 3 years) → Sigir
+
+  ## Query Parameters
+  - `parentId` — UUID of the parent animal type (e.g. Cattle / Qoramol)
+  - `sexNumericValue` — numeric encoding of sex (e.g. 1 = male, 2 = female)
+  - `birthYear` — animal birth year (e.g. 2022)
+  - `birthMonth` — animal birth month (1–12)
+
+  ## Response
+  Returns the resolved leaf AnimalType with its `modelKey` populated.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("data.modelKey exists", function() {
+    expect(res.body.data).to.have.property("modelKey");
+  });
+}

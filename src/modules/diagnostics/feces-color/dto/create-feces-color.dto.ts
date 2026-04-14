@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsUUID, ValidateNested } from 'class-validator';
+import { IsInt, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { NameDto } from 'src/shared/dto';
 
 export class CreateFecesColorDto {
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => NameDto)
   @ApiProperty({ type: NameDto, description: 'Localized name' })

@@ -22,7 +22,7 @@ export class FecesColorService {
    */
   async create(data: CreateFecesColorDto) {
     return await this.prisma.fecesColor.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -84,7 +84,7 @@ export class FecesColorService {
   async update(id: string, data: UpdateFecesColorDto) {
     return await this.prisma.fecesColor.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -99,5 +99,30 @@ export class FecesColorService {
     return await this.prisma.fecesColor.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.fecesColor.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            numericValue: Number(row['numericValue']),
+            animalTypeId: String(row['animalTypeId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

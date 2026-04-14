@@ -64,15 +64,19 @@ model Prediction {
   @@map("predictions")
 }
 
-// Stores veterinarian feedback on AI prediction quality
+// Stores veterinarian/admin feedback on AI prediction quality
 model Feedback {
   id String @id @default(uuid()) @db.Uuid
 
   predictionId String     @map("prediction_id") @db.Uuid
   prediction   Prediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
 
-  veterinarianId String     @map("veterinarian_id") @db.Uuid
-  veterinarian   VetProfile @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
+  // Either veterinarian or admin must be set
+  veterinarianId String?     @map("veterinarian_id") @db.Uuid
+  veterinarian   VetProfile? @relation(fields: [veterinarianId], references: [id], onDelete: Restrict)
+
+  adminId String? @map("admin_id") @db.Uuid
+  admin   User?   @relation(fields: [adminId], references: [id], onDelete: Restrict)
 
   rating  Int     // 1-5 scale of prediction accuracy
   comment String? @db.Text
@@ -86,5 +90,6 @@ model Feedback {
 
   @@index([predictionId])
   @@index([veterinarianId])
+  @@index([adminId])
   @@map("feedbacks")
 }

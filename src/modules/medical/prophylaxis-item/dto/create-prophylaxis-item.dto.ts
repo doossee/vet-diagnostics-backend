@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, ValidateNested } from 'class-validator';
+import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { NameDto } from 'src/shared/dto';
 import { ProphylaxisType } from 'src/shared/enums';
 
 export class CreateProphylaxisItemDto {
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => NameDto)
   @ApiProperty({ type: NameDto, description: 'Localized name' })

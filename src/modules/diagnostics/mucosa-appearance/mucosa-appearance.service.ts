@@ -22,7 +22,7 @@ export class MucosaAppearanceService {
    */
   async create(data: CreateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -52,6 +52,7 @@ export class MucosaAppearanceService {
 
     const include: Prisma.MucosaAppearanceInclude = {
       animalType: true,
+      mucosaType: true,
     };
 
     return await this.paginationService.paginate(
@@ -84,7 +85,7 @@ export class MucosaAppearanceService {
   async update(id: string, data: UpdateMucosaAppearanceDto) {
     return await this.prisma.mucosaAppearance.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { animalType: true },
     });
   }
@@ -99,5 +100,31 @@ export class MucosaAppearanceService {
     return await this.prisma.mucosaAppearance.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.mucosaAppearance.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            numericValue: Number(row['numericValue']),
+            mucosaTypeId: String(row['mucosaTypeId']),
+            animalTypeId: String(row['animalTypeId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

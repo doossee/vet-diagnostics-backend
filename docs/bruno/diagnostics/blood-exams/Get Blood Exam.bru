@@ -1,0 +1,21 @@
+meta {
+  name: Get Blood Exam
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/blood-exams/{{bloodExamId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

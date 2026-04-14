@@ -1,0 +1,41 @@
+meta {
+  name: List Vet Stations
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/vet-stations?page=1&perPage=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Vet Stations
+
+  Returns a paginated list of veterinary stations. Requires admin access.
+
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 10)
+  - `search` — Optional search string
+
+  ## Response
+  Returns paginated `VetStationEntity[]` with meta.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Data is array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+  test("Has meta", function() {
+    expect(res.body).to.have.property("meta");
+  });
+}

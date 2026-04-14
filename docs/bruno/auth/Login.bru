@@ -1,0 +1,49 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "123qazwsx"
+  }
+}
+
+docs {
+  # Login
+
+  Authenticate with a username and password. Returns access and refresh tokens on success.
+
+  **Public endpoint** — no authorization required.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Response has accessToken", function() {
+    expect(res.body.data).to.have.property("accessToken");
+  });
+
+  test("Response has refreshToken", function() {
+    expect(res.body.data).to.have.property("refreshToken");
+  });
+
+  test("Save tokens to vars", function() {
+    bru.setVar("accessToken", res.body.data.accessToken);
+    bru.setVar("refreshToken", res.body.data.refreshToken);
+  });
+}

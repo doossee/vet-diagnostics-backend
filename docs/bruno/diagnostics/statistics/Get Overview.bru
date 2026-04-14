@@ -1,0 +1,21 @@
+meta {
+  name: Get Overview
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/statistics/overview?startDate=2026-01-01&endDate=2026-12-31
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

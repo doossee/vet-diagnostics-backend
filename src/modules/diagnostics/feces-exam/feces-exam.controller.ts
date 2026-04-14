@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -30,7 +39,10 @@ import { IsAuthenticated } from 'src/shared/decorators';
 @ApiTags('feces-exams')
 @Controller('feces-exams')
 export class FecesExamController {
-  constructor(private readonly fecesExamService: FecesExamService) {}
+  constructor(
+    private readonly fecesExamService: FecesExamService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({
     summary: 'Create feces exam',
@@ -81,6 +93,84 @@ export class FecesExamController {
     type: FecesExamEntity,
     description: 'Feces exam retrieved successfully',
   })
+  @ApiOperation({ summary: 'Download Excel import template for feces exam' })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="анализ-кала-шаблон.xlsx"',
+  )
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesColorId',
+          header: 'ID цвета кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesSmellId',
+          header: 'ID запаха кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesConsistencyId',
+          header: 'ID консистенции кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesFormId',
+          header: 'ID формы кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        { key: 'amount', header: 'Количество (кг/сутки)', example: 15 },
+        {
+          key: 'undigestedFood',
+          header: 'Непереваренный корм (%)',
+          example: 5,
+        },
+      ],
+      'Анализ кала',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import feces exams from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'animalId', header: 'ID животного' },
+      { key: 'fecesColorId', header: 'ID цвета кала' },
+      { key: 'fecesSmellId', header: 'ID запаха кала' },
+      { key: 'fecesConsistencyId', header: 'ID консистенции кала' },
+      { key: 'fecesFormId', header: 'ID формы кала' },
+      { key: 'amount', header: 'Количество (кг/сутки)' },
+      { key: 'undigestedFood', header: 'Непереваренный корм (%)' },
+    ]);
+    return await this.fecesExamService.importFromExcel(rows);
+  }
+
   @ApiNotFoundResponse({ description: 'Feces exam not found' })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {

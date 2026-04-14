@@ -1,0 +1,35 @@
+meta {
+  name: List Animals
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/animals?page=1&perPage=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Animals
+
+  Returns a paginated list of all animals in the inventory.
+
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 10)
+  - `search` — Search in animalNameCode or related fields
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Has meta", function() {
+    expect(res.body).to.have.property("meta");
+  });
+}

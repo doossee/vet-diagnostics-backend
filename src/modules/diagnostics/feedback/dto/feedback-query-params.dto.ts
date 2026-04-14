@@ -12,4 +12,9 @@ export class FeedbackQueryParamsDto extends BaseQueryParamsDto {
   @IsUUID()
   @ApiPropertyOptional()
   readonly veterinarianId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @ApiPropertyOptional()
+  readonly adminId?: string;
 }

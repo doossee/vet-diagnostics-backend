@@ -16,7 +16,9 @@ export class ProphylaxisItemService {
   ) {}
 
   async create(data: CreateProphylaxisItemDto) {
-    return await this.prisma.prophylaxisItem.create({ data: data as any });
+    return await this.prisma.prophylaxisItem.create({
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async findAll(query: ProphylaxisItemQueryParamsDto) {
@@ -50,11 +52,35 @@ export class ProphylaxisItemService {
   async update(id: string, data: UpdateProphylaxisItemDto) {
     return await this.prisma.prophylaxisItem.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
   async delete(id: string) {
     return await this.prisma.prophylaxisItem.delete({ where: { id } });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.prophylaxisItem.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            type: row['type'],
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

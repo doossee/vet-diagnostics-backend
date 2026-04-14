@@ -41,29 +41,58 @@ export class UsersService {
         throw new BadRequestException('You must provide a phone or email');
       }
 
-      const user = await this.prisma.user.create({
-        data: {
-          username: data.username,
-          password: hashedPassword,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phone: data.phone,
-          role: data.role || 'FARMER', // Default to FARMER if not specified
-          districtId: data.districtId,
-        },
-        include: {
-          district: true,
-        },
+      const result = await this.prisma.$transaction(async (prisma) => {
+        const user = await prisma.user.create({
+          data: {
+            username: data.username,
+            password: hashedPassword,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phone: data.phone,
+            role: data.role || 'FARMER',
+            districtId: data.districtId,
+          },
+        });
+
+        if (user.role === 'VETERINARIAN') {
+          await prisma.vetProfile.create({
+            data: {
+              id: user.id, // 🔥 same id
+            },
+          });
+        }
+
+        if (user.role === 'FARMER') {
+          await prisma.farmerProfile.create({
+            data: {
+              id: user.id,
+              veterinarianId: data.veterinarianId!,
+            },
+          });
+        }
+
+        return prisma.user.findUnique({
+          where: { id: user.id },
+          include: {
+            district: true,
+            veterinarianProfile: true,
+            farmerProfile: true,
+          },
+        });
       });
 
-      return new UserEntity(user);
+      return new UserEntity(result!);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new BadRequestException('A user with this data already exists');
         }
         if (error.code === 'P2003') {
+          const field = (error.meta?.field_name as string) ?? '';
+          if (field.includes('veterinarian')) {
+            throw new BadRequestException('Invalid veterinarian ID');
+          }
           throw new BadRequestException('Invalid district ID');
         }
       }

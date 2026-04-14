@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DistrictController } from './district.controller';
 import { DistrictService } from './district.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('DistrictController', () => {
   let controller: DistrictController;
   let service: DistrictService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('DistrictController', () => {
         {
           provide: DistrictService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

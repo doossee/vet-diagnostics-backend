@@ -18,10 +18,14 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:db:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "test:e2e:db:down": "docker compose -f docker-compose.test.yml down",
+    "test:e2e:db:reset": "docker compose -f docker-compose.test.yml down -v && docker compose -f docker-compose.test.yml up -d --wait && DATABASE_URL=postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test npx prisma migrate deploy --schema prisma/schema/schema.prisma",
+    "test:e2e:run": "DATABASE_URL=postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test jest --config ./test/jest-e2e.json --runInBand",
     "docker:up": "docker-compose up --build",
     "docker:down": "docker-compose down",
     "docker:clean": "docker-compose down -v",
-    "prisma:migrate": "yarn prisma migrate deploy --schema prisma/schema/schema.prisma",
+    "prisma:migrate": "prisma migrate deploy --schema prisma/schema/schema.prisma",
     "prisma:seed": "yarn tsx prisma/seed.ts"
   },
   "dependencies": {
@@ -39,6 +43,7 @@
     "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "exceljs": "^4.4.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",

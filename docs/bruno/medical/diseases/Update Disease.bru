@@ -1,0 +1,38 @@
+meta {
+  name: Update Disease
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/diseases/{{diseaseId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Стоматит острый", "uz": "O'tkir stomatit" }
+  }
+}
+
+docs {
+  # Update Disease
+
+  Updates an existing disease by ID.
+  Only provided fields are updated.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

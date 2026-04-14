@@ -1,0 +1,36 @@
+meta {
+  name: Get User
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/users/{{userId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get User
+
+  Retrieve a specific user's profile by their UUID. Admin-only endpoint.
+
+  Requires a valid accessToken with ADMIN or SUPER_ADMIN role.
+
+  ## Path Parameter
+  - `userId` — UUID of the user to retrieve (saved by the Create User request)
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Response has data.id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+}

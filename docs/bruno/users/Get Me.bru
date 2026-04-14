@@ -1,0 +1,33 @@
+meta {
+  name: Get Me
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/users/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Me
+
+  Retrieve the profile of the currently authenticated user.
+
+  Requires a valid accessToken as a Bearer token.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Response has data.id", function() {
+    expect(res.body.data).to.have.property("id");
+  });
+}

@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -34,6 +43,7 @@ import { IsAuthenticated } from 'src/shared/decorators';
 export class ProphylaxisDetailController {
   constructor(
     private readonly prophylaxisDetailService: ProphylaxisDetailService,
+    private readonly excelService: ExcelService,
   ) {}
 
   @ApiOperation({ summary: 'Create prophylaxis detail' })
@@ -48,6 +58,54 @@ export class ProphylaxisDetailController {
   @Get()
   async findAll(@Query() query: ProphylaxisDetailQueryParamsDto) {
     return await this.prophylaxisDetailService.findAll(query);
+  }
+
+  @ApiOperation({
+    summary: 'Download Excel import template for prophylaxis details',
+  })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="детали-профилактики-шаблон.xlsx"',
+  )
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'name_ru', header: 'Название (рус)', example: 'Доза 2мл' },
+        { key: 'name_uz', header: 'Название (уз)', example: '2ml doza' },
+        {
+          key: 'itemId',
+          header: 'ID препарата',
+          example: 'uuid-here',
+          width: 38,
+        },
+      ],
+      'Детали профилактики',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import prophylaxis details from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+      { key: 'itemId', header: 'ID препарата' },
+    ]);
+    return await this.prophylaxisDetailService.importFromExcel(rows);
   }
 
   @ApiOperation({ summary: 'Get prophylaxis detail by ID' })

@@ -1,0 +1,21 @@
+meta {
+  name: List Reference Ranges
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/reference-ranges?page=1&perPage=20
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

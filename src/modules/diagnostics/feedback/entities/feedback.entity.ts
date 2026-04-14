@@ -16,12 +16,19 @@ export class FeedbackEntity {
   @Expose()
   predictionId: string;
 
-  @ApiProperty({
-    description: 'Veterinarian ID',
+  @ApiPropertyOptional({
+    description: 'Veterinarian ID (set when created by a veterinarian)',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @Expose()
-  veterinarianId: string;
+  veterinarianId: string | null;
+
+  @ApiPropertyOptional({
+    description: 'Admin user ID (set when created by an admin)',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @Expose()
+  adminId: string | null;
 
   @ApiProperty({ description: 'Prediction accuracy rating (1-5)', example: 3 })
   @Expose()

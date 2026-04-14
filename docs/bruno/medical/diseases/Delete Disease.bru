@@ -1,0 +1,27 @@
+meta {
+  name: Delete Disease
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/diseases/{{diseaseId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Disease
+
+  Deletes a disease by ID.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

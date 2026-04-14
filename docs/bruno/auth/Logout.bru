@@ -1,0 +1,29 @@
+meta {
+  name: Logout
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/auth/logout
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+}
+
+docs {
+  # Logout
+
+  Invalidate the current session by revoking the refresh token for the current user. Pass the access token in the Authorization header.
+
+  **Public endpoint** — passes access token via header directly.
+}
+
+tests {
+  test("Status 200 or 201", function() {
+    expect([200, 201]).to.include(res.status);
+  });
+}

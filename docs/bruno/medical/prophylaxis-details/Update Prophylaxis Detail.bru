@@ -1,0 +1,38 @@
+meta {
+  name: Update Prophylaxis Detail
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/prophylaxis-details/{{prophylaxisDetailId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "S19 (обновлён)", "uz": "S19 (yangilandi)" }
+  }
+}
+
+docs {
+  # Update Prophylaxis Detail
+
+  Updates an existing prophylaxis detail by ID.
+  Only provided fields are updated.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

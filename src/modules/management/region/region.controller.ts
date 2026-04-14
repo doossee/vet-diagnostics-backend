@@ -10,6 +10,15 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -26,7 +35,10 @@ import { IsAdminUser } from 'src/shared/decorators';
 @ApiTags('regions')
 @Controller('regions')
 export class RegionController {
-  constructor(private readonly regionService: RegionService) {}
+  constructor(
+    private readonly regionService: RegionService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({
     summary: 'Create region',
@@ -63,6 +75,42 @@ export class RegionController {
     type: RegionEntity,
     description: 'Region retrieved successfully',
   })
+  @ApiOperation({ summary: 'Download Excel import template for regions' })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header('Content-Disposition', 'attachment; filename="регионы-шаблон.xlsx"')
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'name_ru', header: 'Название (рус)', example: 'Ташкент' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Toshkent' },
+      ],
+      'Регионы',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import regions from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+    ]);
+    return await this.regionService.importFromExcel(rows);
+  }
+
   @ApiNotFoundResponse({ description: 'Region not found' })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {

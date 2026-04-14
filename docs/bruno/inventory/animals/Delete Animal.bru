@@ -1,0 +1,33 @@
+meta {
+  name: Delete Animal
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/animals/{{animalId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Delete Animal
+
+  Deletes an animal record by its ID.
+
+  ## Path Parameters
+  - `animalId` — UUID of the animal to delete
+
+  **Note:** Deleting an animal that has linked diagnostic or medical sessions may result in a
+  constraint error (Prisma P2003). Archive or remove related sessions first.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

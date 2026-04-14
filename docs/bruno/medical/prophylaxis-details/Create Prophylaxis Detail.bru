@@ -1,0 +1,43 @@
+meta {
+  name: Create Prophylaxis Detail
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/prophylaxis-details
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "S19", "uz": "S19" },
+    "prophylaxisItemId": "{{prophylaxisItemId}}"
+  }
+}
+
+docs {
+  # Create Prophylaxis Detail
+
+  Creates a new prophylaxis detail (vaccine strain reference data).
+  Both Russian and Uzbek names are required (bilingual).
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("prophylaxisDetailId", res.body.data.id);
+  });
+}

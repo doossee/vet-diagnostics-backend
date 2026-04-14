@@ -23,7 +23,7 @@ export class BloodExamService {
   async create(data: CreateBloodExamDto) {
     return await this.prisma.bloodExam.create({
       data,
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -49,6 +49,7 @@ export class BloodExamService {
     };
 
     const include: Prisma.BloodExamInclude = {
+      session: true,
       animal: true,
     };
 
@@ -68,7 +69,7 @@ export class BloodExamService {
   async findOne(id: string) {
     return await this.prisma.bloodExam.findUniqueOrThrow({
       where: { id },
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -83,7 +84,7 @@ export class BloodExamService {
     return await this.prisma.bloodExam.update({
       where: { id },
       data,
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -96,7 +97,7 @@ export class BloodExamService {
     return await this.prisma.bloodExam.findFirst({
       where: { animalId },
       orderBy: { createdAt: 'desc' },
-      include: { animal: true },
+      include: { session: true, animal: true },
     });
   }
 
@@ -110,5 +111,68 @@ export class BloodExamService {
     return await this.prisma.bloodExam.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        const toNum = (v: any) =>
+          v !== '' && v != null ? Number(v) : undefined;
+        await this.prisma.bloodExam.create({
+          data: {
+            animalId: row['animalId'] || undefined,
+            sessionId: row['sessionId'] || undefined,
+            coe: toNum(row['coe']),
+            erythrocyteCount: toNum(row['erythrocyteCount']),
+            leukocyteCount: toNum(row['leukocyteCount']),
+            thrombocyteCount: toNum(row['thrombocyteCount']),
+            hemoglobin: toNum(row['hemoglobin']),
+            glutathione: toNum(row['glutathione']),
+            waterPercentage: toNum(row['waterPercentage']),
+            dryResidue: toNum(row['dryResidue']),
+            totalProtein: toNum(row['totalProtein']),
+            totalCalcium: toNum(row['totalCalcium']),
+            organicPhosphorus: toNum(row['organicPhosphorus']),
+            albumin: toNum(row['albumin']),
+            alphaGlobulin: toNum(row['alphaGlobulin']),
+            betaGlobulin: toNum(row['betaGlobulin']),
+            gammaGlobulin: toNum(row['gammaGlobulin']),
+            residualNitrogen: toNum(row['residualNitrogen']),
+            urea: toNum(row['urea']),
+            uricAcid: toNum(row['uricAcid']),
+            creatine: toNum(row['creatine']),
+            creatinine: toNum(row['creatinine']),
+            alkalineReserve: toNum(row['alkalineReserve']),
+            glucose: toNum(row['glucose']),
+            ketoneBodies: toNum(row['ketoneBodies']),
+            totalBilirubin: toNum(row['totalBilirubin']),
+            directBilirubin: toNum(row['directBilirubin']),
+            totalCholesterol: toNum(row['totalCholesterol']),
+            totalLipids: toNum(row['totalLipids']),
+            phospholipids: toNum(row['phospholipids']),
+            lacticAcid: toNum(row['lacticAcid']),
+            pyruvicAcid: toNum(row['pyruvicAcid']),
+            citricAcid: toNum(row['citricAcid']),
+            carotene: toNum(row['carotene']),
+            vitaminA: toNum(row['vitaminA']),
+            vitaminB: toNum(row['vitaminB']),
+            vitaminC: toNum(row['vitaminC']),
+            copper: toNum(row['copper']),
+            cobalt: toNum(row['cobalt']),
+            manganese: toNum(row['manganese']),
+            zinc: toNum(row['zinc']),
+            conclusion: row['conclusion'] || undefined,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

@@ -17,7 +17,7 @@ export class ProphylaxisDetailService {
 
   async create(data: CreateProphylaxisDetailDto) {
     return await this.prisma.prophylaxisDetail.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { item: true },
     });
   }
@@ -55,12 +55,36 @@ export class ProphylaxisDetailService {
   async update(id: string, data: UpdateProphylaxisDetailDto) {
     return await this.prisma.prophylaxisDetail.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { item: true },
     });
   }
 
   async delete(id: string) {
     return await this.prisma.prophylaxisDetail.delete({ where: { id } });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.prophylaxisDetail.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            itemId: String(row['itemId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

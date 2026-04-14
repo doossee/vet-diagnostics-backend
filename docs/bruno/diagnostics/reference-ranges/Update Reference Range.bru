@@ -1,0 +1,28 @@
+meta {
+  name: Update Reference Range
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/reference-ranges/{{referenceRangeId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "minValue": 85,
+    "maxValue": 145
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

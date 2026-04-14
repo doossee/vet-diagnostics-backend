@@ -1,0 +1,35 @@
+meta {
+  name: List Colors
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/colors?page=1&perPage=20
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Colors
+
+  Returns a paginated list of all animal coat colors.
+
+  ## Query Parameters
+  - `page` — Page number (default: 1)
+  - `perPage` — Items per page (default: 10)
+  - `search` — Search in bilingual name
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Data is array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+}

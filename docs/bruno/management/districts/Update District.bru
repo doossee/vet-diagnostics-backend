@@ -1,0 +1,47 @@
+meta {
+  name: Update District
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/districts/{{districtId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Юнусабадский район", "uz": "Yunusobod tumani" }
+  }
+}
+
+docs {
+  # Update District
+
+  Updates an existing district by ID. Requires admin access.
+
+  ## Path Parameters
+  - `id` — District UUID
+
+  ## Request Body
+  - `name.ru` — District name in Russian
+  - `name.uz` — District name in Uzbek
+
+  ## Response
+  Returns the updated `DistrictEntity`.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

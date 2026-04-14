@@ -1,0 +1,42 @@
+meta {
+  name: Create Disease Category
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/disease-categories
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": { "ru": "Болезни пищеварительной системы", "uz": "Hazm qilish tizimi kasalliklari" }
+  }
+}
+
+docs {
+  # Create Disease Category
+
+  Creates a new disease category with bilingual name.
+  Both Russian and Uzbek names are required.
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Has id", function() {
+    expect(res.body.data).to.have.property("id");
+    bru.setVar("diseaseCategoryId", res.body.data.id);
+  });
+}

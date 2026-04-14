@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -30,7 +39,10 @@ import { IsAdminUser } from 'src/shared/decorators';
 @ApiTags('vet-stations')
 @Controller('vet-stations')
 export class VetStationController {
-  constructor(private readonly vetStationService: VetStationService) {}
+  constructor(
+    private readonly vetStationService: VetStationService,
+    private readonly excelService: ExcelService,
+  ) {}
 
   @ApiOperation({
     summary: 'Create vet station',
@@ -67,6 +79,54 @@ export class VetStationController {
     type: VetStationEntity,
     description: 'Vet station retrieved successfully',
   })
+  @ApiOperation({ summary: 'Download Excel import template for vet stations' })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="ветстанции-шаблон.xlsx"',
+  )
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        { key: 'name_ru', header: 'Название (рус)', example: 'Ветстанция №1' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Vet stansiya №1' },
+        { key: 'address', header: 'Адрес', example: 'ул. Ленина 1', width: 30 },
+        {
+          key: 'districtId',
+          header: 'ID района',
+          example: 'uuid-here',
+          width: 38,
+        },
+      ],
+      'Ветстанции',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import vet stations from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+      { key: 'address', header: 'Адрес' },
+      { key: 'districtId', header: 'ID района' },
+    ]);
+    return await this.vetStationService.importFromExcel(rows);
+  }
+
   @ApiNotFoundResponse({ description: 'Vet station not found' })
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {

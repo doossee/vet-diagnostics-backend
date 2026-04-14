@@ -1,0 +1,39 @@
+meta {
+  name: Update Breed
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/breeds/{{breedId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": { "ru": "Голштинская", "uz": "Golshtin" }
+  }
+}
+
+docs {
+  # Update Breed
+
+  Partially updates an existing breed. All fields are optional — only provided fields are updated.
+
+  ## Path Parameters
+  - `breedId` — UUID of the breed to update
+
+  ## Updatable Fields
+  - `name` — bilingual name object `{ "ru": "...", "uz": "..." }`
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

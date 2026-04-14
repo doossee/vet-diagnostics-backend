@@ -3,7 +3,7 @@
 // Set DATABASE_URL for tests if not already set
 if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL =
-    'postgresql://postgres:postgres@localhost:5432/vet_diagnostics_test?schema=public';
+    'postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test?schema=public';
 }
 
 import { PrismaClient } from '../src/generated/prisma/client';

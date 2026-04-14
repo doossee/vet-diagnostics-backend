@@ -1,0 +1,30 @@
+meta {
+  name: List Disease Categories
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/disease-categories?page=1&perPage=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Disease Categories
+
+  Returns a paginated list of all disease categories.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Data is array", function() {
+    expect(res.body.data).to.be.an("array");
+  });
+}

@@ -24,6 +24,7 @@ export class UrineExamService {
     return await this.prisma.urineExam.create({
       data,
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -55,6 +56,7 @@ export class UrineExamService {
     };
 
     const include: Prisma.UrineExamInclude = {
+      session: true,
       animal: true,
       urineColor: true,
       urineSmell: true,
@@ -79,6 +81,7 @@ export class UrineExamService {
     return await this.prisma.urineExam.findUniqueOrThrow({
       where: { id },
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -100,6 +103,7 @@ export class UrineExamService {
       where: { id },
       data,
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -119,6 +123,7 @@ export class UrineExamService {
       where: { animalId },
       orderBy: { createdAt: 'desc' },
       include: {
+        session: true,
         animal: true,
         urineColor: true,
         urineSmell: true,
@@ -138,5 +143,43 @@ export class UrineExamService {
     return await this.prisma.urineExam.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        const toNum = (v) => (v !== '' && v != null ? Number(v) : undefined);
+        await this.prisma.urineExam.create({
+          data: {
+            animalId: row['animalId'] || undefined,
+            sessionId: row['sessionId'] || undefined,
+            urineColorId: row['urineColorId'] || undefined,
+            urineSmellId: row['urineSmellId'] || undefined,
+            urineClarityId: row['urineClarityId'] || undefined,
+            urineConsistencyId: row['urineConsistencyId'] || undefined,
+            amount: toNum(row['amount']),
+            ph: toNum(row['ph']),
+            acetone: toNum(row['acetone']),
+            protein: toNum(row['protein']),
+            bilirubin: toNum(row['bilirubin']),
+            urobilinogen: toNum(row['urobilinogen']),
+            sugar: toNum(row['sugar']),
+            leukocytes: toNum(row['leukocytes']),
+            epithelium: toNum(row['epithelium']),
+            microbialBodies: toNum(row['microbialBodies']),
+            erythrocytes: toNum(row['erythrocytes']),
+            saltCrystals: toNum(row['saltCrystals']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

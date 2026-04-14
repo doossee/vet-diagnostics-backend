@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn add:*)",
+      "Bash(cmd /c \"cd /d d:\\\\project\\\\vet-diagnostics-backend && yarn add exceljs\")",
+      "Bash(cmd /c \"cd /d d:\\\\project\\\\vet-diagnostics-backend && yarn add exceljs 2>&1\")",
+      "Bash(cmd /c \"cd /d d:\\\\project\\\\vet-diagnostics-backend && npm install exceljs --save 2>&1\")",
+      "Bash(powershell -Command \"cd 'd:\\\\project\\\\vet-diagnostics-backend'; npm install exceljs --save; Write-Host 'DONE'\")",
+      "Bash(cat)",
+      "Bash(python3 /tmp/add_excel_to_services.py)",
+      "Bash(find src:*)"
+    ]
+  }
+}

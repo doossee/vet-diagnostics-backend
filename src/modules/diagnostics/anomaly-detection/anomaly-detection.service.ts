@@ -9,7 +9,8 @@ import {
   AnomalyQueryDto,
   UpdateAlertDto,
 } from './dto';
-import { Prisma, AlertSeverity } from 'src/generated/prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
+import { AlertSeverity } from 'src/shared/enums';
 import axios from 'axios';
 
 /**
@@ -182,7 +183,12 @@ const PARAMETER_SOURCE_MAP: Record<string, { table: string; column: string }> =
     fecesUndigestedFood: { table: 'fecesExam', column: 'undigestedFood' },
   };
 
-const SEVERITY_ORDER: AlertSeverity[] = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+const SEVERITY_ORDER: AlertSeverity[] = [
+  AlertSeverity.LOW,
+  AlertSeverity.MEDIUM,
+  AlertSeverity.HIGH,
+  AlertSeverity.CRITICAL,
+];
 
 @Injectable()
 export class AnomalyDetectionService {
@@ -300,9 +306,10 @@ export class AnomalyDetectionService {
     // Build date filter
     const dateFilter: Prisma.MedicalSessionWhereInput = {};
     if (from || to) {
-      dateFilter.date = {};
-      if (from) (dateFilter.date as any).gte = new Date(from);
-      if (to) (dateFilter.date as any).lte = new Date(to);
+      dateFilter.date = {
+        ...(from && { gte: new Date(from) }),
+        ...(to && { lte: new Date(to) }),
+      };
     }
 
     // Query sessions with the relevant exam included

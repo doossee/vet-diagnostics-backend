@@ -26,6 +26,7 @@ import {
 import {
   MedicalSessionEntity,
   PaginatedMedicalSessionEntity,
+  PredictionEntity,
 } from './entities';
 import { IsAuthenticated } from 'src/shared/decorators';
 
@@ -93,6 +94,20 @@ export class MedicalSessionController {
     @Body() data: UpdateMedicalSessionDto,
   ) {
     return await this.medicalSessionService.update(id, data);
+  }
+
+  @ApiOperation({
+    summary: 'Get prediction for medical session',
+    description: 'Retrieve the AI prediction result for a submitted session.',
+  })
+  @ApiOkResponse({
+    type: PredictionEntity,
+    description: 'Prediction retrieved successfully',
+  })
+  @ApiNotFoundResponse({ description: 'Prediction not found for this session' })
+  @Get(':id/predict')
+  async getPrediction(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.medicalSessionService.getPrediction(id);
   }
 
   @ApiOperation({

@@ -31,3 +31,22 @@ export enum FecesAnalysisType {
   MACROSCOPIC = 'MACROSCOPIC',
   MICROSCOPIC = 'MICROSCOPIC',
 }
+
+export enum SessionStatus {
+  DRAFT = 'DRAFT',
+  READY = 'READY',
+  SUBMITTED = 'SUBMITTED',
+}
+
+export enum AlertSeverity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum AlertStatus {
+  NEW = 'NEW',
+  ACKNOWLEDGED = 'ACKNOWLEDGED',
+  RESOLVED = 'RESOLVED',
+}

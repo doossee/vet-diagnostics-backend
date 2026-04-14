@@ -10,6 +10,15 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import {
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
+  Header,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ExcelService } from 'src/shared/services';
+import {
   ApiTags,
   ApiOperation,
   ApiCreatedResponse,
@@ -34,6 +43,7 @@ import { IsAuthenticated } from 'src/shared/decorators';
 export class DiseaseCategoryController {
   constructor(
     private readonly diseaseCategoryService: DiseaseCategoryService,
+    private readonly excelService: ExcelService,
   ) {}
 
   @ApiOperation({ summary: 'Create disease category' })
@@ -48,6 +58,62 @@ export class DiseaseCategoryController {
   @Get()
   async findAll(@Query() query: DiseaseCategoryQueryParamsDto) {
     return await this.diseaseCategoryService.findAll(query);
+  }
+
+  @ApiOperation({
+    summary: 'Download Excel import template for disease categories',
+  })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="категории-болезней-шаблон.xlsx"',
+  )
+  @Get('template')
+  async downloadTemplate() {
+    const buffer = await this.excelService.generateTemplate(
+      [
+        {
+          key: 'name_ru',
+          header: 'Название (рус)',
+          example: 'Инфекционные болезни',
+        },
+        {
+          key: 'name_uz',
+          header: 'Название (уз)',
+          example: 'Yuqumli kasalliklar',
+        },
+        {
+          key: 'parentId',
+          header: 'ID родителя (необязат.)',
+          example: '',
+          width: 38,
+        },
+      ],
+      'Категории болезней',
+    );
+    return new StreamableFile(buffer);
+  }
+
+  @ApiOperation({ summary: 'Import disease categories from Excel file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('import')
+  async importFromExcel(@UploadedFile() file: Express.Multer.File) {
+    const rows = await this.excelService.parseFile(file, [
+      { key: 'name_ru', header: 'Название (рус)' },
+      { key: 'name_uz', header: 'Название (уз)' },
+      { key: 'parentId', header: 'ID родителя (необязат.)' },
+    ]);
+    return await this.diseaseCategoryService.importFromExcel(rows);
   }
 
   @ApiOperation({ summary: 'Get disease category by ID' })

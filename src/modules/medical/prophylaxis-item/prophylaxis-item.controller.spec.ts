@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProphylaxisItemController } from './prophylaxis-item.controller';
 import { ProphylaxisItemService } from './prophylaxis-item.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('ProphylaxisItemController', () => {
   let controller: ProphylaxisItemController;
   let service: ProphylaxisItemService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('ProphylaxisItemController', () => {
         {
           provide: ProphylaxisItemService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsUUID,
@@ -6,6 +6,8 @@ import {
   IsDateString,
   IsOptional,
   IsString,
+  Min,
+  Max,
 } from 'class-validator';
 
 export class CreateAnimalDto {
@@ -26,17 +28,29 @@ export class CreateAnimalDto {
   readonly animalNameCode: string;
 
   @IsInt()
+  @Min(1900)
   @IsNotEmpty()
   @ApiProperty({
-    description: 'Age of the animal in months',
-    example: 12,
+    description: 'Birth year of the animal',
+    example: 2022,
   })
-  readonly age: number;
+  readonly birthYear: number;
+
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Birth month of the animal (1–12, day is ignored)',
+    example: 6,
+  })
+  readonly birthMonth: number;
 
   @IsUUID()
   @IsOptional()
-  @ApiProperty({
-    description: 'UUID of the animal sex lookup entry',
+  @ApiPropertyOptional({
+    description:
+      'UUID of the animal sex lookup entry (auto-assigned from AnimalType if omitted)',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
   })
   readonly sexId?: string;

@@ -1,4 +1,4 @@
-import { Region, District } from '../src/generated/prisma/client';
+import { Region, District } from 'src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 
 export class RegionFactory {
@@ -7,8 +7,10 @@ export class RegionFactory {
   async create(overrides?: Partial<Region>): Promise<Region> {
     return this.prisma.region.create({
       data: {
-        nameRu: overrides?.nameRu || `Регион ${Date.now()}`,
-        nameUz: overrides?.nameUz || `Region ${Date.now()}`,
+        name: {
+          ru: (overrides as any)?.nameRu || `Регион ${Date.now()}`,
+          uz: (overrides as any)?.nameUz || `Region ${Date.now()}`,
+        },
       },
     });
   }
@@ -19,8 +21,7 @@ export class RegionFactory {
     for (let i = 0; i < districtCount; i++) {
       await this.prisma.district.create({
         data: {
-          nameRu: `Район ${i + 1}`,
-          nameUz: `District ${i + 1}`,
+          name: { ru: `Район ${i + 1}`, uz: `District ${i + 1}` },
           regionId: region.id,
         },
       });
@@ -42,8 +43,10 @@ export class DistrictFactory {
   ): Promise<District> {
     return this.prisma.district.create({
       data: {
-        nameRu: overrides?.nameRu || `Район ${Date.now()}`,
-        nameUz: overrides?.nameUz || `District ${Date.now()}`,
+        name: {
+          ru: (overrides as any)?.nameRu || `Район ${Date.now()}`,
+          uz: (overrides as any)?.nameUz || `District ${Date.now()}`,
+        },
         regionId: regionId,
       },
     });

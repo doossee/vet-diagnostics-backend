@@ -17,7 +17,7 @@ export class DiseaseService {
 
   async create(data: CreateDiseaseDto) {
     return await this.prisma.disease.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { diseaseCategory: true },
     });
   }
@@ -55,12 +55,36 @@ export class DiseaseService {
   async update(id: string, data: UpdateDiseaseDto) {
     return await this.prisma.disease.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { diseaseCategory: true },
     });
   }
 
   async delete(id: string) {
     return await this.prisma.disease.delete({ where: { id } });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.disease.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            diseaseCategoryId: String(row['diseaseCategoryId']),
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

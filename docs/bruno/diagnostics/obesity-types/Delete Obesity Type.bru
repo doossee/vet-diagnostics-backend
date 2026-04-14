@@ -1,0 +1,21 @@
+meta {
+  name: Delete Obesity Type
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/obesity-types/{{obesityTypeId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

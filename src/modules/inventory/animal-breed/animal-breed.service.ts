@@ -16,7 +16,9 @@ export class AnimalBreedService {
   ) {}
 
   async create(data: CreateAnimalBreedDto) {
-    return await this.prisma.breed.create({ data: data as any });
+    return await this.prisma.breed.create({
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async findAll(query: AnimalBreedQueryParamsDto) {
@@ -45,10 +47,36 @@ export class AnimalBreedService {
   }
 
   async update(id: string, data: UpdateAnimalBreedDto) {
-    return await this.prisma.breed.update({ where: { id }, data: data as any });
+    return await this.prisma.breed.update({
+      where: { id },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async delete(id: string) {
     return await this.prisma.breed.delete({ where: { id } });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.breed.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

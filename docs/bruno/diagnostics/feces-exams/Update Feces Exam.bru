@@ -1,0 +1,27 @@
+meta {
+  name: Update Feces Exam
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/feces-exams/{{fecesExamId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "amount": 18.0
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

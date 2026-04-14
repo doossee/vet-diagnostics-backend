@@ -37,12 +37,12 @@ describe('DistrictService', () => {
 
   describe('create', () => {
     it('should create a district', async () => {
-      const dto = { nameRu: 'Юнусабад', nameUz: 'Yunusabad', regionId: 1 };
+      const dto = { name: { ru: 'Юнусабад', uz: 'Yunusabad' }, regionId: 1 };
       const mockDistrict = { id: 'uuid', ...dto };
 
       mockPrismaService.district.create.mockResolvedValue(mockDistrict);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto as any);
 
       expect(result).toEqual(mockDistrict);
       expect(prismaService.district.create).toHaveBeenCalledWith({
@@ -56,8 +56,7 @@ describe('DistrictService', () => {
     it('should return a district', async () => {
       const mockDistrict = {
         id: 'uuid',
-        nameRu: 'Юнусабад',
-        nameUz: 'Yunusabad',
+        name: { ru: 'Юнусабад', uz: 'Yunusabad' },
       };
       mockPrismaService.district.findUniqueOrThrow.mockResolvedValue(
         mockDistrict,
@@ -71,12 +70,12 @@ describe('DistrictService', () => {
 
   describe('update', () => {
     it('should update a district', async () => {
-      const dto = { nameRu: 'Updated' };
+      const dto = { name: { ru: 'Updated', uz: 'Updated' } };
       const mockDistrict = { id: 'uuid', ...dto };
 
       mockPrismaService.district.update.mockResolvedValue(mockDistrict);
 
-      const result = await service.update('uuid', dto);
+      const result = await service.update('uuid', dto as any);
 
       expect(result).toEqual(mockDistrict);
     });

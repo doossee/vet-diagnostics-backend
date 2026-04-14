@@ -13,6 +13,7 @@ yarn start:prod         # Run compiled build
 # Database
 yarn prisma:migrate     # Deploy migrations (uses prisma/schema/schema.prisma)
 yarn prisma:seed        # Seed the database
+npx prisma generate --schema prisma/schema/schema.prisma  # Regenerate client after schema changes
 
 # Docker
 yarn docker:up          # Build and start containers
@@ -47,7 +48,7 @@ animal-type/
 └── *.controller.spec.ts  # Controller tests
 ```
 
-`src/core/` contains the root module, Prisma service, and config. `src/shared/` contains global utilities (pagination, image service, filters, interceptors, base DTOs).
+`src/core/` contains `CoreModule` (the root module — not `AppModule`), Prisma service, and config. `src/shared/` contains global utilities (pagination, image service, filters, interceptors, base DTOs). Swagger UI is served at `/swagger`.
 
 ### Prisma
 
@@ -58,15 +59,27 @@ Schema is split across `prisma/schema/*.prisma` files — one per domain:
 - `management.prisma` — Region, District, VetStation
 - `clinical-exam.prisma`, `blood-exam.prisma`, `urine-exam.prisma`, `feces-exam.prisma`, `mucosa-exam.prisma`
 - `session.prisma` — MedicalSession, DiagnosticSession, AIPrediction
+- `anomaly.prisma` — AnomalyDetection rules
+
+The Prisma client is generated to `src/generated/prisma/`. **Always import from `src/generated/prisma/client`**, not `@prisma/client`:
+```typescript
+import { PrismaClient } from 'src/generated/prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
+```
 
 `PrismaService` (`src/core/prisma/`) extends `PrismaClient` with the `PrismaPg` adapter (required for the connection pool).
 
 ### Bilingual Names
 
-All lookup tables store bilingual content as JSONB: `name Json` with shape `{ ru: string, uz: string }`. The shared `NameDto` validates this structure. Search on these fields uses:
+All lookup tables store bilingual content as JSONB: `name Json` with shape `{ ru: string, uz: string }`. The shared `NameDto` validates this structure. Search on these fields uses OR across both languages:
 ```typescript
-name: { path: ['ru'], string_contains: search }
+OR: [
+  { name: { path: ['ru'], string_contains: search } },
+  { name: { path: ['uz'], string_contains: search } },
+]
 ```
+
+When writing JSONB name fields to Prisma, cast with: `data.name as unknown as Prisma.InputJsonValue`.
 
 ### DTOs & Validation
 
@@ -74,7 +87,11 @@ name: { path: ['ru'], string_contains: search }
 - **Query Params DTOs:** Extend `BaseQueryParamsDto` (includes `page`, `limit`, `search`)
 - **Response Entities:** Use `@Expose()` from `class-transformer` for Swagger
 
-Global `ValidationPipe` has `whitelist: true`, `transform: true`, `enableImplicitConversion: true`.
+Global `ValidationPipe` has `whitelist: true`, `forbidNonWhitelisted: true`, `transform: true`, `enableImplicitConversion: true`.
+
+### Enums
+
+Runtime enums are in `src/shared/enums.ts` and must stay in sync with Prisma schema enums. Import from there, not from the Prisma client.
 
 ### Authentication & Authorization
 

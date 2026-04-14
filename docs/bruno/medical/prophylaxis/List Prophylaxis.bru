@@ -1,0 +1,30 @@
+meta {
+  name: List Prophylaxis
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/prophylaxis?page=1&perPage=10
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # List Prophylaxis
+
+  Returns a paginated list of prophylaxis records.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Has meta", function() {
+    expect(res.body).to.have.property("meta");
+  });
+}

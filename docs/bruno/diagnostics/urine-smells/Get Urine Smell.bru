@@ -1,0 +1,21 @@
+meta {
+  name: Get Urine Smell
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/urine-smells/{{urineSmellId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

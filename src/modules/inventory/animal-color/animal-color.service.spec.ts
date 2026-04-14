@@ -37,12 +37,12 @@ describe('AnimalColorService', () => {
 
   describe('create', () => {
     it('should create a color', async () => {
-      const dto = { nameRu: 'Белый', nameUz: 'Oq' };
+      const dto = { name: { ru: 'Белый', uz: 'Oq' } };
       const mockColor = { id: 'uuid', ...dto };
 
       mockPrismaService.color.create.mockResolvedValue(mockColor);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto as any);
 
       expect(result).toEqual(mockColor);
     });
@@ -51,7 +51,7 @@ describe('AnimalColorService', () => {
   describe('findAll', () => {
     it('should return paginated colors', async () => {
       const mockResult = {
-        data: [{ id: 'uuid', nameRu: 'Белый', nameUz: 'Oq' }],
+        data: [{ id: 'uuid', name: { ru: 'Белый', uz: 'Oq' } }],
         meta: { page: 1, perPage: 10, total: 1, totalPages: 1 },
       };
 
@@ -65,7 +65,7 @@ describe('AnimalColorService', () => {
 
   describe('findOne', () => {
     it('should return a color', async () => {
-      const mockColor = { id: 'uuid', nameRu: 'Белый' };
+      const mockColor = { id: 'uuid', name: { ru: 'Белый', uz: 'Oq' } };
       mockPrismaService.color.findUniqueOrThrow.mockResolvedValue(mockColor);
 
       const result = await service.findOne('uuid');
@@ -76,12 +76,12 @@ describe('AnimalColorService', () => {
 
   describe('update', () => {
     it('should update a color', async () => {
-      const dto = { nameRu: 'Updated' };
+      const dto = { name: { ru: 'Updated', uz: 'Updated' } };
       const mockColor = { id: 'uuid', ...dto };
 
       mockPrismaService.color.update.mockResolvedValue(mockColor);
 
-      const result = await service.update('uuid', dto);
+      const result = await service.update('uuid', dto as any);
 
       expect(result).toEqual(mockColor);
     });

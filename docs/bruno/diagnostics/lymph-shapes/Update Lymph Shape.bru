@@ -1,0 +1,31 @@
+meta {
+  name: Update Lymph Shape
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/lymph-shapes/{{lymphShapeId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Округлый",
+      "uz": "Dumaloq"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

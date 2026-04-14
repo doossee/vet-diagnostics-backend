@@ -1,0 +1,36 @@
+meta {
+  name: Create Skin Smell
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/skin-smells
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Без запаха",
+      "uz": "Hidsiz"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save skinSmellId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("skinSmellId", id);
+  });
+}

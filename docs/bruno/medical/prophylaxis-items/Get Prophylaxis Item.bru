@@ -1,0 +1,27 @@
+meta {
+  name: Get Prophylaxis Item
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/prophylaxis-items/{{prophylaxisItemId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+docs {
+  # Get Prophylaxis Item
+
+  Returns a single prophylaxis item by ID.
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

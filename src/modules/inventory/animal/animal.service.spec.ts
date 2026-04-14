@@ -16,6 +16,9 @@ describe('AnimalService', () => {
       update: jest.fn(),
       delete: jest.fn(),
     },
+    animalType: {
+      findUniqueOrThrow: jest.fn(),
+    },
   };
 
   const mockPaginationService = {
@@ -51,12 +54,12 @@ describe('AnimalService', () => {
   });
 
   describe('create', () => {
-    it('should create a new animal', async () => {
+    it('should create a new animal with birthDate and auto-assigned sexId', async () => {
       const createAnimalDto = {
         arrivalDate: '2024-01-15T00:00:00Z',
         animalNameCode: 'A-001',
-        age: 12,
-        sexId: 'sex-id',
+        birthYear: 2022,
+        birthMonth: 3,
         farmerId: 'farmer-id',
         animalTypeId: 'type-id',
         animalBreedId: 'breed-id',
@@ -67,8 +70,8 @@ describe('AnimalService', () => {
         id: 'animal-id',
         arrivalDate: new Date(createAnimalDto.arrivalDate),
         animalNameCode: createAnimalDto.animalNameCode,
-        age: createAnimalDto.age,
-        sexId: createAnimalDto.sexId,
+        birthDate: new Date(2022, 2, 1),
+        sexId: 'male-id',
         farmerId: createAnimalDto.farmerId,
         animalTypeId: createAnimalDto.animalTypeId,
         animalBreedId: createAnimalDto.animalBreedId,
@@ -77,24 +80,61 @@ describe('AnimalService', () => {
         updatedAt: new Date(),
       };
 
+      mockPrismaService.animalType.findUniqueOrThrow.mockResolvedValue({
+        sexId: 'male-id',
+      });
       mockPrismaService.animal.create.mockResolvedValue(mockAnimal);
 
-      const result = await service.create(createAnimalDto);
+      const result = await service.create(createAnimalDto as any);
+
+      expect(prismaService.animalType.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: { id: 'type-id' },
+        select: { sexId: true },
+      });
 
       expect(prismaService.animal.create).toHaveBeenCalledWith({
         data: expect.objectContaining({
+          birthDate: new Date(2022, 2, 1),
           arrivalDate: expect.any(Date),
-          age: 12,
+          sexId: 'male-id',
         }),
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,
         },
       });
       expect(result).toEqual(mockAnimal);
+    });
+
+    it('should not override sexId when AnimalType has no sex constraint', async () => {
+      const createAnimalDto = {
+        arrivalDate: '2024-01-15T00:00:00Z',
+        animalNameCode: 'A-002',
+        birthYear: 2023,
+        birthMonth: 1,
+        sexId: 'provided-sex-id',
+        farmerId: 'farmer-id',
+        animalTypeId: 'type-id',
+        animalBreedId: 'breed-id',
+        animalColorId: 'color-id',
+      };
+
+      mockPrismaService.animalType.findUniqueOrThrow.mockResolvedValue({
+        sexId: null,
+      });
+      mockPrismaService.animal.create.mockResolvedValue({});
+
+      await service.create(createAnimalDto as any);
+
+      expect(prismaService.animal.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          sexId: 'provided-sex-id',
+        }),
+        include: expect.any(Object),
+      });
     });
   });
 
@@ -108,13 +148,13 @@ describe('AnimalService', () => {
       const mockAnimals = [
         {
           id: 'animal-1',
-          age: 12,
+          birthDate: new Date('2022-01-01'),
           sexId: 'sex-id-1',
           arrivalDate: new Date(),
         },
         {
           id: 'animal-2',
-          age: 24,
+          birthDate: new Date('2021-06-01'),
           sexId: 'sex-id-2',
           arrivalDate: new Date(),
         },
@@ -143,7 +183,7 @@ describe('AnimalService', () => {
     it('should return an animal by id', async () => {
       const mockAnimal = {
         id: 'animal-id',
-        age: 12,
+        birthDate: new Date('2022-03-01'),
         sexId: 'sex-id',
         arrivalDate: new Date(),
       };
@@ -156,7 +196,7 @@ describe('AnimalService', () => {
         where: { id: 'animal-id' },
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,
@@ -169,31 +209,32 @@ describe('AnimalService', () => {
   describe('update', () => {
     it('should update an animal', async () => {
       const updateData = {
-        age: 24,
+        animalNameCode: 'A-001-updated',
       };
 
       const mockUpdatedAnimal = {
         id: 'animal-id',
         ...updateData,
+        birthDate: new Date('2022-03-01'),
         arrivalDate: new Date(),
       };
 
       mockPrismaService.animal.update.mockResolvedValue(mockUpdatedAnimal);
 
-      const result = await service.update('animal-id', updateData);
+      const result = await service.update('animal-id', updateData as any);
 
       expect(prismaService.animal.update).toHaveBeenCalledWith({
         where: { id: 'animal-id' },
         data: updateData,
         include: {
           sex: true,
-          farmer: true,
+          // farmer: true,
           animalType: true,
           animalBreed: true,
           animalColor: true,
         },
       });
-      expect(result.age).toBe(24);
+      expect(result.animalNameCode).toBe('A-001-updated');
     });
   });
 
@@ -201,7 +242,7 @@ describe('AnimalService', () => {
     it('should delete an animal', async () => {
       const mockAnimal = {
         id: 'animal-id',
-        age: 12,
+        birthDate: new Date('2022-03-01'),
         sexId: 'sex-id',
       };
 

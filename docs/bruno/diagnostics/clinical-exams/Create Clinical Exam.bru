@@ -1,0 +1,62 @@
+meta {
+  name: Create Clinical Exam
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/clinical-exams
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "animalId": "{{animalId}}",
+    "sessionId": "{{sessionId}}",
+    "pulse": 72,
+    "temperature": 38.5,
+    "respiratoryRate": 20,
+    "rumination": 4,
+    "bodyTypeId": "{{bodyTypeId}}",
+    "obesityId": "{{obesityId}}",
+    "bodyPositionId": "{{bodyPositionId}}",
+    "constitutionId": "{{constitutionId}}",
+    "temperamentId": "{{temperamentId}}",
+    "woolId": "{{woolId}}",
+    "skinColorId": "{{skinColorId}}",
+    "skinHumidityId": "{{skinHumidityId}}",
+    "skinTempId": "{{skinTempId}}",
+    "skinElasticityId": "{{skinElasticityId}}",
+    "lymphSizeId": "{{lymphSizeId}}",
+    "lymphShapeId": "{{lymphShapeId}}",
+    "lymphSurfaceId": "{{lymphSurfaceId}}",
+    "lymphConsistencyId": "{{lymphConsistencyId}}",
+    "lymphTempId": "{{lymphTempId}}",
+    "lymphPainId": "{{lymphPainId}}",
+    "lymphMobilityId": "{{lymphMobilityId}}"
+  }
+}
+
+docs {
+  # Create Clinical Exam
+
+  All lookup IDs reference seeded clinical exam lookup tables.
+  - pulse: 10–300
+  - temperature: 30–45
+  - respiratoryRate: 1–150
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+
+  test("Save clinicalExamId", function() {
+    bru.setVar("clinicalExamId", res.body.data.id);
+  });
+}

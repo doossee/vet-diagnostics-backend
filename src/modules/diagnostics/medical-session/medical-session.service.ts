@@ -10,9 +10,20 @@ import { Prisma } from 'src/generated/prisma/client';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 
-const sessionInclude: Prisma.MedicalSessionInclude = {
-  animal: { include: { sex: true } },
-  veterinarian: true,
+const sessionInclude = {
+  animal: {
+    include: { sex: true, animalType: { select: { modelKey: true } } },
+  },
+  veterinarian: {
+    include: {
+      user: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  },
   clinicalExam: {
     include: {
       bodyType: true,
@@ -65,8 +76,9 @@ const sessionInclude: Prisma.MedicalSessionInclude = {
       mucosaAppearance: true,
     },
   },
+  anomalyAlerts: true,
   prediction: true,
-};
+} satisfies Prisma.MedicalSessionInclude;
 
 @Injectable()
 export class MedicalSessionService {
@@ -80,6 +92,7 @@ export class MedicalSessionService {
     return await this.prisma.medicalSession.create({
       data: {
         ...data,
+        // veterinarianId: veterinarian.id,
         ...(data.date && { date: new Date(data.date) }),
       },
       include: sessionInclude,
@@ -87,12 +100,45 @@ export class MedicalSessionService {
   }
 
   async findAll(query: MedicalSessionQueryParamsDto) {
-    const { page, perPage, byId, animalId, veterinarianId, status } = query;
+    const {
+      page,
+      perPage,
+      byId,
+      animalId,
+      veterinarianId,
+      status,
+      search,
+      hasClinicalExam,
+      hasBloodExam,
+      hasUrineExam,
+      hasFecesExam,
+      hasMucosaExam,
+    } = query;
 
     const where: Prisma.MedicalSessionWhereInput = {
       ...(animalId && { animalId }),
       ...(veterinarianId && { veterinarianId }),
       ...(status && { status }),
+      ...(search && {
+        animal: {
+          animalNameCode: { contains: search, mode: 'insensitive' },
+        },
+      }),
+      ...(hasClinicalExam !== undefined && {
+        clinicalExam: hasClinicalExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasBloodExam !== undefined && {
+        bloodExam: hasBloodExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasUrineExam !== undefined && {
+        urineExam: hasUrineExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasFecesExam !== undefined && {
+        fecesExam: hasFecesExam ? { isNot: null } : { is: null },
+      }),
+      ...(hasMucosaExam !== undefined && {
+        mucosaExams: hasMucosaExam ? { some: {} } : { none: {} },
+      }),
     };
 
     const orderBy: Prisma.MedicalSessionOrderByWithRelationInput = {
@@ -153,138 +199,143 @@ export class MedicalSessionService {
     }
 
     // Build the numeric input vector from all session exams
+    // Order matches values.txt (85 features expected by the ML model)
     const inputVector = {
-      // Animal
-      sex: (animal as any)?.sex?.numericValue ?? null,
-
-      // Clinical — numeric vitals
-      temperature: clinicalExam.temperature,
+      // 1–3: Clinical vitals
       pulse: clinicalExam.pulse,
       respiratoryRate: clinicalExam.respiratoryRate,
-      rumination: clinicalExam.rumination,
-      rumenInfusoriaCount: clinicalExam.rumenInfusoriaCount,
+      temperature: clinicalExam.temperature,
 
-      // Clinical — habitus
-      bodyType: (clinicalExam as any).bodyType?.numericValue ?? null,
-      obesity: (clinicalExam as any).obesity?.numericValue ?? null,
-      bodyPosition: (clinicalExam as any).bodyPosition?.numericValue ?? null,
-      constitution: (clinicalExam as any).constitution?.numericValue ?? null,
-      temperament: (clinicalExam as any).temperament?.numericValue ?? null,
-
-      // Clinical — skin cover
-      wool: (clinicalExam as any).wool?.numericValue ?? null,
-      down: (clinicalExam as any).down?.numericValue ?? null,
-      hair: (clinicalExam as any).hair?.numericValue ?? null,
-      feathers: (clinicalExam as any).feathers?.numericValue ?? null,
-
-      // Clinical — skin
-      skinColor: (clinicalExam as any).skinColor?.numericValue ?? null,
-      skinHumidity: (clinicalExam as any).skinHumidity?.numericValue ?? null,
-      skinSmell: (clinicalExam as any).skinSmell?.numericValue ?? null,
-      skinTemp: (clinicalExam as any).skinTemp?.numericValue ?? null,
-      skinSurface: (clinicalExam as any).skinSurface?.numericValue ?? null,
-      skinElasticity:
-        (clinicalExam as any).skinElasticity?.numericValue ?? null,
-      skinSensitivity:
-        (clinicalExam as any).skinSensitivity?.numericValue ?? null,
-      skinPain: (clinicalExam as any).skinPain?.numericValue ?? null,
-
-      // Clinical — rumen fluid
-      rumenFluidState:
-        (clinicalExam as any).rumenFluidState?.numericValue ?? null,
-
-      // Clinical — lymph
-      lymphSize: (clinicalExam as any).lymphSize?.numericValue ?? null,
-      lymphShape: (clinicalExam as any).lymphShape?.numericValue ?? null,
-      lymphSurface: (clinicalExam as any).lymphSurface?.numericValue ?? null,
-      lymphConsistency:
-        (clinicalExam as any).lymphConsistency?.numericValue ?? null,
-      lymphTemp: (clinicalExam as any).lymphTemp?.numericValue ?? null,
-      lymphPain: (clinicalExam as any).lymphPain?.numericValue ?? null,
-      lymphMobility: (clinicalExam as any).lymphMobility?.numericValue ?? null,
-
-      // Blood — morphological
+      // 4–11: Blood — morphological
       erythrocyteCount: bloodExam.erythrocyteCount,
       leukocyteCount: bloodExam.leukocyteCount,
       thrombocyteCount: bloodExam.thrombocyteCount,
-      hemoglobin: bloodExam.hemoglobin,
       coe: bloodExam.coe,
+      waterPercentage: bloodExam.waterPercentage,
+      dryResidue: bloodExam.dryResidue,
+      glutathione: bloodExam.glutathione,
+      hemoglobin: bloodExam.hemoglobin,
 
-      // Blood — serum
+      // 12–41: Blood — serum & trace elements
       totalProtein: bloodExam.totalProtein,
-      totalCalcium: bloodExam.totalCalcium,
-      organicPhosphorus: bloodExam.organicPhosphorus,
       albumin: bloodExam.albumin,
-      glucose: bloodExam.glucose,
+      alphaGlobulin: bloodExam.alphaGlobulin,
+      betaGlobulin: bloodExam.betaGlobulin,
+      gammaGlobulin: bloodExam.gammaGlobulin,
+      residualNitrogen: bloodExam.residualNitrogen,
+      urea: bloodExam.urea,
+      uricAcid: bloodExam.uricAcid,
+      creatinine: bloodExam.creatinine,
       alkalineReserve: bloodExam.alkalineReserve,
+      glucose: bloodExam.glucose,
       ketoneBodies: bloodExam.ketoneBodies,
       totalBilirubin: bloodExam.totalBilirubin,
+      directBilirubin: bloodExam.directBilirubin,
       totalCholesterol: bloodExam.totalCholesterol,
-      urea: bloodExam.urea,
-
-      // Blood — trace elements
+      totalLipids: bloodExam.totalLipids,
+      phospholipids: bloodExam.phospholipids,
+      lacticAcid: bloodExam.lacticAcid,
+      pyruvicAcid: bloodExam.pyruvicAcid,
+      citricAcid: bloodExam.citricAcid,
+      carotene: bloodExam.carotene,
+      vitaminA: bloodExam.vitaminA,
+      vitaminC: bloodExam.vitaminC,
+      organicPhosphorus: bloodExam.organicPhosphorus,
+      totalCalcium: bloodExam.totalCalcium,
+      creatine: bloodExam.creatine,
       copper: bloodExam.copper,
-      cobalt: bloodExam.cobalt,
-      manganese: bloodExam.manganese,
       zinc: bloodExam.zinc,
+      manganese: bloodExam.manganese,
+      cobalt: bloodExam.cobalt,
 
-      // Urine — numeric
+      // 42–57: Urine
+      urineColor: urineExam?.urineColor?.numericValue ?? null,
+      urineSmell: urineExam?.urineSmell?.numericValue ?? null,
+      urineClarity: urineExam?.urineClarity?.numericValue ?? null,
+      urineConsistency: urineExam?.urineConsistency?.numericValue ?? null,
       urinePh: urineExam?.ph ?? null,
-      urineAmount: urineExam?.amount ?? null,
       urineAcetone: urineExam?.acetone ?? null,
       urineProtein: urineExam?.protein ?? null,
       urineBilirubin: urineExam?.bilirubin ?? null,
+      urineUrobilinogen: urineExam?.urobilinogen ?? null,
       urineSugar: urineExam?.sugar ?? null,
       urineLeukocytes: urineExam?.leukocytes ?? null,
+      urineEpithelium: urineExam?.epithelium ?? null,
+      urineMicrobialBodies: urineExam?.microbialBodies ?? null,
       urineErythrocytes: urineExam?.erythrocytes ?? null,
+      urineSaltCrystals: urineExam?.saltCrystals ?? null,
+      urineAmount: urineExam?.amount ?? null,
 
-      // Urine — lookups
-      urineColor: (urineExam as any)?.urineColor?.numericValue ?? null,
-      urineSmell: (urineExam as any)?.urineSmell?.numericValue ?? null,
-      urineClarity: (urineExam as any)?.urineClarity?.numericValue ?? null,
-      urineConsistency:
-        (urineExam as any)?.urineConsistency?.numericValue ?? null,
-
-      // Feces — numeric
+      // 58–63: Feces
+      fecesSmell: fecesExam?.fecesSmell?.numericValue ?? null,
+      fecesColor: fecesExam?.fecesColor?.numericValue ?? null,
+      fecesConsistency: fecesExam?.fecesConsistency?.numericValue ?? null,
+      fecesForm: fecesExam?.fecesForm?.numericValue ?? null,
       fecesAmount: fecesExam?.amount ?? null,
       fecesUndigestedFood: fecesExam?.undigestedFood ?? null,
 
-      // Feces — lookups
-      fecesColor: (fecesExam as any)?.fecesColor?.numericValue ?? null,
-      fecesSmell: (fecesExam as any)?.fecesSmell?.numericValue ?? null,
-      fecesConsistency:
-        (fecesExam as any)?.fecesConsistency?.numericValue ?? null,
-      fecesForm: (fecesExam as any)?.fecesForm?.numericValue ?? null,
-
-      // Mucosa — extract appearance for each of the 4 types
-      // MucosaType numericValue: 0=oral, 1=nasal, 2=ocular, 3=vaginal
+      // 64–67: Mucosa — MucosaType numericValue: 0=oral, 1=nasal, 2=ocular, 3=vaginal
       mucosaOral:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 0)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 0)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaNasal:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 1)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 1)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaOcular:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 2)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 2)
           ?.mucosaAppearance?.numericValue ?? null,
       mucosaVaginal:
-        (mucosaExams as any[])?.find((m) => m.mucosaType?.numericValue === 3)
+        mucosaExams?.find((m) => m.mucosaType?.numericValue === 3)
           ?.mucosaAppearance?.numericValue ?? null,
+
+      // 68–85: Clinical — habitus, skin, lymph
+      rumination: clinicalExam.rumination,
+      obesity: clinicalExam.obesity?.numericValue ?? null,
+      bodyType: clinicalExam.bodyType?.numericValue ?? null,
+      bodyPosition: clinicalExam.bodyPosition?.numericValue ?? null,
+      wool: clinicalExam.wool?.numericValue ?? null,
+      skinColor: clinicalExam.skinColor?.numericValue ?? null,
+      skinHumidity: clinicalExam.skinHumidity?.numericValue ?? null,
+      skinSmell: clinicalExam.skinSmell?.numericValue ?? null,
+      skinTemp: clinicalExam.skinTemp?.numericValue ?? null,
+      skinSurface: clinicalExam.skinSurface?.numericValue ?? null,
+      skinElasticity: clinicalExam.skinElasticity?.numericValue ?? null,
+      lymphSize: clinicalExam.lymphSize?.numericValue ?? null,
+      lymphShape: clinicalExam.lymphShape?.numericValue ?? null,
+      lymphSurface: clinicalExam.lymphSurface?.numericValue ?? null,
+      lymphConsistency: clinicalExam.lymphConsistency?.numericValue ?? null,
+      lymphTemp: clinicalExam.lymphTemp?.numericValue ?? null,
+      lymphPain: clinicalExam.lymphPain?.numericValue ?? null,
+      lymphMobility: clinicalExam.lymphMobility?.numericValue ?? null,
     };
 
-    const numericArray = Object.values(inputVector).map((v) =>
-      v === null ? null : Number(v),
-    );
+    const nullFields = Object.entries(inputVector)
+      .filter(([, value]) => value === null)
+      .map(([field]) => field);
+
+    if (nullFields.length > 0) {
+      throw new BadRequestException({
+        message: 'Cannot submit session. Some required fields are null.',
+        nullFields,
+      });
+    }
+
+    const numericArray = Object.values(inputVector).map((v) => Number(v));
 
     // Call the AI prediction service
     const uri = this.config.get<string>('PREDICT_API_URI');
 
     let response: { data: Record<string, any> };
     try {
-      response = await axios.post<Record<string, any>>(uri!, {
-        params: numericArray,
-      });
+      response = await axios.post<Record<string, any>>(
+        uri!,
+        {
+          params: numericArray,
+        },
+        { params: { animal: animal.animalType?.modelKey } },
+      );
     } catch (error) {
+      console.log(error);
       if (axios.isAxiosError(error)) {
         if (error.response) {
           throw new BadRequestException(
@@ -318,6 +369,12 @@ export class MedicalSessionService {
     });
 
     return updatedSession;
+  }
+
+  async getPrediction(id: string) {
+    return await this.prisma.prediction.findUniqueOrThrow({
+      where: { sessionId: id },
+    });
   }
 
   async delete(id: string) {

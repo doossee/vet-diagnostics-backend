@@ -1,0 +1,21 @@
+meta {
+  name: Get Diseases By Animals
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/statistics/diseases?startDate=2026-01-01&endDate=2026-12-31
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Create Body Position
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/body-positions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Стоячее",
+      "uz": "Tik turish"
+    },
+    "numericValue": 1
+  }
+}
+
+tests {
+  test("Status 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("Save bodyPositionId", function() {
+    const id = res.body.data?.id;
+    expect(id).to.be.a("string");
+    bru.setVar("bodyPositionId", id);
+  });
+}

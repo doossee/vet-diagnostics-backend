@@ -1,0 +1,31 @@
+meta {
+  name: Update Skin Humidity
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/skin-humidities/{{skinHumidityId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "name": {
+      "ru": "Сухая",
+      "uz": "Quruq"
+    },
+    "numericValue": 2
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

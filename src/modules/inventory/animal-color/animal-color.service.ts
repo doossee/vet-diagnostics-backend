@@ -17,7 +17,7 @@ export class AnimalColorService {
 
   async create(data: CreateAnimalColorDto) {
     return await this.prisma.color.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
@@ -55,7 +55,7 @@ export class AnimalColorService {
   async update(id: string, data: UpdateAnimalColorDto) {
     return await this.prisma.color.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
     });
   }
 
@@ -63,5 +63,28 @@ export class AnimalColorService {
     return await this.prisma.color.delete({
       where: { id },
     });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.color.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

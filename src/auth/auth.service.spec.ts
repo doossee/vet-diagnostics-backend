@@ -17,7 +17,7 @@ describe('AuthService', () => {
   let service: AuthService;
   let usersService: UsersService;
   let jwtService: JwtService;
-  let configService: ConfigService;
+  let _configService: ConfigService;
   let prismaService: PrismaService;
 
   const mockUsersService = {
@@ -77,7 +77,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     usersService = module.get<UsersService>(UsersService);
     jwtService = module.get<JwtService>(JwtService);
-    configService = module.get<ConfigService>(ConfigService);
+    _configService = module.get<ConfigService>(ConfigService);
     prismaService = module.get<PrismaService>(PrismaService);
   });
 

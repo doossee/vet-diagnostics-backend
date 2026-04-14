@@ -1,0 +1,21 @@
+meta {
+  name: Delete Rumen Fluid State
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/rumen-fluid-states/{{rumenFluidStateId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -37,27 +37,26 @@ describe('AnimalTypeService', () => {
 
   describe('create', () => {
     it('should create an animal type', async () => {
-      const dto = { nameRu: 'Крупный рогатый скот', nameUz: 'Qoramol' };
+      const dto = { name: { ru: 'Крупный рогатый скот', uz: 'Qoramol' } };
       const mockType = { id: 'uuid', ...dto, parentId: null };
 
       mockPrismaService.animalType.create.mockResolvedValue(mockType);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto as any);
 
       expect(result).toEqual(mockType);
     });
 
     it('should create an animal type with parent', async () => {
       const dto = {
-        nameRu: 'Подтип',
-        nameUz: 'Subtype',
+        name: { ru: 'Подтип', uz: 'Subtype' },
         parentId: 'parent-id',
       };
       const mockType = { id: 'uuid', ...dto };
 
       mockPrismaService.animalType.create.mockResolvedValue(mockType);
 
-      const result = await service.create(dto);
+      const result = await service.create(dto as any);
 
       expect(result).toEqual(mockType);
     });
@@ -65,7 +64,7 @@ describe('AnimalTypeService', () => {
 
   describe('findOne', () => {
     it('should return an animal type', async () => {
-      const mockType = { id: 'uuid', nameRu: 'Тип', nameUz: 'Type' };
+      const mockType = { id: 'uuid', name: { ru: 'Тип', uz: 'Type' } };
       mockPrismaService.animalType.findUniqueOrThrow.mockResolvedValue(
         mockType,
       );
@@ -78,12 +77,12 @@ describe('AnimalTypeService', () => {
 
   describe('update', () => {
     it('should update an animal type', async () => {
-      const dto = { nameRu: 'Updated' };
+      const dto = { name: { ru: 'Updated', uz: 'Updated' } };
       const mockType = { id: 'uuid', ...dto };
 
       mockPrismaService.animalType.update.mockResolvedValue(mockType);
 
-      const result = await service.update('uuid', dto);
+      const result = await service.update('uuid', dto as any);
 
       expect(result).toEqual(mockType);
     });

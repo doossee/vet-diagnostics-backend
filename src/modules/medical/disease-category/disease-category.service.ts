@@ -17,7 +17,7 @@ export class DiseaseCategoryService {
 
   async create(data: CreateDiseaseCategoryDto) {
     return await this.prisma.diseaseCategory.create({
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }
@@ -64,12 +64,36 @@ export class DiseaseCategoryService {
   async update(id: string, data: UpdateDiseaseCategoryDto) {
     return await this.prisma.diseaseCategory.update({
       where: { id },
-      data: data as any,
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
       include: { parent: true, children: true },
     });
   }
 
   async delete(id: string) {
     return await this.prisma.diseaseCategory.delete({ where: { id } });
+  }
+
+  async importFromExcel(
+    rows: Record<string, any>[],
+  ): Promise<{ imported: number; errors: string[] }> {
+    const errors: string[] = [];
+    let imported = 0;
+    for (const row of rows) {
+      try {
+        await this.prisma.diseaseCategory.create({
+          data: {
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
+            parentId: row['parentId'] ? String(row['parentId']) : undefined,
+          },
+        });
+        imported++;
+      } catch (e) {
+        errors.push(String(e.message));
+      }
+    }
+    return { imported, errors };
   }
 }

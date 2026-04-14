@@ -36,155 +36,177 @@
 
 */
 -- DropIndex
-DROP INDEX "animals_sex_idx";
+DROP INDEX IF EXISTS "animals_sex_idx";
 
 -- AlterTable
-ALTER TABLE "animals" DROP COLUMN "sex",
-ADD COLUMN     "sex_id" UUID;
+ALTER TABLE "animals" DROP COLUMN IF EXISTS "sex",
+ADD COLUMN IF NOT EXISTS "sex_id" UUID;
 
 -- AlterTable
-ALTER TABLE "clinical_analyses" DROP COLUMN "body_position",
-DROP COLUMN "body_type",
-DROP COLUMN "constitution",
-DROP COLUMN "down",
-DROP COLUMN "feathers",
-DROP COLUMN "hair",
-DROP COLUMN "lymph_consistency",
-DROP COLUMN "lymph_mobility",
-DROP COLUMN "lymph_pain",
-DROP COLUMN "lymph_shape",
-DROP COLUMN "lymph_size",
-DROP COLUMN "lymph_surface",
-DROP COLUMN "lymph_temp",
-DROP COLUMN "obesity",
-DROP COLUMN "skin_color",
-DROP COLUMN "skin_elasticity",
-DROP COLUMN "skin_humidity",
-DROP COLUMN "skin_temp",
-DROP COLUMN "temperament",
-DROP COLUMN "wool",
-ADD COLUMN     "body_position_id" UUID,
-ADD COLUMN     "body_type_id" UUID,
-ADD COLUMN     "constitution_id" UUID,
-ADD COLUMN     "down_id" UUID,
-ADD COLUMN     "feathers_id" UUID,
-ADD COLUMN     "hair_id" UUID,
-ADD COLUMN     "lymph_consistency_id" UUID,
-ADD COLUMN     "lymph_mobility_id" UUID,
-ADD COLUMN     "lymph_pain_id" UUID,
-ADD COLUMN     "lymph_shape_id" UUID,
-ADD COLUMN     "lymph_size_id" UUID,
-ADD COLUMN     "lymph_surface_id" UUID,
-ADD COLUMN     "lymph_temp_id" UUID,
-ADD COLUMN     "obesity_id" UUID,
-ADD COLUMN     "skin_color_id" UUID,
-ADD COLUMN     "skin_elasticity_id" UUID,
-ADD COLUMN     "skin_humidity_id" UUID,
-ADD COLUMN     "skin_temp_id" UUID,
-ADD COLUMN     "temperament_id" UUID,
-ADD COLUMN     "wool_id" UUID;
+ALTER TABLE "clinical_analyses" DROP COLUMN IF EXISTS "body_position",
+DROP COLUMN IF EXISTS "body_type",
+DROP COLUMN IF EXISTS "constitution",
+DROP COLUMN IF EXISTS "down",
+DROP COLUMN IF EXISTS "feathers",
+DROP COLUMN IF EXISTS "hair",
+DROP COLUMN IF EXISTS "lymph_consistency",
+DROP COLUMN IF EXISTS "lymph_mobility",
+DROP COLUMN IF EXISTS "lymph_pain",
+DROP COLUMN IF EXISTS "lymph_shape",
+DROP COLUMN IF EXISTS "lymph_size",
+DROP COLUMN IF EXISTS "lymph_surface",
+DROP COLUMN IF EXISTS "lymph_temp",
+DROP COLUMN IF EXISTS "obesity",
+DROP COLUMN IF EXISTS "skin_color",
+DROP COLUMN IF EXISTS "skin_elasticity",
+DROP COLUMN IF EXISTS "skin_humidity",
+DROP COLUMN IF EXISTS "skin_temp",
+DROP COLUMN IF EXISTS "temperament",
+DROP COLUMN IF EXISTS "wool",
+ADD COLUMN IF NOT EXISTS "body_position_id" UUID,
+ADD COLUMN IF NOT EXISTS "body_type_id" UUID,
+ADD COLUMN IF NOT EXISTS "constitution_id" UUID,
+ADD COLUMN IF NOT EXISTS "down_id" UUID,
+ADD COLUMN IF NOT EXISTS "feathers_id" UUID,
+ADD COLUMN IF NOT EXISTS "hair_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_consistency_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_mobility_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_pain_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_shape_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_size_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_surface_id" UUID,
+ADD COLUMN IF NOT EXISTS "lymph_temp_id" UUID,
+ADD COLUMN IF NOT EXISTS "obesity_id" UUID,
+ADD COLUMN IF NOT EXISTS "skin_color_id" UUID,
+ADD COLUMN IF NOT EXISTS "skin_elasticity_id" UUID,
+ADD COLUMN IF NOT EXISTS "skin_humidity_id" UUID,
+ADD COLUMN IF NOT EXISTS "skin_temp_id" UUID,
+ADD COLUMN IF NOT EXISTS "temperament_id" UUID,
+ADD COLUMN IF NOT EXISTS "wool_id" UUID;
 
 -- AlterTable
-ALTER TABLE "feces_colors" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "feces_colors" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "feces_consistencies" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "feces_consistencies" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "feces_forms" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "feces_forms" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "feces_smells" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "feces_smells" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "mucosa_analyses" DROP COLUMN "mucosa_type",
-ADD COLUMN     "mucosa_type_id" UUID;
+ALTER TABLE "mucosa_analyses" DROP COLUMN IF EXISTS "mucosa_type",
+ADD COLUMN IF NOT EXISTS "mucosa_type_id" UUID;
 
 -- AlterTable
-ALTER TABLE "mucosa_appearances" DROP COLUMN "mucosa_type",
-ADD COLUMN     "mucosa_type_id" UUID,
-ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "mucosa_appearances" DROP COLUMN IF EXISTS "mucosa_type",
+ADD COLUMN IF NOT EXISTS "mucosa_type_id" UUID,
+ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "urine_clarities" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "urine_clarities" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "urine_colors" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "urine_colors" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "urine_consistencies" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "urine_consistencies" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
 
 -- AlterTable
-ALTER TABLE "urine_smells" ADD COLUMN     "numeric_value" INTEGER NOT NULL;
+ALTER TABLE "urine_smells" ADD COLUMN IF NOT EXISTS "numeric_value" INTEGER;
+
+-- Backfill required numeric values for existing rows
+UPDATE "feces_colors" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "feces_consistencies" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "feces_forms" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "feces_smells" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "mucosa_appearances" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "urine_clarities" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "urine_colors" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "urine_consistencies" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+UPDATE "urine_smells" SET "numeric_value" = 0 WHERE "numeric_value" IS NULL;
+
+-- Enforce NOT NULL after backfill
+ALTER TABLE "feces_colors" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "feces_consistencies" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "feces_forms" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "feces_smells" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "mucosa_appearances" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "urine_clarities" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "urine_colors" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "urine_consistencies" ALTER COLUMN "numeric_value" SET NOT NULL;
+ALTER TABLE "urine_smells" ALTER COLUMN "numeric_value" SET NOT NULL;
 
 -- DropEnum
-DROP TYPE "AnimalSex";
+DROP TYPE IF EXISTS "AnimalSex";
 
 -- DropEnum
-DROP TYPE "BodyPosition";
+DROP TYPE IF EXISTS "BodyPosition";
 
 -- DropEnum
-DROP TYPE "BodyType";
+DROP TYPE IF EXISTS "BodyType";
 
 -- DropEnum
-DROP TYPE "Constitution";
+DROP TYPE IF EXISTS "Constitution";
 
 -- DropEnum
-DROP TYPE "DownType";
+DROP TYPE IF EXISTS "DownType";
 
 -- DropEnum
-DROP TYPE "FeatherType";
+DROP TYPE IF EXISTS "FeatherType";
 
 -- DropEnum
-DROP TYPE "HairType";
+DROP TYPE IF EXISTS "HairType";
 
 -- DropEnum
-DROP TYPE "LymphConsistency";
+DROP TYPE IF EXISTS "LymphConsistency";
 
 -- DropEnum
-DROP TYPE "LymphMobility";
+DROP TYPE IF EXISTS "LymphMobility";
 
 -- DropEnum
-DROP TYPE "LymphPain";
+DROP TYPE IF EXISTS "LymphPain";
 
 -- DropEnum
-DROP TYPE "LymphShape";
+DROP TYPE IF EXISTS "LymphShape";
 
 -- DropEnum
-DROP TYPE "LymphSize";
+DROP TYPE IF EXISTS "LymphSize";
 
 -- DropEnum
-DROP TYPE "LymphSurface";
+DROP TYPE IF EXISTS "LymphSurface";
 
 -- DropEnum
-DROP TYPE "LymphTemp";
+DROP TYPE IF EXISTS "LymphTemp";
 
 -- DropEnum
-DROP TYPE "MucosaType";
+DROP TYPE IF EXISTS "MucosaType";
 
 -- DropEnum
-DROP TYPE "ObesityType";
+DROP TYPE IF EXISTS "ObesityType";
 
 -- DropEnum
-DROP TYPE "SkinColor";
+DROP TYPE IF EXISTS "SkinColor";
 
 -- DropEnum
-DROP TYPE "SkinElasticity";
+DROP TYPE IF EXISTS "SkinElasticity";
 
 -- DropEnum
-DROP TYPE "SkinHumidity";
+DROP TYPE IF EXISTS "SkinHumidity";
 
 -- DropEnum
-DROP TYPE "SkinTemp";
+DROP TYPE IF EXISTS "SkinTemp";
 
 -- DropEnum
-DROP TYPE "Temperament";
+DROP TYPE IF EXISTS "Temperament";
 
 -- DropEnum
-DROP TYPE "WoolType";
+DROP TYPE IF EXISTS "WoolType";
 
 -- CreateTable
-CREATE TABLE "body_types" (
+CREATE TABLE IF NOT EXISTS "body_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -194,7 +216,7 @@ CREATE TABLE "body_types" (
 );
 
 -- CreateTable
-CREATE TABLE "obesity_types" (
+CREATE TABLE IF NOT EXISTS "obesity_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -204,7 +226,7 @@ CREATE TABLE "obesity_types" (
 );
 
 -- CreateTable
-CREATE TABLE "body_positions" (
+CREATE TABLE IF NOT EXISTS "body_positions" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -214,7 +236,7 @@ CREATE TABLE "body_positions" (
 );
 
 -- CreateTable
-CREATE TABLE "constitutions" (
+CREATE TABLE IF NOT EXISTS "constitutions" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -224,7 +246,7 @@ CREATE TABLE "constitutions" (
 );
 
 -- CreateTable
-CREATE TABLE "temperaments" (
+CREATE TABLE IF NOT EXISTS "temperaments" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -234,7 +256,7 @@ CREATE TABLE "temperaments" (
 );
 
 -- CreateTable
-CREATE TABLE "wool_types" (
+CREATE TABLE IF NOT EXISTS "wool_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -244,7 +266,7 @@ CREATE TABLE "wool_types" (
 );
 
 -- CreateTable
-CREATE TABLE "down_types" (
+CREATE TABLE IF NOT EXISTS "down_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -254,7 +276,7 @@ CREATE TABLE "down_types" (
 );
 
 -- CreateTable
-CREATE TABLE "hair_types" (
+CREATE TABLE IF NOT EXISTS "hair_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -264,7 +286,7 @@ CREATE TABLE "hair_types" (
 );
 
 -- CreateTable
-CREATE TABLE "feather_types" (
+CREATE TABLE IF NOT EXISTS "feather_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -274,7 +296,7 @@ CREATE TABLE "feather_types" (
 );
 
 -- CreateTable
-CREATE TABLE "skin_colors" (
+CREATE TABLE IF NOT EXISTS "skin_colors" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -284,7 +306,7 @@ CREATE TABLE "skin_colors" (
 );
 
 -- CreateTable
-CREATE TABLE "skin_humidities" (
+CREATE TABLE IF NOT EXISTS "skin_humidities" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -294,7 +316,7 @@ CREATE TABLE "skin_humidities" (
 );
 
 -- CreateTable
-CREATE TABLE "skin_temps" (
+CREATE TABLE IF NOT EXISTS "skin_temps" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -304,7 +326,7 @@ CREATE TABLE "skin_temps" (
 );
 
 -- CreateTable
-CREATE TABLE "skin_elasticities" (
+CREATE TABLE IF NOT EXISTS "skin_elasticities" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -314,7 +336,7 @@ CREATE TABLE "skin_elasticities" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_sizes" (
+CREATE TABLE IF NOT EXISTS "lymph_sizes" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -324,7 +346,7 @@ CREATE TABLE "lymph_sizes" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_shapes" (
+CREATE TABLE IF NOT EXISTS "lymph_shapes" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -334,7 +356,7 @@ CREATE TABLE "lymph_shapes" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_surfaces" (
+CREATE TABLE IF NOT EXISTS "lymph_surfaces" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -344,7 +366,7 @@ CREATE TABLE "lymph_surfaces" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_consistencies" (
+CREATE TABLE IF NOT EXISTS "lymph_consistencies" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -354,7 +376,7 @@ CREATE TABLE "lymph_consistencies" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_temps" (
+CREATE TABLE IF NOT EXISTS "lymph_temps" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -364,7 +386,7 @@ CREATE TABLE "lymph_temps" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_pains" (
+CREATE TABLE IF NOT EXISTS "lymph_pains" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -374,7 +396,7 @@ CREATE TABLE "lymph_pains" (
 );
 
 -- CreateTable
-CREATE TABLE "lymph_mobilities" (
+CREATE TABLE IF NOT EXISTS "lymph_mobilities" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -384,7 +406,7 @@ CREATE TABLE "lymph_mobilities" (
 );
 
 -- CreateTable
-CREATE TABLE "mucosa_types" (
+CREATE TABLE IF NOT EXISTS "mucosa_types" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -394,7 +416,7 @@ CREATE TABLE "mucosa_types" (
 );
 
 -- CreateTable
-CREATE TABLE "animal_sexes" (
+CREATE TABLE IF NOT EXISTS "animal_sexes" (
     "id" UUID NOT NULL,
     "name_ru" VARCHAR(255) NOT NULL,
     "name_uz" VARCHAR(255) NOT NULL,
@@ -470,7 +492,7 @@ CREATE UNIQUE INDEX "mucosa_types_numeric_value_key" ON "mucosa_types"("numeric_
 CREATE UNIQUE INDEX "animal_sexes_numeric_value_key" ON "animal_sexes"("numeric_value");
 
 -- CreateIndex
-CREATE INDEX "animals_sex_id_idx" ON "animals"("sex_id");
+CREATE INDEX IF NOT EXISTS "animals_sex_id_idx" ON "animals"("sex_id");
 
 -- AddForeignKey
 ALTER TABLE "clinical_analyses" ADD CONSTRAINT "clinical_analyses_body_type_id_fkey" FOREIGN KEY ("body_type_id") REFERENCES "body_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
