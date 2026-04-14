@@ -50,7 +50,7 @@ export class UsersController {
     description: 'Invalid data or username already exists',
   })
   @ApiForbiddenResponse({ description: 'Admin access required' })
-  // @IsAdminUser()
+  @IsAdminUser()
   @Post()
   async create(@Body() data: CreateUserDto) {
     return new UserEntity(await this.usersService.create(data));
@@ -66,7 +66,7 @@ export class UsersController {
     description: 'Users retrieved successfully',
   })
   @ApiForbiddenResponse({ description: 'Admin access required' })
-  // @IsAdminUser()
+  @IsAdminUser()
   @Get()
   async findAll(@Query() params: UserQueryParamsDto) {
     return await this.usersService.findAll(params);
