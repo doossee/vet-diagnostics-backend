@@ -51,7 +51,7 @@ describe('Users (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ username, password })
-      .expect(200);
+      .expect(201);
 
     return {
       user,
@@ -566,7 +566,7 @@ describe('Users (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({ username: user.username, password: 'newpassword456' })
-        .expect(200);
+        .expect(201);
     });
 
     it('should reject login with the old password after change', async () => {
@@ -876,7 +876,7 @@ describe('Users (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({ username: targetUsername, password: 'changedbyAdmin1' })
-        .expect(200);
+        .expect(201);
     });
 
     it('should return 401 when currentPassword is incorrect', async () => {

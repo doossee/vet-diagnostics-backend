@@ -77,7 +77,8 @@ describe('Feedback (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     return {
       accessToken: res.body.accessToken,
@@ -106,7 +107,8 @@ describe('Feedback (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     return {
       accessToken: res.body.accessToken,

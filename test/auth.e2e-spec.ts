@@ -58,7 +58,7 @@ describe('Auth (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ username, password })
-      .expect(200);
+      .expect(201);
 
     return res.body;
   }
@@ -77,7 +77,7 @@ describe('Auth (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ username: 'testuser', password: 'password123' })
-        .expect(200);
+        .expect(201);
 
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('refreshToken');

@@ -53,7 +53,7 @@ describe('Management (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/login')
       .send({ username, password })
-      .expect(200);
+      .expect(201);
 
     return res.body.accessToken;
   }

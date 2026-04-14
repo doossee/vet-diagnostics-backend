@@ -75,7 +75,8 @@ describe('Diagnostics Lookups (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return res.body.accessToken;

@@ -74,7 +74,8 @@ describe('Diagnostics Exams (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     return res.body.accessToken;
   }

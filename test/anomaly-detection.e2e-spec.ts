@@ -67,7 +67,8 @@ describe('Anomaly Detection & Reference Ranges (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     return res.body.accessToken as string;
   }
@@ -90,7 +91,8 @@ describe('Anomaly Detection & Reference Ranges (e2e)', () => {
 
     const res = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ username, password });
+      .send({ username, password })
+      .expect(201);
 
     return res.body.accessToken as string;
   }
