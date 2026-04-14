@@ -179,9 +179,7 @@ describe('Diagnostics Exams (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/blood-exams')
-          .expect(401);
+        await request(app.getHttpServer()).get('/blood-exams').expect(401);
       });
     });
 
@@ -399,9 +397,7 @@ describe('Diagnostics Exams (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/clinical-exams')
-          .expect(401);
+        await request(app.getHttpServer()).get('/clinical-exams').expect(401);
       });
     });
 
@@ -606,9 +602,7 @@ describe('Diagnostics Exams (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/urine-exams')
-          .expect(401);
+        await request(app.getHttpServer()).get('/urine-exams').expect(401);
       });
     });
 
@@ -808,9 +802,7 @@ describe('Diagnostics Exams (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/feces-exams')
-          .expect(401);
+        await request(app.getHttpServer()).get('/feces-exams').expect(401);
       });
     });
 
@@ -999,9 +991,7 @@ describe('Diagnostics Exams (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/mucosa-exams')
-          .expect(401);
+        await request(app.getHttpServer()).get('/mucosa-exams').expect(401);
       });
     });
 

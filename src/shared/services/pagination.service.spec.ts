@@ -31,7 +31,11 @@ describe('PaginationService', () => {
     it('should return middle page with prev and next', async () => {
       const model = createMockModel(30, []);
 
-      const result = await service.paginate(model, {}, { page: 2, perPage: 10 });
+      const result = await service.paginate(
+        model,
+        {},
+        { page: 2, perPage: 10 },
+      );
 
       expect(result.meta.currentPage).toBe(2);
       expect(result.meta.prev).toBe(1);
@@ -41,7 +45,11 @@ describe('PaginationService', () => {
     it('should return last page with no next', async () => {
       const model = createMockModel(20, []);
 
-      const result = await service.paginate(model, {}, { page: 2, perPage: 10 });
+      const result = await service.paginate(
+        model,
+        {},
+        { page: 2, perPage: 10 },
+      );
 
       expect(result.meta.currentPage).toBe(2);
       expect(result.meta.lastPage).toBe(2);
@@ -81,7 +89,11 @@ describe('PaginationService', () => {
     it('should handle empty results', async () => {
       const model = createMockModel(0, []);
 
-      const result = await service.paginate(model, {}, { page: 1, perPage: 10 });
+      const result = await service.paginate(
+        model,
+        {},
+        { page: 1, perPage: 10 },
+      );
 
       expect(result.data).toEqual([]);
       expect(result.meta.total).toBe(0);
@@ -105,7 +117,11 @@ describe('PaginationService', () => {
     it('should handle string page and perPage values', async () => {
       const model = createMockModel(20, []);
 
-      const result = await service.paginate(model, {}, { page: '2' as any, perPage: '5' as any });
+      const result = await service.paginate(
+        model,
+        {},
+        { page: '2' as any, perPage: '5' as any },
+      );
 
       expect(result.meta.currentPage).toBe(2);
       expect(result.meta.perPage).toBe(5);

@@ -1,22 +1,16 @@
-import {
-  Disease,
-  DiseaseCategory,
-  Prisma,
-} from 'src/generated/prisma/client';
+import { Disease, DiseaseCategory, Prisma } from 'src/generated/prisma/client';
 import { getPrismaTestClient } from '../utils/database';
 
 export class DiseaseCategoryFactory {
   private prisma = getPrismaTestClient();
 
-  async create(
-    overrides?: Partial<DiseaseCategory>,
-  ): Promise<DiseaseCategory> {
+  async create(overrides?: Partial<DiseaseCategory>): Promise<DiseaseCategory> {
     return this.prisma.diseaseCategory.create({
       data: {
-        name: ({
+        name: {
           ru: `Категория_${Date.now()}`,
           uz: `Category_${Date.now()}`,
-        } as unknown as Prisma.InputJsonValue),
+        } as unknown as Prisma.InputJsonValue,
         parentId: overrides?.parentId || null,
       },
     });
@@ -28,10 +22,10 @@ export class DiseaseCategoryFactory {
     for (let i = 0; i < childCount; i++) {
       await this.prisma.diseaseCategory.create({
         data: {
-          name: ({
+          name: {
             ru: `Подкатегория_${i + 1}_${Date.now()}`,
             uz: `Subcategory_${i + 1}_${Date.now()}`,
-          } as unknown as Prisma.InputJsonValue),
+          } as unknown as Prisma.InputJsonValue,
           parentId: parent.id,
         },
       });

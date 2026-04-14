@@ -125,5 +125,4 @@ export class FecesConsistencyService {
     }
     return { imported, errors };
   }
-
 }

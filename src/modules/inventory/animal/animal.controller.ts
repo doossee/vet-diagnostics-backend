@@ -168,5 +168,4 @@ export class AnimalController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.animalService.delete(id);
   }
-
 }

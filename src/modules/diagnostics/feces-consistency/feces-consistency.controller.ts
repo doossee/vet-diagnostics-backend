@@ -83,17 +83,33 @@ export class FecesConsistencyController {
     description: 'Feces consistency retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="консистенция-кала-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="консистенция-кала-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-    { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
-    { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
-    { key: 'numericValue', header: 'Числовое значение', example: 1, width: 18 },
-    { key: 'animalTypeId', header: 'ID типа животного', example: 'uuid-here', width: 38 },
-  ],
+        { key: 'name_ru', header: 'Название (рус)', example: 'Пример' },
+        { key: 'name_uz', header: 'Название (уз)', example: 'Namuna' },
+        {
+          key: 'numericValue',
+          header: 'Числовое значение',
+          example: 1,
+          width: 18,
+        },
+        {
+          key: 'animalTypeId',
+          header: 'ID типа животного',
+          example: 'uuid-here',
+          width: 38,
+        },
+      ],
       'Консистенция кала',
     );
     return new StreamableFile(buffer);
@@ -156,5 +172,4 @@ export class FecesConsistencyController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.fecesConsistencyService.delete(id);
   }
-
 }

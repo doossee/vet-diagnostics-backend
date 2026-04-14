@@ -22,9 +22,7 @@ describe('ExcelService', () => {
     });
 
     it('should apply default width when not specified', async () => {
-      const columns = [
-        { key: 'name', header: 'Name' },
-      ];
+      const columns = [{ key: 'name', header: 'Name' }];
 
       const buffer = await service.generateTemplate(columns, 'Sheet1');
       expect(buffer).toBeInstanceOf(Buffer);

@@ -187,9 +187,7 @@ describe('Auth (e2e)', () => {
     });
 
     it('should return 401 when no Authorization header is provided', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/refresh')
-        .expect(401);
+      await request(app.getHttpServer()).post('/auth/refresh').expect(401);
     });
 
     it('should return 401 when using the old refresh token after rotation', async () => {
@@ -268,9 +266,7 @@ describe('Auth (e2e)', () => {
     });
 
     it('should return 401 without an access token', async () => {
-      await request(app.getHttpServer())
-        .post('/auth/logout-all')
-        .expect(401);
+      await request(app.getHttpServer()).post('/auth/logout-all').expect(401);
     });
 
     it('should return 401 with an invalid access token', async () => {

@@ -87,5 +87,4 @@ export class SkinSensitivityService {
     }
     return { imported, errors };
   }
-
 }

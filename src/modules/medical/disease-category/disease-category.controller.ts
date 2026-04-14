@@ -60,16 +60,37 @@ export class DiseaseCategoryController {
     return await this.diseaseCategoryService.findAll(query);
   }
 
-  @ApiOperation({ summary: 'Download Excel import template for disease categories' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="категории-болезней-шаблон.xlsx"')
+  @ApiOperation({
+    summary: 'Download Excel import template for disease categories',
+  })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="категории-болезней-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'name_ru', header: 'Название (рус)', example: 'Инфекционные болезни' },
-        { key: 'name_uz', header: 'Название (уз)', example: 'Yuqumli kasalliklar' },
-        { key: 'parentId', header: 'ID родителя (необязат.)', example: '', width: 38 },
+        {
+          key: 'name_ru',
+          header: 'Название (рус)',
+          example: 'Инфекционные болезни',
+        },
+        {
+          key: 'name_uz',
+          header: 'Название (уз)',
+          example: 'Yuqumli kasalliklar',
+        },
+        {
+          key: 'parentId',
+          header: 'ID родителя (необязат.)',
+          example: '',
+          width: 38,
+        },
       ],
       'Категории болезней',
     );
@@ -78,7 +99,12 @@ export class DiseaseCategoryController {
 
   @ApiOperation({ summary: 'Import disease categories from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -114,5 +140,4 @@ export class DiseaseCategoryController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.diseaseCategoryService.delete(id);
   }
-
 }

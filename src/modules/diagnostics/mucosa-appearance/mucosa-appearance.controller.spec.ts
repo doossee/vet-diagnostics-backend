@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MucosaAppearanceController } from './mucosa-appearance.controller';
 import { MucosaAppearanceService } from './mucosa-appearance.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('MucosaAppearanceController', () => {
   let controller: MucosaAppearanceController;
   let service: MucosaAppearanceService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('MucosaAppearanceController', () => {
         {
           provide: MucosaAppearanceService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

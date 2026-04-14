@@ -31,30 +31,40 @@ export class MedicalSessionQueryParamsDto extends BaseQueryParamsDto {
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  @ApiPropertyOptional({ description: 'Filter sessions that have a clinical exam attached' })
+  @ApiPropertyOptional({
+    description: 'Filter sessions that have a clinical exam attached',
+  })
   readonly hasClinicalExam?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  @ApiPropertyOptional({ description: 'Filter sessions that have a blood exam attached' })
+  @ApiPropertyOptional({
+    description: 'Filter sessions that have a blood exam attached',
+  })
   readonly hasBloodExam?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  @ApiPropertyOptional({ description: 'Filter sessions that have a urine exam attached' })
+  @ApiPropertyOptional({
+    description: 'Filter sessions that have a urine exam attached',
+  })
   readonly hasUrineExam?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  @ApiPropertyOptional({ description: 'Filter sessions that have a feces exam attached' })
+  @ApiPropertyOptional({
+    description: 'Filter sessions that have a feces exam attached',
+  })
   readonly hasFecesExam?: boolean;
 
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
-  @ApiPropertyOptional({ description: 'Filter sessions that have at least one mucosa exam attached' })
+  @ApiPropertyOptional({
+    description: 'Filter sessions that have at least one mucosa exam attached',
+  })
   readonly hasMucosaExam?: boolean;
 }

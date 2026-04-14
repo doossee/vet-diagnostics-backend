@@ -80,8 +80,14 @@ export class AnimalColorController {
     description: 'AnimalColor retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for animal colors' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="масти-животных-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="масти-животных-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
@@ -96,7 +102,12 @@ export class AnimalColorController {
 
   @ApiOperation({ summary: 'Import animal colors from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -144,5 +155,4 @@ export class AnimalColorController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.colorService.delete(id);
   }
-
 }

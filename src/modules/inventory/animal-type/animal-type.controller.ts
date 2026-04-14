@@ -58,7 +58,9 @@ export class AnimalTypeController {
     return await this.animalTypeService.findAll(query);
   }
 
-  @ApiOperation({ summary: 'Resolve leaf AnimalType from parent + sex + birth month/year' })
+  @ApiOperation({
+    summary: 'Resolve leaf AnimalType from parent + sex + birth month/year',
+  })
   @ApiOkResponse({ type: AnimalTypeEntity })
   @Get('resolve')
   async resolveAnimalType(@Query() query: ResolveAnimalTypeDto) {
@@ -66,8 +68,14 @@ export class AnimalTypeController {
   }
 
   @ApiOperation({ summary: 'Download Excel import template for animal types' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="типы-животных-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="типы-животных-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
@@ -76,8 +84,18 @@ export class AnimalTypeController {
         { key: 'name_uz', header: 'Название (уз)', example: 'Sigir' },
         { key: 'modelKey', header: 'Ключ модели', example: 'cow', width: 18 },
         { key: 'parentId', header: 'ID родителя', example: '', width: 38 },
-        { key: 'minAgeMonths', header: 'Мин. возраст (мес)', example: 0, width: 16 },
-        { key: 'maxAgeMonths', header: 'Макс. возраст (мес)', example: 24, width: 16 },
+        {
+          key: 'minAgeMonths',
+          header: 'Мин. возраст (мес)',
+          example: 0,
+          width: 16,
+        },
+        {
+          key: 'maxAgeMonths',
+          header: 'Макс. возраст (мес)',
+          example: 24,
+          width: 16,
+        },
       ],
       'Типы животных',
     );
@@ -86,7 +104,12 @@ export class AnimalTypeController {
 
   @ApiOperation({ summary: 'Import animal types from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -125,5 +148,4 @@ export class AnimalTypeController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.animalTypeService.delete(id);
   }
-
 }

@@ -76,13 +76,14 @@ describe('StatisticsService', () => {
     it('should return overview statistics', async () => {
       mockPrismaService.medicalSession.count
         .mockResolvedValueOnce(10) // total
-        .mockResolvedValueOnce(5)  // submitted
-        .mockResolvedValueOnce(3)  // draft
+        .mockResolvedValueOnce(5) // submitted
+        .mockResolvedValueOnce(3) // draft
         .mockResolvedValueOnce(2); // ready
 
       mockPrismaService.medicalSession.findMany
         .mockResolvedValueOnce([{ animalId: 'a1' }, { animalId: 'a2' }]) // distinct animals
-        .mockResolvedValueOnce([ // submitted sessions with predictions
+        .mockResolvedValueOnce([
+          // submitted sessions with predictions
           { prediction: { rawOutput: { '0': 0.9, '1': 0.1 } } },
           { prediction: { rawOutput: { '0': 0.8, '1': 0.2 } } },
         ]);

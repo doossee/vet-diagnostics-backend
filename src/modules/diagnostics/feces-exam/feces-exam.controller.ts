@@ -94,19 +94,54 @@ export class FecesExamController {
     description: 'Feces exam retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for feces exam' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="анализ-кала-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="анализ-кала-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
-        { key: 'fecesColorId', header: 'ID цвета кала', example: 'uuid-here', width: 38 },
-        { key: 'fecesSmellId', header: 'ID запаха кала', example: 'uuid-here', width: 38 },
-        { key: 'fecesConsistencyId', header: 'ID консистенции кала', example: 'uuid-here', width: 38 },
-        { key: 'fecesFormId', header: 'ID формы кала', example: 'uuid-here', width: 38 },
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesColorId',
+          header: 'ID цвета кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesSmellId',
+          header: 'ID запаха кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesConsistencyId',
+          header: 'ID консистенции кала',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'fecesFormId',
+          header: 'ID формы кала',
+          example: 'uuid-here',
+          width: 38,
+        },
         { key: 'amount', header: 'Количество (кг/сутки)', example: 15 },
-        { key: 'undigestedFood', header: 'Непереваренный корм (%)', example: 5 },
+        {
+          key: 'undigestedFood',
+          header: 'Непереваренный корм (%)',
+          example: 5,
+        },
       ],
       'Анализ кала',
     );
@@ -115,7 +150,12 @@ export class FecesExamController {
 
   @ApiOperation({ summary: 'Import feces exams from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -168,5 +208,4 @@ export class FecesExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.fecesExamService.delete(id);
   }
-
 }

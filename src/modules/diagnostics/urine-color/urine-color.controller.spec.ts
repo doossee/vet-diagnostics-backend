@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UrineColorController } from './urine-color.controller';
 import { UrineColorService } from './urine-color.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('UrineColorController', () => {
   let controller: UrineColorController;
   let service: UrineColorService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('UrineColorController', () => {
         {
           provide: UrineColorService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

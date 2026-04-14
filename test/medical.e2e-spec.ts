@@ -96,7 +96,9 @@ describe('Medical (e2e)', () => {
         const response = await request(app.getHttpServer())
           .post('/disease-categories')
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Инфекционные болезни', uz: 'Yuqumli kasalliklar' } })
+          .send({
+            name: { ru: 'Инфекционные болезни', uz: 'Yuqumli kasalliklar' },
+          })
           .expect(201);
 
         expect(response.body).toHaveProperty('id');
@@ -446,9 +448,7 @@ describe('Medical (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/diseases')
-          .expect(401);
+        await request(app.getHttpServer()).get('/diseases').expect(401);
       });
     });
 
@@ -494,7 +494,9 @@ describe('Medical (e2e)', () => {
         const response = await request(app.getHttpServer())
           .patch(`/diseases/${disease.id}`)
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Обновлённая болезнь', uz: 'Yangilangan kasallik' } })
+          .send({
+            name: { ru: 'Обновлённая болезнь', uz: 'Yangilangan kasallik' },
+          })
           .expect(200);
 
         expect(response.body.name).toEqual({
@@ -723,7 +725,9 @@ describe('Medical (e2e)', () => {
         const response = await request(app.getHttpServer())
           .patch(`/prophylaxis-items/${item.id}`)
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Обновлённый препарат', uz: 'Yangilangan preparat' } })
+          .send({
+            name: { ru: 'Обновлённый препарат', uz: 'Yangilangan preparat' },
+          })
           .expect(200);
 
         expect(response.body.name).toEqual({
@@ -733,7 +737,9 @@ describe('Medical (e2e)', () => {
       });
 
       it('should update a prophylaxis item type (200)', async () => {
-        const item = await prophylaxisItemFactory.create({ type: 'VACCINE' as any });
+        const item = await prophylaxisItemFactory.create({
+          type: 'VACCINE' as any,
+        });
 
         const response = await request(app.getHttpServer())
           .patch(`/prophylaxis-items/${item.id}`)
@@ -1041,7 +1047,9 @@ describe('Medical (e2e)', () => {
       it('should create with optional detailId (201)', async () => {
         const animal = await animalFactory.create();
         const item = await prophylaxisItemFactory.create();
-        const detail = await prophylaxisDetailFactory.create({ itemId: item.id });
+        const detail = await prophylaxisDetailFactory.create({
+          itemId: item.id,
+        });
 
         const response = await request(app.getHttpServer())
           .post('/prophylaxis')
@@ -1175,9 +1183,7 @@ describe('Medical (e2e)', () => {
       });
 
       it('should return 401 without auth token', async () => {
-        await request(app.getHttpServer())
-          .get('/prophylaxis')
-          .expect(401);
+        await request(app.getHttpServer()).get('/prophylaxis').expect(401);
       });
     });
 
@@ -1217,7 +1223,11 @@ describe('Medical (e2e)', () => {
           .expect(200);
 
         // findFirst returns null when no record found
-        expect(response.body === null || response.body === '' || Object.keys(response.body).length === 0).toBeTruthy();
+        expect(
+          response.body === null ||
+            response.body === '' ||
+            Object.keys(response.body).length === 0,
+        ).toBeTruthy();
       });
 
       it('should return 400 for invalid UUID', async () => {

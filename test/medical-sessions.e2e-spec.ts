@@ -236,9 +236,7 @@ describe('Medical Sessions (e2e)', () => {
     });
 
     it('should return 401 when no auth token is provided', async () => {
-      await request(app.getHttpServer())
-        .get('/medical-sessions')
-        .expect(401);
+      await request(app.getHttpServer()).get('/medical-sessions').expect(401);
     });
   });
 

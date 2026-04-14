@@ -22,7 +22,10 @@ export class AnimalEntity implements Animal {
   @Expose()
   arrivalDate: Date;
 
-  @ApiProperty({ description: 'Birth date (day always = 1, month precision only)', example: '2022-03-01' })
+  @ApiProperty({
+    description: 'Birth date (day always = 1, month precision only)',
+    example: '2022-03-01',
+  })
   @Expose()
   birthDate: Date;
 

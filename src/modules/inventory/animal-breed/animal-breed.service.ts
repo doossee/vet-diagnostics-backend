@@ -16,7 +16,9 @@ export class AnimalBreedService {
   ) {}
 
   async create(data: CreateAnimalBreedDto) {
-    return await this.prisma.breed.create({ data: { ...data, name: data.name as unknown as Prisma.InputJsonValue } });
+    return await this.prisma.breed.create({
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async findAll(query: AnimalBreedQueryParamsDto) {
@@ -45,7 +47,10 @@ export class AnimalBreedService {
   }
 
   async update(id: string, data: UpdateAnimalBreedDto) {
-    return await this.prisma.breed.update({ where: { id }, data: { ...data, name: data.name as unknown as Prisma.InputJsonValue } });
+    return await this.prisma.breed.update({
+      where: { id },
+      data: { ...data, name: data.name as unknown as Prisma.InputJsonValue },
+    });
   }
 
   async delete(id: string) {
@@ -74,5 +79,4 @@ export class AnimalBreedService {
     }
     return { imported, errors };
   }
-
 }

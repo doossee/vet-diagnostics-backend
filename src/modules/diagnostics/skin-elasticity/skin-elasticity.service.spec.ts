@@ -42,7 +42,9 @@ describe('SkinElasticityService', () => {
   describe('findOne', () => {
     it('should return a record', async () => {
       const mock = { id: 'uuid', name: { ru: 'Тест', uz: 'Test' } };
-      mockPrismaService.skinElasticity.findUniqueOrThrow.mockResolvedValue(mock);
+      mockPrismaService.skinElasticity.findUniqueOrThrow.mockResolvedValue(
+        mock,
+      );
       expect(await service.findOne('uuid')).toEqual(mock);
     });
   });
@@ -66,9 +68,21 @@ describe('SkinElasticityService', () => {
 
   describe('findAll', () => {
     it('should return paginated results', async () => {
-      const mockResult = { data: [], meta: { total: 0, currentPage: 1, perPage: 10, lastPage: 0, prev: null, next: null } };
+      const mockResult = {
+        data: [],
+        meta: {
+          total: 0,
+          currentPage: 1,
+          perPage: 10,
+          lastPage: 0,
+          prev: null,
+          next: null,
+        },
+      };
       mockPaginationService.paginate.mockResolvedValue(mockResult);
-      expect(await service.findAll({ page: 1, perPage: 10 } as any)).toEqual(mockResult);
+      expect(await service.findAll({ page: 1, perPage: 10 } as any)).toEqual(
+        mockResult,
+      );
     });
   });
 
@@ -83,7 +97,9 @@ describe('SkinElasticityService', () => {
     });
 
     it('should collect errors for failed rows', async () => {
-      mockPrismaService.skinElasticity.create.mockRejectedValue(new Error('duplicate'));
+      mockPrismaService.skinElasticity.create.mockRejectedValue(
+        new Error('duplicate'),
+      );
       const result = await service.importFromExcel([
         { name_ru: 'Тест', name_uz: 'Test', numericValue: 1 },
       ]);

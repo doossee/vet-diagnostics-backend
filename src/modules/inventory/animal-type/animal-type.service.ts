@@ -107,8 +107,12 @@ export class AnimalTypeService {
             } as unknown as Prisma.InputJsonValue,
             modelKey: row['modelKey'] ? String(row['modelKey']) : undefined,
             parentId: row['parentId'] ? String(row['parentId']) : undefined,
-            minAgeMonths: row['minAgeMonths'] ? Number(row['minAgeMonths']) : undefined,
-            maxAgeMonths: row['maxAgeMonths'] ? Number(row['maxAgeMonths']) : undefined,
+            minAgeMonths: row['minAgeMonths']
+              ? Number(row['minAgeMonths'])
+              : undefined,
+            maxAgeMonths: row['maxAgeMonths']
+              ? Number(row['maxAgeMonths'])
+              : undefined,
           },
         });
         imported++;
@@ -118,5 +122,4 @@ export class AnimalTypeService {
     }
     return { imported, errors };
   }
-
 }

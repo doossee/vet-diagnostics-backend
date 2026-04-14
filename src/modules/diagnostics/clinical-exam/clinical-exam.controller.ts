@@ -94,43 +94,179 @@ export class ClinicalExamController {
     description: 'Clinical exam retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for clinical exam' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="клинический-осмотр-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="клинический-осмотр-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
         { key: 'pulse', header: 'Пульс (уд/мин)', example: 72, width: 18 },
-        { key: 'temperature', header: 'Температура (°C)', example: 38.5, width: 20 },
-        { key: 'respiratoryRate', header: 'Частота дыхания (вдохов/мин)', example: 18, width: 25 },
+        {
+          key: 'temperature',
+          header: 'Температура (°C)',
+          example: 38.5,
+          width: 20,
+        },
+        {
+          key: 'respiratoryRate',
+          header: 'Частота дыхания (вдохов/мин)',
+          example: 18,
+          width: 25,
+        },
         { key: 'rumination', header: 'Жвачка', example: 1, width: 20 },
-        { key: 'rumenInfusoriaCount', header: 'Инфузории рубца', example: 500, width: 22 },
-        { key: 'bodyTypeId', header: 'ID состояния тела', example: 'uuid-here', width: 38 },
-        { key: 'obesityId', header: 'ID упитанности', example: 'uuid-here', width: 38 },
-        { key: 'bodyPositionId', header: 'ID позы тела', example: 'uuid-here', width: 38 },
-        { key: 'constitutionId', header: 'ID конституции', example: 'uuid-here', width: 38 },
-        { key: 'temperamentId', header: 'ID темперамента', example: 'uuid-here', width: 38 },
+        {
+          key: 'rumenInfusoriaCount',
+          header: 'Инфузории рубца',
+          example: 500,
+          width: 22,
+        },
+        {
+          key: 'bodyTypeId',
+          header: 'ID состояния тела',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'obesityId',
+          header: 'ID упитанности',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'bodyPositionId',
+          header: 'ID позы тела',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'constitutionId',
+          header: 'ID конституции',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'temperamentId',
+          header: 'ID темперамента',
+          example: 'uuid-here',
+          width: 38,
+        },
         { key: 'woolId', header: 'ID шерсти', example: 'uuid-here', width: 38 },
         { key: 'downId', header: 'ID пуха', example: 'uuid-here', width: 38 },
         { key: 'hairId', header: 'ID волос', example: 'uuid-here', width: 38 },
-        { key: 'feathersId', header: 'ID перьев', example: 'uuid-here', width: 38 },
-        { key: 'skinColorId', header: 'ID цвета кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinHumidityId', header: 'ID влажности кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinSmellId', header: 'ID запаха кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinTempId', header: 'ID температуры кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinSurfaceId', header: 'ID поверхности кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinElasticityId', header: 'ID эластичности кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinSensitivityId', header: 'ID чувствительности кожи', example: 'uuid-here', width: 38 },
-        { key: 'skinPainId', header: 'ID болезненности кожи', example: 'uuid-here', width: 38 },
-        { key: 'lymphSizeId', header: 'ID размера лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphShapeId', header: 'ID формы лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphSurfaceId', header: 'ID поверхности лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphConsistencyId', header: 'ID консистенции лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphTempId', header: 'ID температуры лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphPainId', header: 'ID болезненности лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'lymphMobilityId', header: 'ID подвижности лимфоузла', example: 'uuid-here', width: 38 },
-        { key: 'rumenFluidStateId', header: 'ID состояния жидкости рубца', example: 'uuid-here', width: 38 },
+        {
+          key: 'feathersId',
+          header: 'ID перьев',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinColorId',
+          header: 'ID цвета кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinHumidityId',
+          header: 'ID влажности кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinSmellId',
+          header: 'ID запаха кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinTempId',
+          header: 'ID температуры кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinSurfaceId',
+          header: 'ID поверхности кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinElasticityId',
+          header: 'ID эластичности кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinSensitivityId',
+          header: 'ID чувствительности кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'skinPainId',
+          header: 'ID болезненности кожи',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphSizeId',
+          header: 'ID размера лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphShapeId',
+          header: 'ID формы лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphSurfaceId',
+          header: 'ID поверхности лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphConsistencyId',
+          header: 'ID консистенции лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphTempId',
+          header: 'ID температуры лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphPainId',
+          header: 'ID болезненности лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'lymphMobilityId',
+          header: 'ID подвижности лимфоузла',
+          example: 'uuid-here',
+          width: 38,
+        },
+        {
+          key: 'rumenFluidStateId',
+          header: 'ID состояния жидкости рубца',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Клинический осмотр',
     );
@@ -139,7 +275,12 @@ export class ClinicalExamController {
 
   @ApiOperation({ summary: 'Import clinical exams from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -216,5 +357,4 @@ export class ClinicalExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.clinicalExamService.delete(id);
   }
-
 }

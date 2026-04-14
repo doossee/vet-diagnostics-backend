@@ -170,9 +170,7 @@ describe('Inventory (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (r: any) => r.name.ru === 'Уникальный тип',
-          ),
+          response.body.data.some((r: any) => r.name.ru === 'Уникальный тип'),
         ).toBe(true);
       });
 
@@ -651,9 +649,7 @@ describe('Inventory (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (r: any) => r.name.ru === 'Уникальная масть',
-          ),
+          response.body.data.some((r: any) => r.name.ru === 'Уникальная масть'),
         ).toBe(true);
       });
 
@@ -880,7 +876,7 @@ describe('Inventory (e2e)', () => {
         await request(app.getHttpServer())
           .post('/animal-sexes')
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Самка', uz: 'Urg\'ochi' }, numericValue: 2 })
+          .send({ name: { ru: 'Самка', uz: "Urg'ochi" }, numericValue: 2 })
           .expect(201);
 
         const response = await request(app.getHttpServer())
@@ -899,7 +895,10 @@ describe('Inventory (e2e)', () => {
         await request(app.getHttpServer())
           .post('/animal-sexes')
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Уникальный пол', uz: 'Unique sex' }, numericValue: 99 })
+          .send({
+            name: { ru: 'Уникальный пол', uz: 'Unique sex' },
+            numericValue: 99,
+          })
           .expect(201);
 
         const response = await request(app.getHttpServer())
@@ -910,9 +909,7 @@ describe('Inventory (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (r: any) => r.name.ru === 'Уникальный пол',
-          ),
+          response.body.data.some((r: any) => r.name.ru === 'Уникальный пол'),
         ).toBe(true);
       });
 
@@ -1028,7 +1025,10 @@ describe('Inventory (e2e)', () => {
         const createRes = await request(app.getHttpServer())
           .post('/animal-sexes')
           .set('Authorization', `Bearer ${accessToken}`)
-          .send({ name: { ru: 'Удаляемый пол', uz: 'To delete' }, numericValue: 99 })
+          .send({
+            name: { ru: 'Удаляемый пол', uz: 'To delete' },
+            numericValue: 99,
+          })
           .expect(201);
 
         const sexId = createRes.body.id;
@@ -1276,9 +1276,7 @@ describe('Inventory (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (a: any) => a.animalNameCode === uniqueCode,
-          ),
+          response.body.data.some((a: any) => a.animalNameCode === uniqueCode),
         ).toBe(true);
       });
 

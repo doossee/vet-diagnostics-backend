@@ -87,5 +87,4 @@ export class HairTypeService {
     }
     return { imported, errors };
   }
-
 }

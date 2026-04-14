@@ -82,15 +82,19 @@ export class VetStationService {
       try {
         await this.prisma.vetStation.create({
           data: {
-            name: { ru: String(row['name_ru'] ?? ''), uz: String(row['name_uz'] ?? '') } as unknown as Prisma.InputJsonValue,
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
             address: String(row['address']),
             districtId: String(row['districtId']),
           },
         });
         imported++;
-      } catch (e) { errors.push(String(e.message)); }
+      } catch (e) {
+        errors.push(String(e.message));
+      }
     }
     return { imported, errors };
   }
-
 }

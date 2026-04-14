@@ -110,14 +110,18 @@ export class DistrictService {
       try {
         await this.prisma.district.create({
           data: {
-            name: { ru: String(row['name_ru'] ?? ''), uz: String(row['name_uz'] ?? '') } as unknown as Prisma.InputJsonValue,
+            name: {
+              ru: String(row['name_ru'] ?? ''),
+              uz: String(row['name_uz'] ?? ''),
+            } as unknown as Prisma.InputJsonValue,
             regionId: Number(row['regionId']),
           },
         });
         imported++;
-      } catch (e) { errors.push(String(e.message)); }
+      } catch (e) {
+        errors.push(String(e.message));
+      }
     }
     return { imported, errors };
   }
-
 }

@@ -143,9 +143,7 @@ describe('Management (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (r: any) => r.name.ru === 'Самарканд',
-          ),
+          response.body.data.some((r: any) => r.name.ru === 'Самарканд'),
         ).toBe(true);
       });
 
@@ -384,9 +382,7 @@ describe('Management (e2e)', () => {
 
         expect(response.body.data.length).toBeGreaterThanOrEqual(1);
         expect(
-          response.body.data.some(
-            (d: any) => d.name.ru === 'Чиланзар',
-          ),
+          response.body.data.some((d: any) => d.name.ru === 'Чиланзар'),
         ).toBe(true);
       });
 

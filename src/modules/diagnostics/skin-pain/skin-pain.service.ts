@@ -87,5 +87,4 @@ export class SkinPainService {
     }
     return { imported, errors };
   }
-
 }

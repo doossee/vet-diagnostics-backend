@@ -125,5 +125,4 @@ export class UrineConsistencyService {
     }
     return { imported, errors };
   }
-
 }

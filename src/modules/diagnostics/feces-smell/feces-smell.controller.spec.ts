@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FecesSmellController } from './feces-smell.controller';
 import { FecesSmellService } from './feces-smell.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('FecesSmellController', () => {
   let controller: FecesSmellController;
   let service: FecesSmellService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('FecesSmellController', () => {
         {
           provide: FecesSmellService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

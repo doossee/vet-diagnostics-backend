@@ -80,8 +80,14 @@ export class VetStationController {
     description: 'Vet station retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for vet stations' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="ветстанции-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="ветстанции-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
@@ -89,7 +95,12 @@ export class VetStationController {
         { key: 'name_ru', header: 'Название (рус)', example: 'Ветстанция №1' },
         { key: 'name_uz', header: 'Название (уз)', example: 'Vet stansiya №1' },
         { key: 'address', header: 'Адрес', example: 'ул. Ленина 1', width: 30 },
-        { key: 'districtId', header: 'ID района', example: 'uuid-here', width: 38 },
+        {
+          key: 'districtId',
+          header: 'ID района',
+          example: 'uuid-here',
+          width: 38,
+        },
       ],
       'Ветстанции',
     );
@@ -98,7 +109,12 @@ export class VetStationController {
 
   @ApiOperation({ summary: 'Import vet stations from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -148,5 +164,4 @@ export class VetStationController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.vetStationService.delete(id);
   }
-
 }

@@ -87,5 +87,4 @@ export class LymphSizeService {
     }
     return { imported, errors };
   }
-
 }

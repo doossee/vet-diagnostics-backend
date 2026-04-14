@@ -1,10 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnimalController } from './animal.controller';
 import { AnimalService } from './animal.service';
+import { ExcelService } from 'src/shared/services';
 
 describe('AnimalController', () => {
   let controller: AnimalController;
   let service: AnimalService;
+
+  const mockExcelService = {
+    generateTemplate: jest.fn(),
+    parseFile: jest.fn(),
+  };
 
   const mockService = {
     create: jest.fn(),
@@ -21,6 +27,10 @@ describe('AnimalController', () => {
         {
           provide: AnimalService,
           useValue: mockService,
+        },
+        {
+          provide: ExcelService,
+          useValue: mockExcelService,
         },
       ],
     }).compile();

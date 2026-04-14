@@ -49,7 +49,8 @@ export class CreateAnimalDto {
   @IsUUID()
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'UUID of the animal sex lookup entry (auto-assigned from AnimalType if omitted)',
+    description:
+      'UUID of the animal sex lookup entry (auto-assigned from AnimalType if omitted)',
     example: 'e3a49f9c-70be-45d3-8d4c-1c6f8a29fcd9',
   })
   readonly sexId?: string;

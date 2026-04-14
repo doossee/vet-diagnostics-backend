@@ -66,9 +66,21 @@ describe('ConstitutionService', () => {
 
   describe('findAll', () => {
     it('should return paginated results', async () => {
-      const mockResult = { data: [], meta: { total: 0, currentPage: 1, perPage: 10, lastPage: 0, prev: null, next: null } };
+      const mockResult = {
+        data: [],
+        meta: {
+          total: 0,
+          currentPage: 1,
+          perPage: 10,
+          lastPage: 0,
+          prev: null,
+          next: null,
+        },
+      };
       mockPaginationService.paginate.mockResolvedValue(mockResult);
-      expect(await service.findAll({ page: 1, perPage: 10 } as any)).toEqual(mockResult);
+      expect(await service.findAll({ page: 1, perPage: 10 } as any)).toEqual(
+        mockResult,
+      );
     });
   });
 
@@ -83,7 +95,9 @@ describe('ConstitutionService', () => {
     });
 
     it('should collect errors for failed rows', async () => {
-      mockPrismaService.constitution.create.mockRejectedValue(new Error('duplicate'));
+      mockPrismaService.constitution.create.mockRejectedValue(
+        new Error('duplicate'),
+      );
       const result = await service.importFromExcel([
         { name_ru: 'Тест', name_uz: 'Test', numericValue: 1 },
       ]);

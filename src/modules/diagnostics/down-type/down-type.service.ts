@@ -87,5 +87,4 @@ export class DownTypeService {
     }
     return { imported, errors };
   }
-
 }

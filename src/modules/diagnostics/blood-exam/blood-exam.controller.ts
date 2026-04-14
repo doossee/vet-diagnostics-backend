@@ -92,13 +92,24 @@ export class BloodExamController {
     description: 'Blood exam retrieved successfully',
   })
   @ApiOperation({ summary: 'Download Excel import template for blood exam' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="анализ-крови-шаблон.xlsx"')
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="анализ-крови-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
-        { key: 'animalId', header: 'ID животного', example: 'uuid-here', width: 38 },
+        {
+          key: 'animalId',
+          header: 'ID животного',
+          example: 'uuid-here',
+          width: 38,
+        },
         { key: 'erythrocyteCount', header: 'Эритроциты', example: 7.5 },
         { key: 'leukocyteCount', header: 'Лейкоциты', example: 8.0 },
         { key: 'thrombocyteCount', header: 'Тромбоциты', example: 300 },
@@ -112,26 +123,66 @@ export class BloodExamController {
         { key: 'alphaGlobulin', header: 'α-Глобулин (%)', example: 12 },
         { key: 'betaGlobulin', header: 'β-Глобулин (%)', example: 15 },
         { key: 'gammaGlobulin', header: 'γ-Глобулин (%)', example: 20 },
-        { key: 'residualNitrogen', header: 'Остаточный азот (ммоль/л)', example: 18 },
+        {
+          key: 'residualNitrogen',
+          header: 'Остаточный азот (ммоль/л)',
+          example: 18,
+        },
         { key: 'urea', header: 'Мочевина (ммоль/л)', example: 5.5 },
         { key: 'uricAcid', header: 'Мочевая кислота (ммоль/л)', example: 0.3 },
         { key: 'creatinine', header: 'Креатинин (мкмоль/л)', example: 90 },
-        { key: 'alkalineReserve', header: 'Щелочной резерв (об% СО2)', example: 55 },
+        {
+          key: 'alkalineReserve',
+          header: 'Щелочной резерв (об% СО2)',
+          example: 55,
+        },
         { key: 'glucose', header: 'Глюкоза (ммоль/л)', example: 4.5 },
         { key: 'ketoneBodies', header: 'Кетоновые тела (г/л)', example: 0.05 },
-        { key: 'totalBilirubin', header: 'Общий билирубин (мкмоль/л)', example: 8 },
-        { key: 'directBilirubin', header: 'Прямой билирубин (мкмоль/л)', example: 2 },
-        { key: 'totalCholesterol', header: 'Общий холестерин (ммоль/л)', example: 4.5 },
+        {
+          key: 'totalBilirubin',
+          header: 'Общий билирубин (мкмоль/л)',
+          example: 8,
+        },
+        {
+          key: 'directBilirubin',
+          header: 'Прямой билирубин (мкмоль/л)',
+          example: 2,
+        },
+        {
+          key: 'totalCholesterol',
+          header: 'Общий холестерин (ммоль/л)',
+          example: 4.5,
+        },
         { key: 'totalLipids', header: 'Общие липиды (г/л)', example: 5.5 },
         { key: 'phospholipids', header: 'Фосфолипиды (г/л)', example: 2.1 },
-        { key: 'lacticAcid', header: 'Молочная кислота (ммоль/л)', example: 1.2 },
-        { key: 'pyruvicAcid', header: 'Пировиноградная кислота (ммоль/л)', example: 0.08 },
-        { key: 'citricAcid', header: 'Лимонная кислота (ммоль/л)', example: 0.12 },
+        {
+          key: 'lacticAcid',
+          header: 'Молочная кислота (ммоль/л)',
+          example: 1.2,
+        },
+        {
+          key: 'pyruvicAcid',
+          header: 'Пировиноградная кислота (ммоль/л)',
+          example: 0.08,
+        },
+        {
+          key: 'citricAcid',
+          header: 'Лимонная кислота (ммоль/л)',
+          example: 0.12,
+        },
         { key: 'carotene', header: 'Каротин (мкмоль/л)', example: 3.5 },
         { key: 'vitaminA', header: 'Витамин A (мкмоль/л)', example: 1.5 },
         { key: 'vitaminC', header: 'Витамин C (мкмоль/л)', example: 40 },
-        { key: 'organicPhosphorus', header: 'Органический фосфор (ммоль/л)', example: 1.8 },
-        { key: 'totalCalcium', header: 'Общий кальций (ммоль/л)', example: 2.5 },
+        {
+          key: 'organicPhosphorus',
+          header: 'Органический фосфор (ммоль/л)',
+          example: 1.8,
+        },
+        {
+          key: 'totalCalcium',
+          header: 'Общий кальций (ммоль/л)',
+          example: 2.5,
+        },
         { key: 'creatine', header: 'Креатин (ммоль/л)', example: 0.15 },
         { key: 'copper', header: 'Медь (ммоль/л)', example: 0.015 },
         { key: 'zinc', header: 'Цинк (ммоль/л)', example: 0.02 },
@@ -239,5 +290,4 @@ export class BloodExamController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.bloodExamService.delete(id);
   }
-
 }

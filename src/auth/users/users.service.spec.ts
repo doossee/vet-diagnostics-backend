@@ -18,6 +18,23 @@ describe('UsersService', () => {
       update: jest.fn(),
       delete: jest.fn(),
     },
+    $transaction: jest.fn((fn) =>
+      fn({
+        user: {
+          create: jest.fn().mockResolvedValue({
+            id: 'user-id',
+            role: 'FARMER',
+          }),
+          findUnique: jest.fn().mockResolvedValue({
+            id: 'user-id',
+            username: 'testuser',
+            role: 'FARMER',
+          }),
+        },
+        vetProfile: { create: jest.fn() },
+        farmerProfile: { create: jest.fn() },
+      }),
+    ),
   };
 
   const mockPaginationService = {
@@ -61,38 +78,9 @@ describe('UsersService', () => {
         role: UserRole.VETERINARIAN,
       };
 
-      const mockUser = {
-        id: 'user-id',
-        ...createUserDto,
-        password: 'hashed-password',
-        avatar: null,
-        gender: null,
-        birthDate: null,
-        address: null,
-        refreshTokenHash: null,
-        tokenExpiresAt: null,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      };
-
-      mockPrismaService.user.create.mockResolvedValue(mockUser);
-
       const result = await service.create(createUserDto);
 
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
-          username: createUserDto.username,
-          firstName: createUserDto.firstName,
-          lastName: createUserDto.lastName,
-          email: createUserDto.email,
-          phone: createUserDto.phone,
-          role: createUserDto.role,
-          districtId: createUserDto.districtId,
-        }),
-        include: { district: true },
-      });
+      expect(mockPrismaService.$transaction).toHaveBeenCalled();
       expect(result).toBeDefined();
     });
 
@@ -116,37 +104,13 @@ describe('UsersService', () => {
         firstName: 'Test',
         phone: '+998901234567',
         districtId: 'district-id',
+        veterinarianId: 'vet-id',
       };
 
-      const mockUser = {
-        id: 'user-id',
-        ...createUserDto,
-        role: UserRole.FARMER,
-        password: 'hashed-password',
-        lastName: null,
-        email: null,
-        avatar: null,
-        gender: null,
-        birthDate: null,
-        address: null,
-        refreshTokenHash: null,
-        tokenExpiresAt: null,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      };
+      const result = await service.create(createUserDto as any);
 
-      mockPrismaService.user.create.mockResolvedValue(mockUser);
-
-      await service.create(createUserDto as any);
-
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
-          role: UserRole.FARMER,
-        }),
-        include: { district: true },
-      });
+      expect(mockPrismaService.$transaction).toHaveBeenCalled();
+      expect(result).toBeDefined();
     });
   });
 

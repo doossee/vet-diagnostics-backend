@@ -87,5 +87,4 @@ export class BodyPositionService {
     }
     return { imported, errors };
   }
-
 }

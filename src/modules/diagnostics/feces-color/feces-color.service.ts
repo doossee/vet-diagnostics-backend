@@ -125,5 +125,4 @@ export class FecesColorService {
     }
     return { imported, errors };
   }
-
 }

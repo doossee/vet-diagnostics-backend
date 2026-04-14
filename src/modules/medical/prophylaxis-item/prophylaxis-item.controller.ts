@@ -60,16 +60,33 @@ export class ProphylaxisItemController {
     return await this.prophylaxisItemService.findAll(query);
   }
 
-  @ApiOperation({ summary: 'Download Excel import template for prophylaxis items' })
-  @Header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-  @Header('Content-Disposition', 'attachment; filename="препараты-профилактики-шаблон.xlsx"')
+  @ApiOperation({
+    summary: 'Download Excel import template for prophylaxis items',
+  })
+  @Header(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  )
+  @Header(
+    'Content-Disposition',
+    'attachment; filename="препараты-профилактики-шаблон.xlsx"',
+  )
   @Get('template')
   async downloadTemplate() {
     const buffer = await this.excelService.generateTemplate(
       [
         { key: 'name_ru', header: 'Название (рус)', example: 'Вакцина ящура' },
-        { key: 'name_uz', header: 'Название (уз)', example: 'Tarvaqay vaktsinasi' },
-        { key: 'type', header: 'Тип (VACCINE/DEWORMING/TREATMENT)', example: 'VACCINE', width: 30 },
+        {
+          key: 'name_uz',
+          header: 'Название (уз)',
+          example: 'Tarvaqay vaktsinasi',
+        },
+        {
+          key: 'type',
+          header: 'Тип (VACCINE/DEWORMING/TREATMENT)',
+          example: 'VACCINE',
+          width: 30,
+        },
       ],
       'Препараты профилактики',
     );
@@ -78,7 +95,12 @@ export class ProphylaxisItemController {
 
   @ApiOperation({ summary: 'Import prophylaxis items from Excel file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } } })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @Post('import')
   async importFromExcel(@UploadedFile() file: Express.Multer.File) {
@@ -114,5 +136,4 @@ export class ProphylaxisItemController {
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.prophylaxisItemService.delete(id);
   }
-
 }
