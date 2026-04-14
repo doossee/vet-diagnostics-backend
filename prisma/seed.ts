@@ -1,4 +1,14 @@
 import 'dotenv/config';
+import { execSync } from 'child_process';
+
+// Ensure Prisma client is generated before importing
+try {
+  require.resolve('../src/generated/prisma/client');
+} catch {
+  console.log('Prisma client not found. Generating...');
+  execSync('npx prisma generate --schema prisma/schema/schema.prisma', { stdio: 'inherit' });
+}
+
 import { PrismaClient, ProphylaxisType, UserRole, UserGender } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
@@ -1009,8 +1019,9 @@ async function main() {
 
     const diseases = await prisma.disease.findMany();
 
-    // --- Helper: pick from array ---
-    const pick = <T>(arr: T[], idx: number): T => arr[idx % arr.length];
+    // --- Helper: pick from array by index (wraps around) ---
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
+    const pick = <T extends unknown>(arr: T[], idx: number): T => arr[idx % arr.length];
 
     // --- Animal definitions (18 cattle) ---
     interface AnimalDef {
