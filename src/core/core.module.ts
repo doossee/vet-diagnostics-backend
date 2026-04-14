@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { IS_DEV_ENV } from 'src/shared/utils';
 import { PrismaModule } from './prisma/prisma.module';
@@ -42,6 +42,10 @@ import { SharedModule } from 'src/shared/shared.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseTransformInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })
