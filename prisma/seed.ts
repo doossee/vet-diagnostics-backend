@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { PrismaClient, ProphylaxisType, UserRole, UserGender } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
+import axios from 'axios';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
@@ -1007,8 +1008,6 @@ async function main() {
     const rumenFluidBloated = await prisma.rumenFluidState.findUnique({ where: { numericValue: 1 } });
     const rumenFluidBlocked = await prisma.rumenFluidState.findUnique({ where: { numericValue: 2 } });
 
-    const diseases = await prisma.disease.findMany();
-
     // --- Helper: pick from array by index (wraps around) ---
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
     const pick = <T extends unknown>(arr: T[], idx: number): T => arr[idx % arr.length];
@@ -1262,46 +1261,6 @@ async function main() {
       urinary: { colorIdx: 0, smellIdx: 0, consistencyIdx: 0, formIdx: 0, amount: 450, undigestedFood: 2 },
     };
 
-    // Map from our seeded disease array index → AI model output index (0-based).
-    // DISEASE_NAMES uses 1-indexed keys; getTopDisease() does Number(key)+1.
-    // So model output key "16" → DISEASE_NAMES["17"] = "Стоматит".
-    const seedDiseaseToModelIdx: number[] = [
-      // Category 1: Digestive system (16 diseases, array indices 0-15)
-      16, // 0: Стоматит       → DISEASE_NAMES["17"]
-      17, // 1: Фарингит       → DISEASE_NAMES["18"]
-      18, // 2: Гипотония      → DISEASE_NAMES["19"]
-      19, // 3: Атония         → DISEASE_NAMES["20"]
-      20, // 4: Парез рубца    → DISEASE_NAMES["21"]
-      22, // 5: Ацидоз         → DISEASE_NAMES["23"]
-      23, // 6: Алкалоз        → DISEASE_NAMES["24"]
-      24, // 7: Тимпания       → DISEASE_NAMES["25"]
-      25, // 8: Паракератоз    → DISEASE_NAMES["26"]
-      26, // 9: Травм. ретикулит → DISEASE_NAMES["27"]
-      27, // 10: Ретикулоперитонит → DISEASE_NAMES["28"]
-      28, // 11: Гастрит       → DISEASE_NAMES["29"]
-      29, // 12: Язва желудка  → DISEASE_NAMES["30"]
-      30, // 13: Гастроэнтерит → DISEASE_NAMES["31"]
-      31, // 14: Энтероколит   → DISEASE_NAMES["32"]
-      32, // 15: Метеоризм     → DISEASE_NAMES["33"]
-      // Category 2: Urinary system (7 diseases, array indices 16-22)
-      41, // 16: Нефрит        → DISEASE_NAMES["42"]
-      42, // 17: Нефроз        → DISEASE_NAMES["43"]
-      43, // 18: Нефросклероз   → DISEASE_NAMES["44"]
-      44, // 19: Пиелонефрит   → DISEASE_NAMES["45"]
-      45, // 20: Уроцистит     → DISEASE_NAMES["46"]
-      46, // 21: Мочекаменная  → DISEASE_NAMES["47"]
-      47, // 22: Хр. гематурия → DISEASE_NAMES["48"]
-    ];
-
-    // Disease index mapping by profile for predictions (indices into seeded disease array)
-    const diseaseMap: Record<string, number[]> = {
-      healthy:  [0, 1],       // Стоматит, Фарингит (low confidence)
-      mild:     [2, 3, 7],    // Гипотония/Атония, Тимпания
-      moderate: [4, 5, 9],    // Парез рубца, Ацидоз, Травм. ретикулит
-      severe:   [10, 11, 13], // Ретикулоперитонит, Гастрит, Гастроэнтерит
-      urinary:  [16, 17, 18], // Нефрит, Нефроз, Нефросклероз
-    };
-
     // --- Create animals and their exam data ---
     for (let ai = 0; ai < animalDefs.length; ai++) {
       const def = animalDefs[ai];
@@ -1493,80 +1452,95 @@ async function main() {
           }
         }
 
-        // --- Prediction ---
-        if (diseases.length > 0) {
-          const targetDiseaseIndices = diseaseMap[prof] || [0];
-          const primaryIdx = targetDiseaseIndices[ai % targetDiseaseIndices.length];
-          const primaryDisease = diseases[primaryIdx % diseases.length];
-
-          // Build probability distribution using AI model indices
-          const predictions = diseases.map((_d, di) => {
-            const modelIdx = seedDiseaseToModelIdx[di] ?? di;
-            let prob: number;
-            if (di === primaryIdx % diseases.length) {
-              prob = prof === 'healthy' ? 0.35 : prof === 'mild' ? 0.65 : prof === 'moderate' ? 0.78 : prof === 'severe' ? 0.92 : 0.75;
-            } else if (targetDiseaseIndices.includes(di)) {
-              prob = 0.05 + (0.1 * ((ai + di) % 3)) / 10;
-            } else {
-              prob = 0.01 + (0.02 * ((ai + di) % 5)) / 10;
-            }
-            return { modelIdx, probability: Math.round(prob * 1000) / 1000 };
-          });
-
-          // Normalize probabilities to sum to 1.0
-          const total = predictions.reduce((sum, p) => sum + p.probability, 0);
-          for (const p of predictions) {
-            p.probability = Math.round((p.probability / total) * 1000) / 1000;
-          }
-
-          // Build a representative 85-feature input vector
+        // --- Prediction via real AI API ---
+        {
+          // Build 85-feature input vector in EXACT order matching medical-session.service.ts submit()
           const inputVector: Record<string, number> = {
-            pulse: cp.pulse, temperature: cp.temperature, respiratoryRate: cp.respiratoryRate,
-            rumination: cp.rumination, infusoriaCount: cp.infusoria,
-            coe: bp.coe, erythrocyteCount: bp.erythrocyteCount, leukocyteCount: bp.leukocyteCount,
-            thrombocyteCount: bp.thrombocyteCount, hemoglobin: bp.hemoglobin,
-            glutathione: bp.glutathione, waterPercentage: bp.waterPercentage, dryResidue: bp.dryResidue,
-            totalProtein: bp.totalProtein, totalCalcium: bp.totalCalcium,
-            organicPhosphorus: bp.organicPhosphorus, albumin: bp.albumin,
-            alphaGlobulin: bp.alphaGlobulin, betaGlobulin: bp.betaGlobulin, gammaGlobulin: bp.gammaGlobulin,
-            residualNitrogen: bp.residualNitrogen, urea: bp.urea, uricAcid: bp.uricAcid,
-            creatine: bp.creatine, creatinine: bp.creatinine, alkalineReserve: bp.alkalineReserve,
-            glucose: bp.glucose, ketoneBodies: bp.ketoneBodies, totalBilirubin: bp.totalBilirubin,
-            directBilirubin: bp.directBilirubin, totalCholesterol: bp.totalCholesterol,
-            totalLipids: bp.totalLipids, phospholipids: bp.phospholipids, lacticAcid: bp.lacticAcid,
-            pyruvicAcid: bp.pyruvicAcid, citricAcid: bp.citricAcid, carotene: bp.carotene,
-            vitaminA: bp.vitaminA, vitaminB: bp.vitaminB, vitaminC: bp.vitaminC,
-            copper: bp.copper, cobalt: bp.cobalt, manganese: bp.manganese, zinc: bp.zinc,
-            // Urine numeric values
-            urineAmount: up.amount, urinePh: up.ph, urineAcetone: up.acetone,
-            urineProtein: up.protein, urineBilirubin: up.bilirubin,
-            urineUrobilinogen: up.urobilinogen, urineSugar: up.sugar,
-            urineLeukocytes: up.leukocytes, urineEpithelium: up.epithelium,
-            urineMicrobialBodies: up.microbialBodies, urineErythrocytes: up.erythrocytes,
+            // 1-3: Clinical vitals
+            pulse: cp.pulse,
+            respiratoryRate: cp.respiratoryRate,
+            temperature: cp.temperature,
+            // 4-11: Blood morphological
+            erythrocyteCount: bp.erythrocyteCount,
+            leukocyteCount: bp.leukocyteCount,
+            thrombocyteCount: bp.thrombocyteCount,
+            coe: bp.coe,
+            waterPercentage: bp.waterPercentage,
+            dryResidue: bp.dryResidue,
+            glutathione: bp.glutathione,
+            hemoglobin: bp.hemoglobin,
+            // 12-41: Blood serum & trace
+            totalProtein: bp.totalProtein,
+            albumin: bp.albumin,
+            alphaGlobulin: bp.alphaGlobulin,
+            betaGlobulin: bp.betaGlobulin,
+            gammaGlobulin: bp.gammaGlobulin,
+            residualNitrogen: bp.residualNitrogen,
+            urea: bp.urea,
+            uricAcid: bp.uricAcid,
+            creatinine: bp.creatinine,
+            alkalineReserve: bp.alkalineReserve,
+            glucose: bp.glucose,
+            ketoneBodies: bp.ketoneBodies,
+            totalBilirubin: bp.totalBilirubin,
+            directBilirubin: bp.directBilirubin,
+            totalCholesterol: bp.totalCholesterol,
+            totalLipids: bp.totalLipids,
+            phospholipids: bp.phospholipids,
+            lacticAcid: bp.lacticAcid,
+            pyruvicAcid: bp.pyruvicAcid,
+            citricAcid: bp.citricAcid,
+            carotene: bp.carotene,
+            vitaminA: bp.vitaminA,
+            vitaminC: bp.vitaminC,
+            organicPhosphorus: bp.organicPhosphorus,
+            totalCalcium: bp.totalCalcium,
+            creatine: bp.creatine,
+            copper: bp.copper,
+            zinc: bp.zinc,
+            manganese: bp.manganese,
+            cobalt: bp.cobalt,
+            // 42-57: Urine
+            urineColor: up.colorIdx,
+            urineSmell: up.smellIdx,
+            urineClarity: up.clarityIdx,
+            urineConsistency: up.consistencyIdx,
+            urinePh: up.ph,
+            urineAcetone: up.acetone,
+            urineProtein: up.protein,
+            urineBilirubin: up.bilirubin,
+            urineUrobilinogen: up.urobilinogen,
+            urineSugar: up.sugar,
+            urineLeukocytes: up.leukocytes,
+            urineEpithelium: up.epithelium,
+            urineMicrobialBodies: up.microbialBodies,
+            urineErythrocytes: up.erythrocytes,
             urineSaltCrystals: up.saltCrystals,
-            // Urine categorical (numericValues)
-            urineColor: up.colorIdx, urineSmell: up.smellIdx,
-            urineClarity: up.clarityIdx, urineConsistency: up.consistencyIdx,
-            // Feces numeric values
-            fecesAmount: fp.amount, fecesUndigestedFood: fp.undigestedFood,
-            // Feces categorical
-            fecesColor: fp.colorIdx, fecesSmell: fp.smellIdx,
-            fecesConsistency: fp.consistencyIdx, fecesForm: fp.formIdx,
-            // Clinical categorical (numericValues from lookup keys)
-            bodyType: cp.bodyType === 'strong' ? 0 : cp.bodyType === 'normal' ? 1 : 2,
+            urineAmount: up.amount,
+            // 58-63: Feces
+            fecesSmell: fp.smellIdx,
+            fecesColor: fp.colorIdx,
+            fecesConsistency: fp.consistencyIdx,
+            fecesForm: fp.formIdx,
+            fecesAmount: fp.amount,
+            fecesUndigestedFood: fp.undigestedFood,
+            // 64-67: Mucosa
+            mucosaOral: 0,
+            mucosaNasal: 0,
+            mucosaOcular: 0,
+            mucosaVaginal: 0,
+            // 68-85: Clinical habitus, skin, lymph
+            rumination: cp.rumination,
             obesity: cp.obesity === 'good' ? 0 : cp.obesity === 'medium' ? 1 : cp.obesity === 'low' ? 2 : 3,
+            bodyType: cp.bodyType === 'strong' ? 0 : cp.bodyType === 'normal' ? 1 : 2,
             bodyPosition: cp.bodyPos === 'natural' ? 0 : 1,
-            constitution: cp.constitution === 'strong' ? 1 : 0,
-            temperament: cp.temperament === 'melanch' ? 0 : 1,
-            woolType: cp.wool === 'even' ? 0 : cp.wool === 'uneven' ? 1 : 6,
+            wool: cp.wool === 'even' ? 0 : cp.wool === 'uneven' ? 1 : 6,
             skinColor: cp.skinColor === 'pale' ? 0 : cp.skinColor === 'white' ? 1 : cp.skinColor === 'red' ? 2 : 4,
             skinHumidity: cp.skinHumidity === 'normal' ? 0 : 1,
             skinSmell: cp.skinSmell === 'none' ? 0 : 1,
             skinTemp: cp.skinTemp === 'raised' ? 0 : 4,
             skinSurface: cp.skinSurface === 'smooth' ? 0 : 1,
             skinElasticity: cp.skinElasticity === 'normal' ? 0 : 1,
-            skinSensitivity: cp.skinSens === 'normal' ? 0 : 1,
-            skinPain: cp.skinPain === 'none' ? 0 : 1,
             lymphSize: cp.lymphSize === 'normal' ? 0 : 1,
             lymphShape: cp.lymphShape === 'flat' ? 0 : cp.lymphShape === 'round' ? 1 : 3,
             lymphSurface: cp.lymphSurface === 'smooth' ? 0 : 1,
@@ -1574,15 +1548,30 @@ async function main() {
             lymphTemp: cp.lymphTemp === 'normal' ? 0 : 1,
             lymphPain: cp.lymphPain === 'no' ? 0 : 1,
             lymphMobility: cp.lymphMob === 'mobile' ? 0 : 1,
-            rumenFluidState: cp.rumenFluid === 'normal' ? 0 : cp.rumenFluid === 'bloated' ? 1 : 2,
           };
 
-          // rawOutput must be { "0": prob, "1": prob, ... } format
-          // (0-indexed model output key → probability) — matches real AI API output.
-          // Statistics getTopDisease() does Number(key)+1 to get DISEASE_NAMES key.
-          const rawOutput: Record<string, number> = {};
-          for (const p of predictions) {
-            rawOutput[String(p.modelIdx)] = p.probability;
+          const numericArray = Object.values(inputVector).map((v) => Number(v));
+
+          // Determine model key based on animal subtype
+          const modelKey = def.profile === 'urinary' ? 'cow' :
+            def.sexNv === 0 ? 'bull' :
+            def.birthDate > '2024-01-01' ? 'calf' :
+            def.birthDate > '2021-06-01' ? 'heifer' : 'cow';
+
+          // Call real AI prediction API
+          const predictUri = process.env.PREDICT_API_URI || 'http://176.96.241.182:8090/predict';
+          let rawOutput: Record<string, any> = {};
+
+          try {
+            const response = await axios.post(
+              predictUri,
+              { params: numericArray },
+              { params: { animal: modelKey }, timeout: 10000 },
+            );
+            rawOutput = response.data;
+            console.log(`    AI prediction for ${def.code} (${modelKey}): OK`);
+          } catch (err: any) {
+            console.warn(`    AI prediction for ${def.code} failed: ${err.message}. Using empty prediction.`);
           }
 
           await prisma.prediction.create({
@@ -1590,7 +1579,7 @@ async function main() {
               sessionId: session.id,
               inputVector: inputVector as any,
               rawOutput: rawOutput as any,
-              modelVersion: 'demo-v1.0',
+              modelVersion: 'live-v1.0',
             },
           });
         }
