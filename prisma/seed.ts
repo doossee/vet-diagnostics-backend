@@ -1262,11 +1262,42 @@ async function main() {
       urinary: { colorIdx: 0, smellIdx: 0, consistencyIdx: 0, formIdx: 0, amount: 450, undigestedFood: 2 },
     };
 
-    // Disease index mapping by profile for predictions
+    // Map from our seeded disease array index → AI model output index (0-based).
+    // DISEASE_NAMES uses 1-indexed keys; getTopDisease() does Number(key)+1.
+    // So model output key "16" → DISEASE_NAMES["17"] = "Стоматит".
+    const seedDiseaseToModelIdx: number[] = [
+      // Category 1: Digestive system (16 diseases, array indices 0-15)
+      16, // 0: Стоматит       → DISEASE_NAMES["17"]
+      17, // 1: Фарингит       → DISEASE_NAMES["18"]
+      18, // 2: Гипотония      → DISEASE_NAMES["19"]
+      19, // 3: Атония         → DISEASE_NAMES["20"]
+      20, // 4: Парез рубца    → DISEASE_NAMES["21"]
+      22, // 5: Ацидоз         → DISEASE_NAMES["23"]
+      23, // 6: Алкалоз        → DISEASE_NAMES["24"]
+      24, // 7: Тимпания       → DISEASE_NAMES["25"]
+      25, // 8: Паракератоз    → DISEASE_NAMES["26"]
+      26, // 9: Травм. ретикулит → DISEASE_NAMES["27"]
+      27, // 10: Ретикулоперитонит → DISEASE_NAMES["28"]
+      28, // 11: Гастрит       → DISEASE_NAMES["29"]
+      29, // 12: Язва желудка  → DISEASE_NAMES["30"]
+      30, // 13: Гастроэнтерит → DISEASE_NAMES["31"]
+      31, // 14: Энтероколит   → DISEASE_NAMES["32"]
+      32, // 15: Метеоризм     → DISEASE_NAMES["33"]
+      // Category 2: Urinary system (7 diseases, array indices 16-22)
+      41, // 16: Нефрит        → DISEASE_NAMES["42"]
+      42, // 17: Нефроз        → DISEASE_NAMES["43"]
+      43, // 18: Нефросклероз   → DISEASE_NAMES["44"]
+      44, // 19: Пиелонефрит   → DISEASE_NAMES["45"]
+      45, // 20: Уроцистит     → DISEASE_NAMES["46"]
+      46, // 21: Мочекаменная  → DISEASE_NAMES["47"]
+      47, // 22: Хр. гематурия → DISEASE_NAMES["48"]
+    ];
+
+    // Disease index mapping by profile for predictions (indices into seeded disease array)
     const diseaseMap: Record<string, number[]> = {
-      healthy:  [0, 1],       // Стоматит, Фарингит (low confidence, healthy so no strong pred)
-      mild:     [2, 3, 7],    // Гипотония/Атония преджелудков, Тимпания
-      moderate: [4, 5, 9],    // Парез рубца, Ацидоз, Травматический ретикулит
+      healthy:  [0, 1],       // Стоматит, Фарингит (low confidence)
+      mild:     [2, 3, 7],    // Гипотония/Атония, Тимпания
+      moderate: [4, 5, 9],    // Парез рубца, Ацидоз, Травм. ретикулит
       severe:   [10, 11, 13], // Ретикулоперитонит, Гастрит, Гастроэнтерит
       urinary:  [16, 17, 18], // Нефрит, Нефроз, Нефросклероз
     };
@@ -1468,8 +1499,9 @@ async function main() {
           const primaryIdx = targetDiseaseIndices[ai % targetDiseaseIndices.length];
           const primaryDisease = diseases[primaryIdx % diseases.length];
 
-          // Build probability distribution
-          const predictions = diseases.map((d, di) => {
+          // Build probability distribution using AI model indices
+          const predictions = diseases.map((_d, di) => {
+            const modelIdx = seedDiseaseToModelIdx[di] ?? di;
             let prob: number;
             if (di === primaryIdx % diseases.length) {
               prob = prof === 'healthy' ? 0.35 : prof === 'mild' ? 0.65 : prof === 'moderate' ? 0.78 : prof === 'severe' ? 0.92 : 0.75;
@@ -1478,11 +1510,7 @@ async function main() {
             } else {
               prob = 0.01 + (0.02 * ((ai + di) % 5)) / 10;
             }
-            return {
-              diseaseIndex: String(di),
-              diseaseName: (d.name as { ru: string }).ru,
-              probability: Math.round(prob * 1000) / 1000,
-            };
+            return { modelIdx, probability: Math.round(prob * 1000) / 1000 };
           });
 
           // Normalize probabilities to sum to 1.0
@@ -1490,7 +1518,6 @@ async function main() {
           for (const p of predictions) {
             p.probability = Math.round((p.probability / total) * 1000) / 1000;
           }
-          predictions.sort((a, b) => b.probability - a.probability);
 
           // Build a representative 85-feature input vector
           const inputVector: Record<string, number> = {
@@ -1550,14 +1577,19 @@ async function main() {
             rumenFluidState: cp.rumenFluid === 'normal' ? 0 : cp.rumenFluid === 'bloated' ? 1 : 2,
           };
 
+          // rawOutput must be { "0": prob, "1": prob, ... } format
+          // (0-indexed model output key → probability) — matches real AI API output.
+          // Statistics getTopDisease() does Number(key)+1 to get DISEASE_NAMES key.
+          const rawOutput: Record<string, number> = {};
+          for (const p of predictions) {
+            rawOutput[String(p.modelIdx)] = p.probability;
+          }
+
           await prisma.prediction.create({
             data: {
               sessionId: session.id,
               inputVector: inputVector as any,
-              rawOutput: {
-                predictions: predictions,
-                topDisease: predictions[0],
-              } as any,
+              rawOutput: rawOutput as any,
               modelVersion: 'demo-v1.0',
             },
           });
