@@ -20,13 +20,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:e2e:db:up": "docker compose -f docker-compose.test.yml up -d --wait",
     "test:e2e:db:down": "docker compose -f docker-compose.test.yml down",
-    "test:e2e:db:reset": "docker compose -f docker-compose.test.yml down -v && docker compose -f docker-compose.test.yml up -d --wait && DATABASE_URL=postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test npx prisma migrate deploy --schema prisma/schema/schema.prisma",
+    "test:e2e:db:reset": "docker compose -f docker-compose.test.yml down -v && docker compose -f docker-compose.test.yml up -d --wait && DATABASE_URL=postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test npx prisma migrate deploy --schema prisma/schema",
     "test:e2e:run": "DATABASE_URL=postgresql://postgres:postgres@localhost:5434/vet_diagnostics_test jest --config ./test/jest-e2e.json --runInBand",
     "docker:up": "docker-compose up --build",
     "docker:down": "docker-compose down",
     "docker:clean": "docker-compose down -v",
-    "prisma:migrate": "prisma migrate deploy --schema prisma/schema/schema.prisma",
-    "prisma:seed": "yarn tsx prisma/seed.ts"
+    "prisma:migrate": "prisma migrate deploy --schema prisma/schema",
+    "prisma:seed": "npx prisma generate --schema prisma/schema && yarn tsx prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.16",
