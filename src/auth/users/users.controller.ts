@@ -59,14 +59,13 @@ export class UsersController {
   @ApiOperation({
     summary: 'List all users',
     description:
-      'Retrieve paginated list of all users with optional filters. Admin only.',
+      'Retrieve paginated list of all users with optional filters.',
   })
   @ApiOkResponse({
     type: PaginatedUsersEntity,
     description: 'Users retrieved successfully',
   })
-  @ApiForbiddenResponse({ description: 'Admin access required' })
-  @IsAdminUser()
+  @IsAuthenticated()
   @Get()
   async findAll(@Query() params: UserQueryParamsDto) {
     return await this.usersService.findAll(params);
