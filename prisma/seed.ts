@@ -28,7 +28,7 @@ async function main() {
   for (const item of bodyTypes) {
     await prisma.bodyType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -42,7 +42,7 @@ async function main() {
   for (const item of obesityTypes) {
     await prisma.obesityType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -63,7 +63,7 @@ async function main() {
   for (const item of bodyPositions) {
     await prisma.bodyPosition.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -77,7 +77,7 @@ async function main() {
   for (const item of constitutions) {
     await prisma.constitution.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -89,7 +89,7 @@ async function main() {
   for (const item of temperaments) {
     await prisma.temperament.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -114,7 +114,7 @@ async function main() {
   for (const item of woolTypes) {
     await prisma.woolType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -139,7 +139,7 @@ async function main() {
   for (const item of downTypes) {
     await prisma.downType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -151,7 +151,7 @@ async function main() {
   for (const item of hairTypes) {
     await prisma.hairType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -166,7 +166,7 @@ async function main() {
   for (const item of featherTypes) {
     await prisma.featherType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -181,7 +181,7 @@ async function main() {
   for (const item of skinColors) {
     await prisma.skinColor.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -195,7 +195,7 @@ async function main() {
   for (const item of skinHumidities) {
     await prisma.skinHumidity.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -210,7 +210,7 @@ async function main() {
   for (const item of skinTemps) {
     await prisma.skinTemp.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -223,7 +223,7 @@ async function main() {
   for (const item of skinElasticities) {
     await prisma.skinElasticity.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -237,7 +237,7 @@ async function main() {
   for (const item of skinSmells) {
     await prisma.skinSmell.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -251,7 +251,7 @@ async function main() {
   for (const item of skinSurfaces) {
     await prisma.skinSurface.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -264,7 +264,7 @@ async function main() {
   for (const item of skinSensitivities) {
     await prisma.skinSensitivity.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -277,7 +277,7 @@ async function main() {
   for (const item of skinPains) {
     await prisma.skinPain.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -289,7 +289,7 @@ async function main() {
   for (const item of lymphSizes) {
     await prisma.lymphSize.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -303,7 +303,7 @@ async function main() {
   for (const item of lymphShapes) {
     await prisma.lymphShape.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -315,7 +315,7 @@ async function main() {
   for (const item of lymphSurfaces) {
     await prisma.lymphSurface.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -328,7 +328,7 @@ async function main() {
   for (const item of lymphConsistencies) {
     await prisma.lymphConsistency.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -340,7 +340,7 @@ async function main() {
   for (const item of lymphTemps) {
     await prisma.lymphTemp.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -352,7 +352,7 @@ async function main() {
   for (const item of lymphPains) {
     await prisma.lymphPain.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -364,7 +364,7 @@ async function main() {
   for (const item of lymphMobilities) {
     await prisma.lymphMobility.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -379,7 +379,7 @@ async function main() {
   for (const item of rumenFluidStates) {
     await prisma.rumenFluidState.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -393,7 +393,7 @@ async function main() {
   for (const item of mucosaTypes) {
     await prisma.mucosaType.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
@@ -408,7 +408,7 @@ async function main() {
   for (const item of animalSexes) {
     await prisma.animalSex.upsert({
       where: { numericValue: item.nv },
-      update: {},
+      update: { name: n(item.ru, item.uz) },
       create: { name: n(item.ru, item.uz), numericValue: item.nv },
     });
   }
