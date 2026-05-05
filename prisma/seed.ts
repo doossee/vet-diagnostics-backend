@@ -21,9 +21,9 @@ async function main() {
   // --- 0. Clinical Exam Lookup Tables ---
 
   const bodyTypes = [
-    { ru: 'Кучли жуссали', uz: 'Kuchli jussali', nv: 0 },
-    { ru: 'Ўртача жуссали', uz: "O'rtacha jussali", nv: 1 },
-    { ru: 'Кучсиз жуссали', uz: 'Kuchsiz jussali', nv: 2 },
+    { ru: 'Крепкое телосложение', uz: 'Kuchli jussali', nv: 0 },
+    { ru: 'Среднее телосложение', uz: "O'rtacha jussali", nv: 1 },
+    { ru: 'Слабое телосложение', uz: 'Kuchsiz jussali', nv: 2 },
   ];
   for (const item of bodyTypes) {
     await prisma.bodyType.upsert({
@@ -34,9 +34,9 @@ async function main() {
   }
 
   const obesityTypes = [
-    { ru: 'Яхши, юқори семиз', uz: 'Yaxshi, yuqori semiz', nv: 0 },
-    { ru: 'Ўртача семиз', uz: "O'rtacha semiz", nv: 1 },
-    { ru: 'Ўртадан паст семиз', uz: "O'rtadan past semiz", nv: 2 },
+    { ru: 'Хорошая упитанность', uz: 'Yaxshi, yuqori semiz', nv: 0 },
+    { ru: 'Средняя упитанность', uz: "O'rtacha semiz", nv: 1 },
+    { ru: 'Ниже средней упитанности', uz: "O'rtadan past semiz", nv: 2 },
     { ru: 'Кахексия', uz: 'Kaxeksiya', nv: 3 },
   ];
   for (const item of obesityTypes) {
@@ -48,17 +48,17 @@ async function main() {
   }
 
   const bodyPositions = [
-    { ru: 'Табиий', uz: 'Tabiiy', nv: 0 },
-    { ru: 'Мажбурий тик турган', uz: 'Majburiy tik turgan', nv: 1 },
-    { ru: 'Мажбурий ётган', uz: 'Majburiy yotgan', nv: 2 },
-    { ru: 'Мажбурий ўтирган', uz: "Majburiy o'tirgan", nv: 3 },
-    { ru: 'Табиий бўлмаган холат', uz: "Tabiiy bo'lmagan holat", nv: 4 },
-    { ru: 'Ихтиёрсиз ҳаракатлар', uz: 'Ixtiyorsiz harakatlar', nv: 5 },
-    { ru: 'Монежли ҳаракат', uz: 'Monejli harakat', nv: 6 },
-    { ru: 'Айланма ҳаракат', uz: 'Aylanma harakat', nv: 7 },
-    { ru: 'Олдинга қараб ҳаракат', uz: 'Oldinga qarab harakat', nv: 8 },
-    { ru: 'Орқага қараб ҳаракат', uz: 'Orqaga qarab harakat', nv: 9 },
-    { ru: 'Ағанаб ётган жойдаги ҳаракат', uz: "Ag'anab yotgan joyidagi harakat", nv: 10 },
+    { ru: 'Естественное', uz: 'Tabiiy', nv: 0 },
+    { ru: 'Вынужденное стоячее', uz: 'Majburiy tik turgan', nv: 1 },
+    { ru: 'Вынужденное лежачее', uz: 'Majburiy yotgan', nv: 2 },
+    { ru: 'Вынужденное сидячее', uz: "Majburiy o'tirgan", nv: 3 },
+    { ru: 'Неестественное положение', uz: "Tabiiy bo'lmagan holat", nv: 4 },
+    { ru: 'Непроизвольные движения', uz: 'Ixtiyorsiz harakatlar', nv: 5 },
+    { ru: 'Манежное движение', uz: 'Monejli harakat', nv: 6 },
+    { ru: 'Круговое движение', uz: 'Aylanma harakat', nv: 7 },
+    { ru: 'Движение вперёд', uz: 'Oldinga qarab harakat', nv: 8 },
+    { ru: 'Движение назад', uz: 'Orqaga qarab harakat', nv: 9 },
+    { ru: 'Движение в положении лёжа', uz: "Ag'anab yotgan joyidagi harakat", nv: 10 },
   ];
   for (const item of bodyPositions) {
     await prisma.bodyPosition.upsert({
@@ -69,10 +69,10 @@ async function main() {
   }
 
   const constitutions = [
-    { ru: 'Юмшоқ', uz: 'Yumshoq', nv: 0 },
-    { ru: 'Мустаҳкам', uz: 'Mustahkam', nv: 1 },
-    { ru: 'Отларда', uz: 'Otlarda', nv: 2 },
-    { ru: 'Паррандаларда', uz: 'Parranda', nv: 3 },
+    { ru: 'Рыхлая (нежная)', uz: 'Yumshoq', nv: 0 },
+    { ru: 'Плотная (грубая)', uz: 'Mustahkam', nv: 1 },
+    { ru: 'У лошадей', uz: 'Otlarda', nv: 2 },
+    { ru: 'У птиц', uz: 'Parranda', nv: 3 },
   ];
   for (const item of constitutions) {
     await prisma.constitution.upsert({
@@ -95,21 +95,21 @@ async function main() {
   }
 
   const woolTypes = [
-    { ru: 'Бир текис', uz: 'Bir tekis', nv: 0 },
-    { ru: 'Бир текис эмас', uz: 'Bir tekis emas', nv: 1 },
-    { ru: 'Терига ётиб туради', uz: 'Teriga yotib turadi', nv: 2 },
-    { ru: 'Ялтироқ', uz: 'Yaltiroq', nv: 3 },
-    { ru: 'Хира', uz: 'Xira', nv: 4 },
-    { ru: 'Тушмайди', uz: 'Tushmaydi', nv: 5 },
-    { ru: 'Ҳурпайган', uz: 'Hurpaygan', nv: 6 },
-    { ru: 'Бир-бирига ёпишган', uz: 'Bir-biriga yopishgan', nv: 7 },
-    { ru: 'Теринг айрим жойларида жунлар тушган', uz: 'Terining ayrim joylarida junlar tushgan', nv: 8 },
-    { ru: 'Қалин', uz: 'Qalin', nv: 9 },
-    { ru: 'Сийрак', uz: 'Siyrak', nv: 10 },
-    { ru: 'Физиологик тулаш', uz: 'Fiziologik tullash', nv: 11 },
-    { ru: 'Патологик тулаш', uz: 'Patologik tullash', nv: 12 },
-    { ru: 'Жун тушаяпти', uz: 'Jun tushayapti', nv: 13 },
-    { ru: 'Жун тушмаяпти', uz: 'Jun tushmayapti', nv: 14 },
+    { ru: 'Равномерная', uz: 'Bir tekis', nv: 0 },
+    { ru: 'Неравномерная', uz: 'Bir tekis emas', nv: 1 },
+    { ru: 'Прилегает к коже', uz: 'Teriga yotib turadi', nv: 2 },
+    { ru: 'Блестящая', uz: 'Yaltiroq', nv: 3 },
+    { ru: 'Тусклая', uz: 'Xira', nv: 4 },
+    { ru: 'Не выпадает', uz: 'Tushmaydi', nv: 5 },
+    { ru: 'Взъерошенная', uz: 'Hurpaygan', nv: 6 },
+    { ru: 'Свалявшаяся', uz: 'Bir-biriga yopishgan', nv: 7 },
+    { ru: 'Очаговое выпадение шерсти', uz: 'Terining ayrim joylarida junlar tushgan', nv: 8 },
+    { ru: 'Густая', uz: 'Qalin', nv: 9 },
+    { ru: 'Редкая', uz: 'Siyrak', nv: 10 },
+    { ru: 'Физиологическая линька', uz: 'Fiziologik tullash', nv: 11 },
+    { ru: 'Патологическая линька', uz: 'Patologik tullash', nv: 12 },
+    { ru: 'Шерсть выпадает', uz: 'Jun tushayapti', nv: 13 },
+    { ru: 'Шерсть не выпадает', uz: 'Jun tushmayapti', nv: 14 },
   ];
   for (const item of woolTypes) {
     await prisma.woolType.upsert({
@@ -120,21 +120,21 @@ async function main() {
   }
 
   const downTypes = [
-    { ru: 'Зич', uz: 'Zich', nv: 0 },
-    { ru: 'Сийрак', uz: 'Siyrak', nv: 1 },
-    { ru: 'Йўқ', uz: "Yo'q", nv: 2 },
-    { ru: 'Юмшоқ', uz: 'Yumshoq', nv: 3 },
-    { ru: 'Силлиқ', uz: 'Silliq', nv: 4 },
-    { ru: 'Хира', uz: 'Xira', nv: 5 },
-    { ru: 'Ялтироқ', uz: 'Yaltiroq', nv: 6 },
-    { ru: 'Қуруқ', uz: 'Quruq', nv: 7 },
-    { ru: 'Чанг босган', uz: 'Chang bosgan', nv: 8 },
-    { ru: 'Бир текис', uz: 'Bir tekis', nv: 9 },
-    { ru: 'Оқ рангли', uz: 'Oq rangli', nv: 10 },
-    { ru: 'Кулранг', uz: 'Kulrang', nv: 11 },
-    { ru: 'Сарғайган', uz: "Sarg'aygan", nv: 12 },
-    { ru: 'Қорамтир', uz: 'Qoramtir', nv: 13 },
-    { ru: 'Нам', uz: 'Nam', nv: 14 },
+    { ru: 'Густой', uz: 'Zich', nv: 0 },
+    { ru: 'Редкий', uz: 'Siyrak', nv: 1 },
+    { ru: 'Отсутствует', uz: "Yo'q", nv: 2 },
+    { ru: 'Мягкий', uz: 'Yumshoq', nv: 3 },
+    { ru: 'Гладкий', uz: 'Silliq', nv: 4 },
+    { ru: 'Тусклый', uz: 'Xira', nv: 5 },
+    { ru: 'Блестящий', uz: 'Yaltiroq', nv: 6 },
+    { ru: 'Сухой', uz: 'Quruq', nv: 7 },
+    { ru: 'Запылённый', uz: 'Chang bosgan', nv: 8 },
+    { ru: 'Равномерный', uz: 'Bir tekis', nv: 9 },
+    { ru: 'Белого цвета', uz: 'Oq rangli', nv: 10 },
+    { ru: 'Серый', uz: 'Kulrang', nv: 11 },
+    { ru: 'Желтоватый', uz: "Sarg'aygan", nv: 12 },
+    { ru: 'Тёмный', uz: 'Qoramtir', nv: 13 },
+    { ru: 'Влажный', uz: 'Nam', nv: 14 },
   ];
   for (const item of downTypes) {
     await prisma.downType.upsert({
@@ -145,8 +145,8 @@ async function main() {
   }
 
   const hairTypes = [
-    { ru: 'Дағал', uz: "Dag'al", nv: 0 },
-    { ru: 'Сийрак', uz: 'Siyrak', nv: 1 },
+    { ru: 'Жёсткий', uz: "Dag'al", nv: 0 },
+    { ru: 'Редкий', uz: 'Siyrak', nv: 1 },
   ];
   for (const item of hairTypes) {
     await prisma.hairType.upsert({
@@ -157,11 +157,11 @@ async function main() {
   }
 
   const featherTypes = [
-    { ru: 'Ялтироқ', uz: 'Yaltiroq', nv: 0 },
-    { ru: 'Хира', uz: 'Xira', nv: 1 },
-    { ru: 'Тўлиқ', uz: "To'liq", nv: 2 },
-    { ru: 'Тўкилган', uz: "To'kilgan", nv: 3 },
-    { ru: 'Синиқ', uz: 'Siniq', nv: 4 },
+    { ru: 'Блестящие', uz: 'Yaltiroq', nv: 0 },
+    { ru: 'Тусклые', uz: 'Xira', nv: 1 },
+    { ru: 'Полные', uz: "To'liq", nv: 2 },
+    { ru: 'Выпавшие', uz: "To'kilgan", nv: 3 },
+    { ru: 'Сломанные', uz: 'Siniq', nv: 4 },
   ];
   for (const item of featherTypes) {
     await prisma.featherType.upsert({
@@ -172,11 +172,11 @@ async function main() {
   }
 
   const skinColors = [
-    { ru: 'Оч бинафша', uz: 'Och binafsha', nv: 0 },
-    { ru: 'Оқарган', uz: 'Oqargan', nv: 1 },
-    { ru: 'Қизарган', uz: 'Qizargan', nv: 2 },
-    { ru: 'Кўкарган', uz: "Ko'kargan", nv: 3 },
-    { ru: 'Сарғайган', uz: "Sarg'aygan", nv: 4 },
+    { ru: 'Бледно-розовый', uz: 'Och binafsha', nv: 0 },
+    { ru: 'Бледный', uz: 'Oqargan', nv: 1 },
+    { ru: 'Покрасневший', uz: 'Qizargan', nv: 2 },
+    { ru: 'Синюшный', uz: "Ko'kargan", nv: 3 },
+    { ru: 'Желтушный', uz: "Sarg'aygan", nv: 4 },
   ];
   for (const item of skinColors) {
     await prisma.skinColor.upsert({
@@ -187,10 +187,10 @@ async function main() {
   }
 
   const skinHumidities = [
-    { ru: 'Ўртача нам', uz: "O'rtacha nam", nv: 0 },
+    { ru: 'Умеренно влажная', uz: "O'rtacha nam", nv: 0 },
     { ru: 'Гипергидроз', uz: 'Gipergidroz', nv: 1 },
-    { ru: 'Маҳаллий терлаган', uz: 'Mahalliy terlagan', nv: 2 },
-    { ru: 'Қуруқ — ангидоз', uz: 'Quruq – angidoz', nv: 3 },
+    { ru: 'Местное потоотделение', uz: 'Mahalliy terlagan', nv: 2 },
+    { ru: 'Сухая — ангидроз', uz: 'Quruq – angidoz', nv: 3 },
   ];
   for (const item of skinHumidities) {
     await prisma.skinHumidity.upsert({
@@ -201,11 +201,11 @@ async function main() {
   }
 
   const skinTemps = [
-    { ru: 'Тери ҳарорати умумий кўтарилган', uz: "Teri harorati umumiy ko'tarilgan", nv: 0 },
-    { ru: 'Тери ҳарорати маҳаллий кўтарилган', uz: "Teri harorati mahalliy ko'tarilgan", nv: 1 },
-    { ru: 'Тери ҳарорати умумий пасайган', uz: 'Teri harorati umumiy pasaygan', nv: 2 },
-    { ru: 'Тери ҳарорати маҳаллий пасайган', uz: 'Teri harorati mahalliy pasaygan', nv: 3 },
-    { ru: 'Тери ҳарорати ҳар хил', uz: 'Teri harorati har xil', nv: 4 },
+    { ru: 'Температура кожи общая повышена', uz: "Teri harorati umumiy ko'tarilgan", nv: 0 },
+    { ru: 'Температура кожи местная повышена', uz: "Teri harorati mahalliy ko'tarilgan", nv: 1 },
+    { ru: 'Температура кожи общая понижена', uz: 'Teri harorati umumiy pasaygan', nv: 2 },
+    { ru: 'Температура кожи местная понижена', uz: 'Teri harorati mahalliy pasaygan', nv: 3 },
+    { ru: 'Температура кожи разная', uz: 'Teri harorati har xil', nv: 4 },
   ];
   for (const item of skinTemps) {
     await prisma.skinTemp.upsert({
@@ -216,9 +216,9 @@ async function main() {
   }
 
   const skinElasticities = [
-    { ru: 'Эластик', uz: 'Elastik', nv: 0 },
-    { ru: 'Тери эластиклиги камайган', uz: 'Teri elastikgi kamaygan', nv: 1 },
-    { ru: 'Тери эластиклиги умуман йўқ', uz: "Teri elastikligi umuman yo'q", nv: 2 },
+    { ru: 'Эластичная', uz: 'Elastik', nv: 0 },
+    { ru: 'Эластичность кожи снижена', uz: 'Teri elastikgi kamaygan', nv: 1 },
+    { ru: 'Эластичность кожи отсутствует', uz: "Teri elastikligi umuman yo'q", nv: 2 },
   ];
   for (const item of skinElasticities) {
     await prisma.skinElasticity.upsert({
@@ -283,8 +283,8 @@ async function main() {
   }
 
   const lymphSizes = [
-    { ru: 'Катталмаган', uz: 'Kattarmagan', nv: 0 },
-    { ru: 'Катталган', uz: 'Kattargan', nv: 1 },
+    { ru: 'Не увеличены', uz: 'Kattarmagan', nv: 0 },
+    { ru: 'Увеличены', uz: 'Kattargan', nv: 1 },
   ];
   for (const item of lymphSizes) {
     await prisma.lymphSize.upsert({
@@ -295,10 +295,10 @@ async function main() {
   }
 
   const lymphShapes = [
-    { ru: 'Ясси', uz: 'Yassi', nv: 0 },
-    { ru: 'Думалоқ', uz: 'Dumaloq', nv: 1 },
-    { ru: 'Катталган', uz: 'Kattargan', nv: 2 },
-    { ru: 'Шишган', uz: 'Shishgan', nv: 3 },
+    { ru: 'Плоская', uz: 'Yassi', nv: 0 },
+    { ru: 'Круглая', uz: 'Dumaloq', nv: 1 },
+    { ru: 'Увеличенная', uz: 'Kattargan', nv: 2 },
+    { ru: 'Распухшая', uz: 'Shishgan', nv: 3 },
   ];
   for (const item of lymphShapes) {
     await prisma.lymphShape.upsert({
@@ -309,8 +309,8 @@ async function main() {
   }
 
   const lymphSurfaces = [
-    { ru: 'Силлиқ', uz: 'Silliq', nv: 0 },
-    { ru: 'Ғадир-будир', uz: "G'adir-budir", nv: 1 },
+    { ru: 'Гладкая', uz: 'Silliq', nv: 0 },
+    { ru: 'Бугристая', uz: "G'adir-budir", nv: 1 },
   ];
   for (const item of lymphSurfaces) {
     await prisma.lymphSurface.upsert({
@@ -321,9 +321,9 @@ async function main() {
   }
 
   const lymphConsistencies = [
-    { ru: 'Зич', uz: 'Zich', nv: 0 },
-    { ru: 'Билқиллаган', uz: 'Bilqillagan', nv: 1 },
-    { ru: 'Ўзига хос', uz: "O'ziga xos", nv: 2 },
+    { ru: 'Плотная', uz: 'Zich', nv: 0 },
+    { ru: 'Дряблая', uz: 'Bilqillagan', nv: 1 },
+    { ru: 'Своеобразная', uz: "O'ziga xos", nv: 2 },
   ];
   for (const item of lymphConsistencies) {
     await prisma.lymphConsistency.upsert({
@@ -334,8 +334,8 @@ async function main() {
   }
 
   const lymphTemps = [
-    { ru: 'Ўртача', uz: "O'rtacha", nv: 0 },
-    { ru: 'Ошган', uz: 'Oshgan', nv: 1 },
+    { ru: 'Умеренная', uz: "O'rtacha", nv: 0 },
+    { ru: 'Повышенная', uz: 'Oshgan', nv: 1 },
   ];
   for (const item of lymphTemps) {
     await prisma.lymphTemp.upsert({
@@ -346,8 +346,8 @@ async function main() {
   }
 
   const lymphPains = [
-    { ru: 'Оғриқсиз', uz: "Og'riqsiz", nv: 0 },
-    { ru: 'Оғриқли', uz: "Og'riqli", nv: 1 },
+    { ru: 'Безболезненные', uz: "Og'riqsiz", nv: 0 },
+    { ru: 'Болезненные', uz: "Og'riqli", nv: 1 },
   ];
   for (const item of lymphPains) {
     await prisma.lymphPain.upsert({
@@ -358,8 +358,8 @@ async function main() {
   }
 
   const lymphMobilities = [
-    { ru: 'Ҳаракатчан', uz: 'Harakatchan', nv: 0 },
-    { ru: 'Кам ҳаракатчан', uz: 'Kam harakatchan', nv: 1 },
+    { ru: 'Подвижные', uz: 'Harakatchan', nv: 0 },
+    { ru: 'Малоподвижные', uz: 'Kam harakatchan', nv: 1 },
   ];
   for (const item of lymphMobilities) {
     await prisma.lymphMobility.upsert({
@@ -385,10 +385,10 @@ async function main() {
   }
 
   const mucosaTypes = [
-    { ru: 'Оғиз', uz: "Og'iz", nv: 0 },
-    { ru: 'Бурун', uz: 'Burun', nv: 1 },
-    { ru: 'Кўз', uz: "Ko'z", nv: 2 },
-    { ru: 'Репродуктив', uz: 'Reproduktiv organ', nv: 3 },
+    { ru: 'Ротовая', uz: "Og'iz", nv: 0 },
+    { ru: 'Носовая', uz: 'Burun', nv: 1 },
+    { ru: 'Глазная', uz: "Ko'z", nv: 2 },
+    { ru: 'Репродуктивная', uz: 'Reproduktiv organ', nv: 3 },
   ];
   for (const item of mucosaTypes) {
     await prisma.mucosaType.upsert({
@@ -399,11 +399,11 @@ async function main() {
   }
 
   const animalSexes = [
-    { ru: 'Эркак', uz: 'Erkak', nv: 0 },                                           // MALE
-    { ru: 'Аёл', uz: 'Ayol', nv: 1 },                                              // FEMALE
-    { ru: 'Кастрация қилинган эркак', uz: 'Kastratsiya qilingan erkak', nv: 2 },   // NEUTERED
-    { ru: 'Стерилизация қилинган аёл', uz: 'Sterilizatsiya qilingan ayol', nv: 3 }, // SPAYED
-    { ru: 'Номаълум', uz: "Noma'lum", nv: 4 },                                     // UNKNOWN
+    { ru: 'Самец', uz: 'Erkak', nv: 0 },                                           // MALE
+    { ru: 'Самка', uz: 'Ayol', nv: 1 },                                            // FEMALE
+    { ru: 'Кастрированный самец', uz: 'Kastratsiya qilingan erkak', nv: 2 },        // NEUTERED
+    { ru: 'Стерилизованная самка', uz: 'Sterilizatsiya qilingan ayol', nv: 3 },     // SPAYED
+    { ru: 'Неизвестно', uz: "Noma'lum", nv: 4 },                                   // UNKNOWN
   ];
   for (const item of animalSexes) {
     await prisma.animalSex.upsert({
@@ -494,7 +494,7 @@ async function main() {
           uz: 'Qoramol',
           children: [
             {
-              ru: 'Буқа (Бык)',
+              ru: 'Бык',
               uz: 'Buqa',
               modelKey: 'bull',
               sexId: maleSex?.id ?? null,
@@ -502,7 +502,7 @@ async function main() {
               maxAgeMonths: null,
             },
             {
-              ru: 'Гунажин (Тёлка)',
+              ru: 'Тёлка',
               uz: "G'unojin",
               modelKey: 'heifer',
               sexId: femaleSex?.id ?? null,
@@ -510,7 +510,7 @@ async function main() {
               maxAgeMonths: 35,
             },
             {
-              ru: 'Сигир (Корова)',
+              ru: 'Корова',
               uz: 'Sigir',
               modelKey: 'cow',
               sexId: femaleSex?.id ?? null,
@@ -518,7 +518,7 @@ async function main() {
               maxAgeMonths: null,
             },
             {
-              ru: 'Бузоқ (Телёнок)',
+              ru: 'Телёнок',
               uz: 'Buzoq',
               modelKey: 'calf',
               sexId: null,
