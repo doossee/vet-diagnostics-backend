@@ -35,14 +35,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Generate Prisma Client
-        run: npx prisma generate --schema prisma/schema/schema.prisma
+        run: npx prisma generate
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vet_diagnostics_test?schema=public
 
