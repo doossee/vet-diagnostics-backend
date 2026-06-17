@@ -101,17 +101,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build & push migrator image (builder stage, keeps Prisma CLI)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile.prod
-          target: builder
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:migrator
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
   trigger-deploy:
     name: Trigger deploy on ops repo
     runs-on: ubuntu-latest

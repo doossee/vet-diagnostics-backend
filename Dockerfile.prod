@@ -35,36 +35,40 @@ RUN yarn build
 FROM node:22-alpine AS production
 
 WORKDIR /app
-
 ENV NODE_ENV=production
+# disable Prisma's update check (no runtime network call / cache writes)
+ENV CHECKPOINT_DISABLE=1
 
-# Install production dependencies only
+# Create the non-root user FIRST so we can COPY --chown and avoid a
+# `chown -R /app`, which would duplicate node_modules into its own layer
+# (~430 MB of waste). node_modules is world-readable, so the app reads the
+# root-owned deps fine; only ./uploads needs to be writable.
+RUN addgroup -g 1001 -S nodejs && adduser -S nestjs -u 1001
+
+# Production dependencies only. `prisma` (CLI) is a production dependency and
+# `dotenv` is required by prisma.config.ts, so the container can run
+# `prisma migrate deploy` itself at startup — no separate migrate container.
 COPY package*.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production && yarn cache clean
 
-# Copy built application from builder. The generated Prisma client is part of
-# dist (dist/generated/prisma) and uses the @prisma/adapter-pg driver adapter,
-# so no query-engine binary / node_modules/.prisma copy is needed.
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# Built app + Prisma schema/migrations/config (all needed by `migrate deploy`).
+# The generated Prisma client lives in dist (dist/generated/prisma) and uses the
+# @prisma/adapter-pg driver adapter — no query-engine binary copy needed.
+COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nestjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nestjs:nodejs /app/prisma.config.ts ./prisma.config.ts
+COPY --chown=nestjs:nodejs docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && mkdir -p /app/uploads && chown nestjs:nodejs /app/uploads
 
-# Create uploads directory
-RUN mkdir -p /app/uploads
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001 && \
-    chown -R nestjs:nodejs /app
-
-# Switch to non-root user
 USER nestjs
-
-# Expose application port
 EXPOSE 3000
 
-# Health check (exits non-zero on connection error too)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+# Health check (exits non-zero on connection error too). Longer start period to
+# cover `migrate deploy` running before the server binds.
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/health',(r)=>{process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
 
-# Start application
+# Apply DB migrations, then start the app
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "dist/main"]
